@@ -3,12 +3,15 @@ package com.interface21.webmvc.servlet.mvc.tobe;
 import com.interface21.context.stereotype.Controller;
 import com.interface21.web.bind.annotation.RequestMapping;
 import com.interface21.webmvc.servlet.ModelAndView;
+import com.interface21.webmvc.servlet.view.JspView;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
 
 class HandlerExecutionTest {
 
@@ -31,6 +34,13 @@ class HandlerExecutionTest {
         Assertions.assertDoesNotThrow(() -> new HandlerExecution(controller, "handle"));
     }
 
+    @Test
+    void request_와_response를_받아_특정_메소드를_실행한다() throws Exception {
+        HandlerExecution handlerExecution = new HandlerExecution(controller, "handle");
+        ModelAndView actual = handlerExecution.handle(mock(HttpServletRequest.class), mock(HttpServletResponse.class));
+        assertThat(actual.getObject("name")).isEqualTo("jinyoung");
+    }
+
     @Controller
     static class HandlerExecutionController {
         @RequestMapping
@@ -40,7 +50,8 @@ class HandlerExecutionTest {
 
         @RequestMapping
         public ModelAndView handle(HttpServletRequest request, HttpServletResponse response) {
-            return null;
+            return new ModelAndView(new JspView(""))
+                    .addObject("name", "jinyoung");
         }
     }
 }
