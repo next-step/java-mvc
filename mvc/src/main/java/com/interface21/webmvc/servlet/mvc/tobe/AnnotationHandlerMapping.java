@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 public class AnnotationHandlerMapping {
 
@@ -26,28 +28,37 @@ public class AnnotationHandlerMapping {
 
     public void initialize() {
         log.info("Initialized AnnotationHandlerMapping!");
+        handlerExecutions.putAll(mappingBasePackageHandlers());
+    }
+
+    private Map<HandlerKey, HandlerExecution> mappingBasePackageHandlers() {
+        return Arrays.stream(basePackage)
+                .map(this::mappingHandler)
+                .flatMap(handlers -> handlers.entrySet().stream())
+                .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
+    }
+
+    private Map<HandlerKey, HandlerExecution> mappingHandler(Object basePackage1) {
         try {
             Map<HandlerKey, HandlerExecution> handlerExecutions = new HashMap<>();
-            for (Object basePackage1 : basePackage) {
-                Reflections reflections = new Reflections(basePackage1);
-                Set<Class<?>> controllers = reflections.getTypesAnnotatedWith(Controller.class);
-                for (Class<?> controller : controllers) {
-                    Object controllerInstance = controller.getConstructor().newInstance();
-                    List<Method> methods = Arrays.stream(controller.getMethods())
-                            .filter(method -> method.isAnnotationPresent(RequestMapping.class))
-                            .toList();
-                    for (Method method : methods) {
-                        RequestMapping requestMapping = method.getDeclaredAnnotation(RequestMapping.class);
-                        String url = requestMapping.value();
-                        RequestMethod[] requestMethods = requestMapping.method();
-                        for (RequestMethod requestMethod : requestMethods) {
-                            HandlerKey handlerKey = new HandlerKey(url, requestMethod);
-                            handlerExecutions.put(handlerKey, new HandlerExecution(controllerInstance, method.getName()));
-                        }
+            Reflections reflections = new Reflections(basePackage1);
+            Set<Class<?>> controllers = reflections.getTypesAnnotatedWith(Controller.class);
+            for (Class<?> controller : controllers) {
+                Object controllerInstance = controller.getConstructor().newInstance();
+                List<Method> methods = Arrays.stream(controller.getMethods())
+                        .filter(method -> method.isAnnotationPresent(RequestMapping.class))
+                        .toList();
+                for (Method method : methods) {
+                    RequestMapping requestMapping = method.getDeclaredAnnotation(RequestMapping.class);
+                    String url = requestMapping.value();
+                    RequestMethod[] requestMethods = requestMapping.method();
+                    for (RequestMethod requestMethod : requestMethods) {
+                        HandlerKey handlerKey = new HandlerKey(url, requestMethod);
+                        handlerExecutions.put(handlerKey, new HandlerExecution(controllerInstance, method.getName()));
                     }
                 }
             }
-            this.handlerExecutions.putAll(handlerExecutions);
+            return handlerExecutions;
         } catch (InvocationTargetException | InstantiationException | IllegalAccessException |
                  NoSuchMethodException e) {
             throw new RuntimeException(e);
