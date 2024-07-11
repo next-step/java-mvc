@@ -19,3 +19,9 @@
 ## 학습 테스트
 1. [Reflection API](study/src/test/java/reflection)
 2. [Servlet](study/src/test/java/servlet)
+
+## 1단계 - @MVC 구현하기
+- basePackage를 받아 하위에 있는 클래스들을 트래킹한다.
+  - `@Controller` 어노테이션이 달린 클래스들만 필터링한다.
+  - 해당 클래스의 메소드 중 `@RequestMapping`이 걸린 메소드를 필터링하고 value와 method를 받아온다.
+  - HttpRequest를 가지고 HandlerKey를 만들어 해당하는 HandlerExecution을 반환한다.
