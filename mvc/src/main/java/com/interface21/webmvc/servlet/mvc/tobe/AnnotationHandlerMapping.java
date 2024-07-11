@@ -52,7 +52,7 @@ public class AnnotationHandlerMapping {
 
         return Arrays.stream(controller.getMethods())
                 .filter(method -> method.isAnnotationPresent(RequestMapping.class))
-                .map(method -> parseMethod(method, controllerInstance))
+                .map(method -> parseMethodHandler(method, controllerInstance))
                 .flatMap(handlers -> handlers.entrySet().stream())
                 .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
     }
@@ -72,7 +72,7 @@ public class AnnotationHandlerMapping {
         }
     }
 
-    private Map<HandlerKey, HandlerExecution> parseMethod(Method method, Object controllerInstance) {
+    private Map<HandlerKey, HandlerExecution> parseMethodHandler(Method method, Object controllerInstance) {
         RequestMapping requestMapping = method.getDeclaredAnnotation(RequestMapping.class);
         String url = requestMapping.value();
         HandlerExecution handlerExecution = new HandlerExecution(controllerInstance, method.getName());
