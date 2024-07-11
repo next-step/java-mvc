@@ -20,13 +20,15 @@ class HandlerExecutionTest {
     @Test
     void 생성_시_존재하지_않는_메소드로_생성하는_경우_예외가_발생한다() {
         assertThatThrownBy(() -> new HandlerExecution(controller, "error"))
-                .isInstanceOf(NoSuchMethodException.class);
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("요청된 method name에 해당하는 핸들링 메소드가 없습니다.");
     }
 
     @Test
     void 생성_시_지원하는_파라미터와_불일치하면_예외가_발생한다() {
         assertThatThrownBy(() -> new HandlerExecution(controller, "handleError"))
-                .isInstanceOf(NoSuchMethodException.class);
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("요청된 method name에 해당하는 핸들링 메소드가 없습니다.");
     }
 
     @Test
