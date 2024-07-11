@@ -25,6 +25,8 @@
   - `@Controller` 어노테이션이 달린 클래스들만 필터링한다.
   - 해당 클래스의 메소드 중 `@RequestMapping`이 걸린 메소드를 필터링하고 value와 method를 받아온다.
   - HttpRequest를 가지고 HandlerKey를 만들어 해당하는 HandlerExecution을 반환한다.
+- AnnotationHandlerMapping
+  - 지원하지 않는 request값으로 handler를 요청하면 예외가 발생한다.
 
 - HandlerExecution
   - handling할 수 있는 객체와 실행할 메소드(Method)를 들고 있는다.

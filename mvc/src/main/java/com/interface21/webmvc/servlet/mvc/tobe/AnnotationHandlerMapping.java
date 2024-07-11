@@ -55,8 +55,17 @@ public class AnnotationHandlerMapping {
     }
 
     public Object getHandler(final HttpServletRequest request) {
-        RequestMethod requestMethod = RequestMethod.valueOf(request.getMethod());
-        String url = request.getRequestURI();
-        return handlerExecutions.get(new HandlerKey(url, requestMethod));
+        HandlerKey handlerKey = createHandlerKey(request);
+        if (handlerExecutions.containsKey(handlerKey)) {
+            return handlerExecutions.get(handlerKey);
+        }
+        throw new IllegalArgumentException("지원하지 않는 request 요청입니다.");
+    }
+
+    private HandlerKey createHandlerKey(HttpServletRequest request) {
+        return new HandlerKey(
+                request.getRequestURI(),
+                RequestMethod.valueOf(request.getMethod())
+        );
     }
 }
