@@ -41,14 +41,12 @@ public class AnnotationHandlerMapping {
                 .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
     }
 
-    private Map<HandlerKey, HandlerExecution> mappingHandler(Object basePackage1) {
-        Map<HandlerKey, HandlerExecution> handlerExecutions = new HashMap<>();
-        Reflections reflections = new Reflections(basePackage1);
-        Set<Class<?>> controllers = reflections.getTypesAnnotatedWith(Controller.class);
-        for (Class<?> controller : controllers) {
-            handlerExecutions.putAll(parseControllerHandler(controller));
-        }
-        return handlerExecutions;
+    private Map<HandlerKey, HandlerExecution> mappingHandler(Object basePackage) {
+        return new Reflections(basePackage).getTypesAnnotatedWith(Controller.class)
+                .stream()
+                .map(this::parseControllerHandler)
+                .flatMap(handlers -> handlers.entrySet().stream())
+                .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
     }
 
     private Map<HandlerKey, HandlerExecution> parseControllerHandler(Class<?> controller) {
