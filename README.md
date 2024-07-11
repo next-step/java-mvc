@@ -33,3 +33,5 @@
   - handling할 수 있는 객체와 실행할 메소드 name만을 받아서 생성한다.
     - 없는 메소드를 요청한 경우 예외가 발생한다. (HttpServletRequest와 HttpServletResponse)를 가진다.
   - 실행하여 반환한다.
+- HandlerKey
+  - HttpServletRequest를 가지고 값을 파싱하여 생성할 수 있다.
