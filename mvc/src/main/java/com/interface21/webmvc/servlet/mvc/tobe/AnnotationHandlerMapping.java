@@ -49,13 +49,7 @@ public class AnnotationHandlerMapping {
                         .filter(method -> method.isAnnotationPresent(RequestMapping.class))
                         .toList();
                 for (Method method : methods) {
-                    RequestMapping requestMapping = method.getDeclaredAnnotation(RequestMapping.class);
-                    String url = requestMapping.value();
-                    RequestMethod[] requestMethods = requestMapping.method();
-                    for (RequestMethod requestMethod : requestMethods) {
-                        HandlerKey handlerKey = new HandlerKey(url, requestMethod);
-                        handlerExecutions.put(handlerKey, new HandlerExecution(controllerInstance, method.getName()));
-                    }
+                    handlerExecutions.putAll(parseMethod(method, controllerInstance));
                 }
             }
             return handlerExecutions;
@@ -63,6 +57,19 @@ public class AnnotationHandlerMapping {
                  NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private Map<HandlerKey, HandlerExecution> parseMethod(Method method, Object controllerInstance) {
+        RequestMapping requestMapping = method.getDeclaredAnnotation(RequestMapping.class);
+        String url = requestMapping.value();
+        HandlerExecution handlerExecution = new HandlerExecution(controllerInstance, method.getName());
+
+        return Arrays.stream(requestMapping.method())
+                .map(requestMethod -> new HandlerKey(url, requestMethod))
+                .collect(Collectors.toMap(
+                        handlerKey -> handlerKey,
+                        handlerKey -> handlerExecution)
+                );
     }
 
     public Object getHandler(final HttpServletRequest request) {
