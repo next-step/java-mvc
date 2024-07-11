@@ -2,7 +2,6 @@ package com.interface21.webmvc.servlet.mvc.tobe;
 
 import com.interface21.context.stereotype.Controller;
 import com.interface21.web.bind.annotation.RequestMapping;
-import com.interface21.web.bind.annotation.RequestMethod;
 import jakarta.servlet.http.HttpServletRequest;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
@@ -87,17 +86,10 @@ public class AnnotationHandlerMapping {
     }
 
     public Object getHandler(final HttpServletRequest request) {
-        HandlerKey handlerKey = createHandlerKey(request);
+        HandlerKey handlerKey = HandlerKey.from(request);
         if (handlerExecutions.containsKey(handlerKey)) {
             return handlerExecutions.get(handlerKey);
         }
         throw new IllegalArgumentException("지원하지 않는 request 요청입니다.");
-    }
-
-    private HandlerKey createHandlerKey(HttpServletRequest request) {
-        return new HandlerKey(
-                request.getRequestURI(),
-                RequestMethod.valueOf(request.getMethod())
-        );
     }
 }
