@@ -33,14 +33,8 @@ public class AnnotationHandlerMapping {
     }
 
     private Map<HandlerKey, HandlerExecution> mappingBasePackageHandlers() {
-        return Arrays.stream(basePackage)
-                .map(this::mappingHandler)
-                .flatMap(handlers -> handlers.entrySet().stream())
-                .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
-    }
-
-    private Map<HandlerKey, HandlerExecution> mappingHandler(Object basePackage) {
-        return new Reflections(basePackage).getTypesAnnotatedWith(Controller.class)
+        Reflections reflections = new Reflections(basePackage);
+        return reflections.getTypesAnnotatedWith(Controller.class)
                 .stream()
                 .map(this::parseControllerHandler)
                 .flatMap(handlers -> handlers.entrySet().stream())
