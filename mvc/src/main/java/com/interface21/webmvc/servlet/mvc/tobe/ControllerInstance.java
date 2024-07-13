@@ -1,14 +1,19 @@
 package com.interface21.webmvc.servlet.mvc.tobe;
 
+import com.interface21.web.bind.annotation.RequestMapping;
+
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
-public class ClassInstance {
+public class ControllerInstance {
 
     private final Class<?> clazz;
     private final Object instance;
 
-    public ClassInstance(Class<?> clazz) {
+    public ControllerInstance(Class<?> clazz) {
         this.clazz = clazz;
         this.instance = createNoArgInstance(clazz);
     }
@@ -28,11 +33,21 @@ public class ClassInstance {
         }
     }
 
+    public List<Method> getRequestMappingMethods() {
+        return Arrays.stream(clazz.getMethods())
+                .filter(method -> method.isAnnotationPresent(RequestMapping.class))
+                .toList();
+    }
+
+    public Object getInstance() {
+        return instance;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ClassInstance that = (ClassInstance) o;
+        ControllerInstance that = (ControllerInstance) o;
         return Objects.equals(clazz, that.clazz);
     }
 
