@@ -35,3 +35,8 @@
   - 실행하여 반환한다.
 - HandlerKey
   - HttpServletRequest를 가지고 값을 파싱하여 생성할 수 있다.
+
+## 2단계 - 점진적인 리팩터링
+- ControllerScanner
+  - 패키지 내에 controller어노테이션을 가진 클래스를 찾아 인스턴스화된 map을 반환한다
+  - 예외는 기존 AnnotationHandlerMapping과 동일하다
