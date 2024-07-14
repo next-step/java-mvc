@@ -48,4 +48,4 @@
   - mapping list를 가지며 생성 시 초기화한다.
   - request에 해당하는 handler를 반환한다.
     - request에 해당하는 handler가 없는 경우 예외가 발생햔다.
-    - HandlerMapping에서 Optional<Object>를 반환하고 못찾으면 Registry에서 예외를 반환하는 것으로 변경한다.
+    - HandlerMapping에서 Object(nullable)를 반환하고 못찾으면 Registry에서 예외를 반환하는 것으로 변경한다.

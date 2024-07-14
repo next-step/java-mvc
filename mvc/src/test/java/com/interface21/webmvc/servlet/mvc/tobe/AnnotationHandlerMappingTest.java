@@ -5,8 +5,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -30,7 +28,7 @@ class AnnotationHandlerMappingTest {
         when(request.getRequestURI()).thenReturn("/get-test");
         when(request.getMethod()).thenReturn("GET");
 
-        final var handlerExecution = (HandlerExecution) handlerMapping.getHandler(request).get();
+        final var handlerExecution = (HandlerExecution) handlerMapping.getHandler(request);
         final var modelAndView = handlerExecution.handle(request, response);
 
         assertThat(modelAndView.getObject("id")).isEqualTo("gugu");
@@ -45,19 +43,19 @@ class AnnotationHandlerMappingTest {
         when(request.getRequestURI()).thenReturn("/post-test");
         when(request.getMethod()).thenReturn("POST");
 
-        final var handlerExecution = (HandlerExecution) handlerMapping.getHandler(request).get();
+        final var handlerExecution = (HandlerExecution) handlerMapping.getHandler(request);
         final var modelAndView = handlerExecution.handle(request, response);
 
         assertThat(modelAndView.getObject("id")).isEqualTo("gugu");
     }
 
     @Test
-    void 지원하지_않는_url_method로_요청하면_empty가_반환된다() {
+    void 지원하지_않는_url_method로_요청하면_null이_반환된다() {
         final var request = mock(HttpServletRequest.class);
         when(request.getRequestURI()).thenReturn("/no-support");
         when(request.getMethod()).thenReturn("GET");
 
-        Optional<Object> actual = handlerMapping.getHandler(request);
-        assertThat(actual).isEmpty();
+        Object actual = handlerMapping.getHandler(request);
+        assertThat(actual).isNull();
     }
 }
