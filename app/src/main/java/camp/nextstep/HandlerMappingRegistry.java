@@ -14,6 +14,9 @@ public class HandlerMappingRegistry {
     public HandlerMappingRegistry(HandlerMapping... handlerMappings) {
         this.handlerMappings = Arrays.stream(handlerMappings)
                 .toList();
+    }
+
+    public void initialize() {
         this.handlerMappings.forEach(HandlerMapping::initialize);
     }
 

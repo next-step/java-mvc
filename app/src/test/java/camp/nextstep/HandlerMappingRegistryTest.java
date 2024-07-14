@@ -2,6 +2,7 @@ package camp.nextstep;
 
 import camp.nextstep.controller.LoginController;
 import jakarta.servlet.http.HttpServletRequest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -11,21 +12,26 @@ import static org.mockito.Mockito.when;
 
 class HandlerMappingRegistryTest {
 
+    private HandlerMappingRegistry handlerMappingRegistry;
+
+    @BeforeEach
+    void setUp() {
+        this.handlerMappingRegistry = new HandlerMappingRegistry(new ManualHandlerMapping());
+        this.handlerMappingRegistry.initialize();;
+    }
+
     @Test
-    void Registry생성과_동시에_초기화한다() {
-        ManualHandlerMapping givenHandlerMapping = new ManualHandlerMapping();
+    void Registry를_초기화한다() {
         HttpServletRequest request = mock(HttpServletRequest.class);
         when(request.getRequestURI()).thenReturn("/login");
 
-        new HandlerMappingRegistry(givenHandlerMapping);
-        assertThat(givenHandlerMapping.getHandler(request)).isInstanceOf(LoginController.class);
+        assertThat(handlerMappingRegistry.getHandler(request)).isInstanceOf(LoginController.class);
     }
 
     @Test
     void 지원하는_handler가_없는_경우_예외가_발생한다() {
         HttpServletRequest request = mock(HttpServletRequest.class);
         when(request.getRequestURI()).thenReturn("/error_path");
-        HandlerMappingRegistry handlerMappingRegistry = new HandlerMappingRegistry(new ManualHandlerMapping());
 
         assertThatThrownBy(() -> handlerMappingRegistry.getHandler(request))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -37,7 +43,7 @@ class HandlerMappingRegistryTest {
         HttpServletRequest request = mock(HttpServletRequest.class);
         when(request.getRequestURI()).thenReturn("/login");
 
-        Object actual = new HandlerMappingRegistry(new ManualHandlerMapping()).getHandler(request);
+        Object actual = handlerMappingRegistry.getHandler(request);
         assertThat(actual).isInstanceOf(LoginController.class);
     }
 }
