@@ -16,7 +16,7 @@ public class HandlerExecution {
         this.method = getMethod(handler, methodName);
     }
 
-    private static Method getMethod(Object handler, String methodName) {
+    private Method getMethod(Object handler, String methodName) {
         try {
             return handler.getClass()
                     .getMethod(methodName, HttpServletRequest.class, HttpServletResponse.class);
