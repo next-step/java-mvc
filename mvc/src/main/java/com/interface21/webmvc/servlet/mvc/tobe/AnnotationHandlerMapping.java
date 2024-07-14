@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-public class AnnotationHandlerMapping {
+public class AnnotationHandlerMapping implements HandlerMapping {
 
     private static final Logger log = LoggerFactory.getLogger(AnnotationHandlerMapping.class);
 
@@ -24,6 +24,7 @@ public class AnnotationHandlerMapping {
         this.handlerExecutions = new HashMap<>();
     }
 
+    @Override
     public void initialize() {
         log.info("Initialized AnnotationHandlerMapping!");
         handlerExecutions.putAll(mappingBasePackageHandlers());
@@ -59,6 +60,7 @@ public class AnnotationHandlerMapping {
                 );
     }
 
+    @Override
     public Object getHandler(final HttpServletRequest request) {
         HandlerKey handlerKey = HandlerKey.from(request);
         if (handlerExecutions.containsKey(handlerKey)) {
