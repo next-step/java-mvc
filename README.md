@@ -40,3 +40,7 @@
 - ControllerScanner
   - 패키지 내에 controller어노테이션을 가진 클래스를 찾아 인스턴스화된 map을 반환한다
   - 예외는 기존 AnnotationHandlerMapping과 동일하다
+
+- HandlerMapping
+  - ManualHandlerMapping, AnnotationHandlerMapping를 HandlerMapping 인터페이스로 각각 추상화하여 저장할 수 있도록 한다.
+  - 저장과 동시에 초기화한다.
