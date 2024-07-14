@@ -6,6 +6,15 @@ plugins {
 group 'camp.nextstep'
 version '1.0-SNAPSHOT'
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     implementation 'org.reflections:reflections:0.10.2'
     implementation 'org.apache.tomcat.embed:tomcat-embed-core:10.1.25'
@@ -20,6 +29,10 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.2'
     testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.10.2'
     testImplementation 'com.h2database:h2:2.2.224'
+}
+
+test {
+    useJUnitPlatform()
 }
 
 idea {
