@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class AnnotationHandlerMapping implements HandlerMapping {
@@ -61,11 +62,8 @@ public class AnnotationHandlerMapping implements HandlerMapping {
     }
 
     @Override
-    public Object getHandler(final HttpServletRequest request) {
+    public Optional<Object> getHandler(final HttpServletRequest request) {
         HandlerKey handlerKey = HandlerKey.from(request);
-        if (handlerExecutions.containsKey(handlerKey)) {
-            return handlerExecutions.get(handlerKey);
-        }
-        throw new IllegalArgumentException("지원하지 않는 request 요청입니다.");
+        return Optional.ofNullable(handlerExecutions.get(handlerKey));
     }
 }

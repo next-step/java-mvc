@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class ManualHandlerMapping implements HandlerMapping {
 
@@ -32,8 +33,8 @@ public class ManualHandlerMapping implements HandlerMapping {
     }
 
     @Override
-    public Object getHandler(HttpServletRequest request) {
+    public Optional<Object> getHandler(HttpServletRequest request) {
         log.debug("Request Mapping Uri : {}", request.getRequestURI());
-        return controllers.get(request.getRequestURI());
+        return Optional.ofNullable(controllers.get(request.getRequestURI()));
     }
 }
