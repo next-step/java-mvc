@@ -8,11 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class AnnotationHandlerMapping {
 
@@ -33,28 +31,37 @@ public class AnnotationHandlerMapping {
     }
 
     private Map<HandlerKey, HandlerExecution> createHandlerExecutions(final Controllers controllers) {
-        return controllers.stream()
-                .map(this::createHandlerExecutions)
-                .flatMap(HandlerExecutions -> HandlerExecutions.entrySet().stream())
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        final Map<HandlerKey, HandlerExecution> executions = new HashMap<>();
+        for (final Object controller : controllers) {
+            executions.putAll(createHandlerExecutions(controller));
+        }
+        return executions;
     }
 
     private Map<HandlerKey, HandlerExecution> createHandlerExecutions(final Object controllerInstance) {
-        return Arrays.stream(controllerInstance.getClass().getDeclaredMethods())
-                .filter(method -> method.isAnnotationPresent(RequestMapping.class))
-                .map(method -> createHandlers(controllerInstance, method))
-                .flatMap(handlers -> handlers.entrySet().stream())
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        final Map<HandlerKey, HandlerExecution> executions = new HashMap<>();
+        final Method[] methods = controllerInstance.getClass().getMethods();
+
+        for (final Method method : methods) {
+            executions.putAll(createHandlers(controllerInstance, method));
+        }
+
+        return executions;
     }
 
     private Map<HandlerKey, HandlerExecution> createHandlers(final Object controllerInstance, final Method requestMappingMethod) {
-        final RequestMapping requestMapping = requestMappingMethod.getDeclaredAnnotation(RequestMapping.class);
-        return Arrays.stream(initRequestMethods(requestMapping))
-                .map(method -> new HandlerKey(requestMapping.value(), method))
-                .collect(Collectors.toMap(
-                        Function.identity(),
-                        handlerKey -> new HandlerExecution(controllerInstance, requestMappingMethod)
-                ));
+        if (!requestMappingMethod.isAnnotationPresent(RequestMapping.class)) {
+            return Collections.emptyMap();
+        }
+        final Map<HandlerKey, HandlerExecution> handlers = new HashMap<>();
+        final RequestMapping requestMapping = requestMappingMethod.getAnnotation(RequestMapping.class);
+        final String url = requestMapping.value();
+
+        for (final RequestMethod requestMethod : initRequestMethods(requestMapping)) {
+            handlers.put(new HandlerKey(url, requestMethod), new HandlerExecution(controllerInstance, requestMappingMethod));
+        }
+
+        return handlers;
     }
 
     private RequestMethod[] initRequestMethods(final RequestMapping requestMapping) {
