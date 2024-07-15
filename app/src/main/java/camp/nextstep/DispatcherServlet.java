@@ -1,11 +1,10 @@
 package camp.nextstep;
 
+import camp.nextstep.manual.ManualHandlerAdapter;
 import camp.nextstep.manual.ManualHandlerMapping;
 import com.interface21.webmvc.servlet.ModelAndView;
-import com.interface21.webmvc.servlet.mvc.asis.Controller;
+import com.interface21.webmvc.servlet.mvc.tobe.annotation.AnnotationHandlerAdapter;
 import com.interface21.webmvc.servlet.mvc.tobe.annotation.AnnotationHandlerMapping;
-import com.interface21.webmvc.servlet.mvc.tobe.annotation.HandlerExecution;
-import com.interface21.webmvc.servlet.view.JspView;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,16 +18,16 @@ public class DispatcherServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(DispatcherServlet.class);
 
     private final HandlerMappingRegistry handlerMappingRegistry;
+    private final HandlerAdapterRegistry handlerAdapterRegistry;
 
     public DispatcherServlet() {
         this.handlerMappingRegistry = new HandlerMappingRegistry(new ManualHandlerMapping());
+        this.handlerAdapterRegistry = new HandlerAdapterRegistry(new ManualHandlerAdapter());
     }
 
     public DispatcherServlet(Object... basePackage) {
-        this.handlerMappingRegistry = new HandlerMappingRegistry(
-                new ManualHandlerMapping(),
-                new AnnotationHandlerMapping(basePackage)
-        );
+        this.handlerMappingRegistry = new HandlerMappingRegistry(new ManualHandlerMapping(), new AnnotationHandlerMapping(basePackage));
+        this.handlerAdapterRegistry = new HandlerAdapterRegistry(new ManualHandlerAdapter(), new AnnotationHandlerAdapter());
     }
 
     @Override
@@ -42,23 +41,12 @@ public class DispatcherServlet extends HttpServlet {
         log.debug("Method : {}, Request URI : {}", request.getMethod(), requestURI);
 
         try {
-            final ModelAndView modelAndView = handle(request, response);
+            final var handler = handlerMappingRegistry.getHandler(request);
+            final ModelAndView modelAndView = handlerAdapterRegistry.handle(handler, request, response);
             modelAndView.render(request, response);
         } catch (Throwable e) {
             log.error("Exception : {}", e.getMessage(), e);
             throw new ServletException(e.getMessage());
         }
-    }
-
-    private ModelAndView handle(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        final var handler = handlerMappingRegistry.getHandler(request);
-        if (handler instanceof Controller) {
-            final var viewName = ((Controller) handler).execute(request, response);
-            return new ModelAndView(new JspView(viewName));
-        }
-        if (handler instanceof HandlerExecution) {
-            return ((HandlerExecution) handler).handle(request, response);
-        }
-        throw new IllegalStateException("지원하는 handler가 없습니다.");
     }
 }
