@@ -33,32 +33,46 @@
 - @RequestMapping()에 method 설정이 되어 있지 않으면 모든 HTTP method를 지원
 - 아래와 같은 컨트롤러를 지원하는 프레임워크 구현
 
-```java
+### 요구사항 1 - @MVC FrameWork 테스트 통과하기
 
+> AnnotationHandlerMappingTest 클래스의 테스트가 성공하면 1단계 미션을 완료한것으로 간주
+>
+> Controller 인터페이스는 그대로 두고 미션을 진행
+
+```java
 @Controller
 public class TestController {
 
     private static final Logger log = LoggerFactory.getLogger(TestController.class);
 
     @RequestMapping(value = "/get-test", method = RequestMethod.GET)
-    public ModelAndView findUserId(HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView findUserId(final HttpServletRequest request, final HttpServletResponse response) {
         log.info("test controller get method");
-        final ModelAndView modelAndView = new ModelAndView(new JspView("/get-test.jsp"));
+        final var modelAndView = new ModelAndView(new JspView(""));
         modelAndView.addObject("id", request.getAttribute("id"));
         return modelAndView;
     }
 
     @RequestMapping(value = "/post-test", method = RequestMethod.POST)
-    public ModelAndView save(HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView save(final HttpServletRequest request, final HttpServletResponse response) {
         log.info("test controller post method");
-        final ModelAndView modelAndView = new ModelAndView(new JspView("/post-test.jsp"));
+        final var modelAndView = new ModelAndView(new JspView(""));
         modelAndView.addObject("id", request.getAttribute("id"));
         return modelAndView;
     }
 }
 ```
 
-### 요구사항 3 - @MVC FrameWork 테스트 통과하기
-
-- AnnotationHandlerMappingTest 클래스의 테스트가 성공하면 1단계 미션을 완료한것으로 간주
-- Controller 인터페이스는 그대로 두고 미션을 진행
+- `AnnotationHandlerMapping` 클래스의 생성자 파리미터로 `basePackage` 를 넘긴다
+- 생성된 `AnnotationHandlerMapping` 의 `initialize` 를 호출한다
+    - `basePackage` 하위에 `@Controller` 를 가진 클래스들을 모은다
+    - `Controller` 클래스들의 `@RequestMapping`이 걸린 메소드들을 모은다
+    - value와 method를 가지고 `HandlerKey` 를 만든다
+      - method 정보가 없으면 모든 `Method` 에 대해 만든다.
+    - 메서드를 실행 시킬 수 있게 객체를와 메서드 정보를 가진 `HandlerExecution` 을 만든다
+    - 만들어진 정보를 `handlerExecutions` 필드에 담는다.
+- `AnnotationHandlerMapping` 의 `getHandler` 호출한다
+    - 파라미터로 넘어온 request 정보로 `HandlerKey` 를 만든다.
+    - 알맞는 `HandlerExecution` 를 반환한다.
+- `HandlerExecution` 의 `handle` 를 호출한다.
+    - 만들어진 객체와 메서드정보로 메서드를 실행시킨다.
