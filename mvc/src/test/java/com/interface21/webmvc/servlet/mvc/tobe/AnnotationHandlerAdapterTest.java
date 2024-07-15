@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.Mockito.mock;
 
 class AnnotationHandlerAdapterTest {
 
@@ -16,7 +18,8 @@ class AnnotationHandlerAdapterTest {
 
     @Test
     void HandlerExecution_handler를_지원가능으로_판단한다() {
-        boolean actual = annotationHandlerAdapter.accept(new HandlerExecution(new HandlerExecutionController(), "handle"));
+        HandlerExecution handlerExecution = new HandlerExecution(new HandlerExecutionController(), "handle");
+        boolean actual = annotationHandlerAdapter.accept(handlerExecution);
         assertThat(actual).isTrue();
     }
 
@@ -24,6 +27,19 @@ class AnnotationHandlerAdapterTest {
     void HandlerExecution가_아닌_handler는_지원불가능으로_판단한다() {
         boolean actual = annotationHandlerAdapter.accept("error");
         assertThat(actual).isFalse();
+    }
+
+    @Test
+    void handling된_ModelAndView를_반환한다() throws Exception {
+        HandlerExecution handlerExecution = new HandlerExecution(new HandlerExecutionController(), "handle");
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        HttpServletResponse response = mock(HttpServletResponse.class);
+
+        ModelAndView actual = annotationHandlerAdapter.handle(handlerExecution, request, response);
+        assertAll(
+                () -> assertThat(actual.getView()).isEqualTo(new JspView("")),
+                () -> assertThat(actual.getObject("name")).isEqualTo("jinyoung")
+        );
     }
 
     @Controller

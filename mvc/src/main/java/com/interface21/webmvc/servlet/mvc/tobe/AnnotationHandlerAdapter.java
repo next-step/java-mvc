@@ -13,6 +13,6 @@ public class AnnotationHandlerAdapter implements HandlerAdapter {
 
     @Override
     public ModelAndView handle(Object handler, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        return null;
+        return ((HandlerExecution) handler).handle(request, response);
     }
 }
