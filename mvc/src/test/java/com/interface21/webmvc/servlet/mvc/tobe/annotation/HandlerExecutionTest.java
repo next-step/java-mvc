@@ -44,7 +44,7 @@ class HandlerExecutionTest {
     }
 
     @Controller
-    static class HandlerExecutionController {
+    private static class HandlerExecutionController {
         @RequestMapping
         public ModelAndView handleError(HttpServletResponse response, HttpServletRequest request) {
             return null;

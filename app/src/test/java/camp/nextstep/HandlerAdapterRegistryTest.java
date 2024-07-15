@@ -40,7 +40,7 @@ class HandlerAdapterRegistryTest {
     }
 
     @Controller
-    static class HandlerExecutionController {
+    private static class HandlerExecutionController {
 
         @RequestMapping
         public ModelAndView handle(HttpServletRequest request, HttpServletResponse response) {
