@@ -26,13 +26,6 @@
 
 ## 1단계 - @MVC 구현하기
 
-### 요구사항 1 - 비즈니스 로직 구현에만 집중 할 수 있도록 어노테이션 기반의 MVC 프레임워크로 개선
-
-### 요구사항 2 - URL을 컨트롤러에 매핑하면서 HTTP 메서드(GET, POST, PUT, DELETE 등)도 매핑 조건에 포함
-
-- @RequestMapping()에 method 설정이 되어 있지 않으면 모든 HTTP method를 지원
-- 아래와 같은 컨트롤러를 지원하는 프레임워크 구현
-
 ### 요구사항 1 - @MVC FrameWork 테스트 통과하기
 
 > AnnotationHandlerMappingTest 클래스의 테스트가 성공하면 1단계 미션을 완료한것으로 간주
