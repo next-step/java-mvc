@@ -1,4 +1,4 @@
-package camp.nextstep;
+package camp.nextstep.manual;
 
 import camp.nextstep.controller.*;
 import com.interface21.webmvc.servlet.mvc.asis.Controller;

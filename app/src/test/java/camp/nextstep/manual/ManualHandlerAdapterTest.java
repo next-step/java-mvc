@@ -1,4 +1,4 @@
-package camp.nextstep;
+package camp.nextstep.manual;
 
 import com.interface21.webmvc.servlet.ModelAndView;
 import com.interface21.webmvc.servlet.mvc.asis.ForwardController;

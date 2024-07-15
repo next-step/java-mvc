@@ -1,6 +1,7 @@
 package camp.nextstep;
 
 import camp.nextstep.controller.LoginController;
+import camp.nextstep.manual.ManualHandlerMapping;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
