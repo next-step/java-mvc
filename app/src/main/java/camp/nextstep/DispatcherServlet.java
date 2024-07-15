@@ -2,6 +2,8 @@ package camp.nextstep;
 
 import com.interface21.webmvc.servlet.ModelAndView;
 import com.interface21.webmvc.servlet.mvc.asis.Controller;
+import com.interface21.webmvc.servlet.mvc.tobe.AnnotationHandlerMapping;
+import com.interface21.webmvc.servlet.mvc.tobe.HandlerExecution;
 import com.interface21.webmvc.servlet.view.JspView;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -21,6 +23,13 @@ public class DispatcherServlet extends HttpServlet {
         this.handlerMappingRegistry = new HandlerMappingRegistry(new ManualHandlerMapping());
     }
 
+    public DispatcherServlet(Object... basePackage) {
+        this.handlerMappingRegistry = new HandlerMappingRegistry(
+                new ManualHandlerMapping(),
+                new AnnotationHandlerMapping(basePackage)
+        );
+    }
+
     @Override
     public void init() {
         handlerMappingRegistry.initialize();
@@ -32,13 +41,23 @@ public class DispatcherServlet extends HttpServlet {
         log.debug("Method : {}, Request URI : {}", request.getMethod(), requestURI);
 
         try {
-            final var controller = (Controller) handlerMappingRegistry.getHandler(request);
-            final var viewName = controller.execute(request, response);
-            final var modelAndView = new ModelAndView(new JspView(viewName));
+            final ModelAndView modelAndView = handle(request, response);
             modelAndView.render(request, response);
         } catch (Throwable e) {
             log.error("Exception : {}", e.getMessage(), e);
             throw new ServletException(e.getMessage());
         }
+    }
+
+    private ModelAndView handle(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        final var handler = handlerMappingRegistry.getHandler(request);
+        if (handler instanceof Controller) {
+            final var viewName = ((Controller) handler).execute(request, response);
+            return new ModelAndView(new JspView(viewName));
+        }
+        if (handler instanceof HandlerExecution) {
+            return ((HandlerExecution) handler).handle(request, response);
+        }
+        throw new IllegalStateException("지원하는 handler가 없습니다.");
     }
 }

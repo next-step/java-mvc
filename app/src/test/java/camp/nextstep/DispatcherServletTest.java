@@ -17,7 +17,7 @@ class DispatcherServletTest {
 
     @BeforeEach
     void setUp() {
-        dispatcherServlet = new DispatcherServlet();
+        dispatcherServlet = new DispatcherServlet("samples");
         dispatcherServlet.init();
     }
 
@@ -49,6 +49,25 @@ class DispatcherServletTest {
         when(request.getRequestURI()).thenReturn("/register/view");
         when(request.getMethod()).thenReturn("GET");
         when(request.getRequestDispatcher("/register.jsp")).thenReturn(requestDispatcher);
+
+        // when
+        dispatcherServlet.service(request, response);
+
+        // then
+        verify(requestDispatcher).forward(request, response);
+    }
+
+    @Test
+    void get_test_path() throws ServletException, IOException {
+        // given
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        RequestDispatcher requestDispatcher = mock(RequestDispatcher.class);
+        HttpServletResponse response = mock(HttpServletResponse.class);
+
+        when(request.getAttribute("id")).thenReturn("gugu");
+        when(request.getRequestURI()).thenReturn("/get-test");
+        when(request.getMethod()).thenReturn("GET");
+        when(request.getRequestDispatcher("")).thenReturn(requestDispatcher);
 
         // when
         dispatcherServlet.service(request, response);
