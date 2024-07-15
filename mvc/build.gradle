@@ -5,6 +5,15 @@ plugins {
 group 'com.interface21'
 version '1.0-SNAPSHOT'
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     implementation 'jakarta.servlet:jakarta.servlet-api:5.0.0'
     implementation 'jakarta.servlet.jsp:jakarta.servlet.jsp-api:2.3.6'
@@ -21,4 +30,8 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:5.12.0'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
     testImplementation 'org.springframework:spring-test:6.1.10'
+}
+
+test {
+    useJUnitPlatform()
 }
