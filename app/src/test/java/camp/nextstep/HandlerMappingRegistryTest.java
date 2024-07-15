@@ -18,7 +18,7 @@ class HandlerMappingRegistryTest {
     @BeforeEach
     void setUp() {
         this.handlerMappingRegistry = new HandlerMappingRegistry(new ManualHandlerMapping());
-        this.handlerMappingRegistry.initialize();;
+        this.handlerMappingRegistry.initialize();
     }
 
     @Test

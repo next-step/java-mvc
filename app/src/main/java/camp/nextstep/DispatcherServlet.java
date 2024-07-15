@@ -2,7 +2,6 @@ package camp.nextstep;
 
 import camp.nextstep.manual.ManualHandlerAdapter;
 import camp.nextstep.manual.ManualHandlerMapping;
-import com.interface21.webmvc.servlet.ModelAndView;
 import com.interface21.webmvc.servlet.mvc.tobe.annotation.AnnotationHandlerAdapter;
 import com.interface21.webmvc.servlet.mvc.tobe.annotation.AnnotationHandlerMapping;
 import jakarta.servlet.ServletException;
@@ -42,7 +41,7 @@ public class DispatcherServlet extends HttpServlet {
 
         try {
             final var handler = handlerMappingRegistry.getHandler(request);
-            final ModelAndView modelAndView = handlerAdapterRegistry.handle(handler, request, response);
+            final var modelAndView = handlerAdapterRegistry.handle(handler, request, response);
             modelAndView.render(request, response);
         } catch (Throwable e) {
             log.error("Exception : {}", e.getMessage(), e);
