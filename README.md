@@ -52,3 +52,10 @@
 - JspView
   - redirect가 포함된 viewName인 경우 rending할 때 response로 해당 위치를 redirect시킨다.
   - render를 실행하면 model을 포함하여 requestDispatcher로 forward한다.
+- HandleAdapter
+  - Object Handler가 지원가능한 handler인지 확인한다.
+  - 요청된 handler로 ModelAndView를 만들어 반환한다.
+- HandlerAdapterRegistry
+  - HandlerAdapter list를 가진다.
+  - 지원가능한 handler가 없는 경우 예외가 발생한다.
+  - 지원가능한 handler로 ModelAndView를 만들어 반환한다.
