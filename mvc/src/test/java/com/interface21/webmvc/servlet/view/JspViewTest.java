@@ -1,5 +1,6 @@
 package com.interface21.webmvc.servlet.view;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
@@ -18,5 +19,19 @@ class JspViewTest {
 
         new JspView("redirect:/index.jsp").render(Map.of(), request, response);
         verify(response).sendRedirect("/index.jsp");
+    }
+
+    @Test
+    void model을_포함하여_forward한다() throws Exception {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        RequestDispatcher requestDispatcher = mock(RequestDispatcher.class);
+        HttpServletResponse response = mock(HttpServletResponse.class);
+
+        doNothing().when(request).setAttribute("name", "jinyoung");
+        when(request.getRequestDispatcher("/index.jsp")).thenReturn(requestDispatcher);
+        doNothing().when(requestDispatcher).forward(request, response);
+
+        new JspView("/index.jsp").render(Map.of("name", "jinyoung"), request, response);
+        verify(request).setAttribute("name", "jinyoung");
     }
 }

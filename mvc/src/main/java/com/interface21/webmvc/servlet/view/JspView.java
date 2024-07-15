@@ -1,6 +1,7 @@
 package com.interface21.webmvc.servlet.view;
 
 import com.interface21.webmvc.servlet.View;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -32,6 +33,7 @@ public class JspView implements View {
             request.setAttribute(key, model.get(key));
         });
 
-        // todo
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher(viewName);
+        requestDispatcher.forward(request, response);
     }
 }
