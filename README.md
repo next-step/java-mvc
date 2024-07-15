@@ -50,4 +50,5 @@
     - request에 해당하는 handler가 없는 경우 예외가 발생햔다.
     - HandlerMapping에서 Object(nullable)를 반환하고 못찾으면 Registry에서 예외를 반환하는 것으로 변경한다.
 - JspView
-  - render를 실행하면 requestDispatcher로 forward한다.
+  - redirect가 포함된 viewName인 경우 rending할 때 response로 해당 위치를 redirect시킨다.
+  - render를 실행하면 model을 포함하여 requestDispatcher로 forward한다.
