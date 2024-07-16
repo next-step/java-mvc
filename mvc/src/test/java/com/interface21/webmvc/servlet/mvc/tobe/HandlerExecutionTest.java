@@ -12,12 +12,12 @@ import static org.mockito.Mockito.mock;
 
 class HandlerExecutionTest {
 
-    @DisplayName("메서드가 존재하지 않을 때 NoSuchMethodException을 던진다.")
+    @DisplayName("메서드가 존재하지 않을 때 IllegalArgumentException을 던진다.")
     @Test
     void throwNosuchMethodException() {
         // given // when // then
         assertThatThrownBy(()->{new HandlerExecution(new Object(), "nonExistMethod");})
-                .isInstanceOf(NoSuchMethodException.class);
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("메서드가 존재할 때 HandlerExecution 객체를 생성한다.")
