@@ -48,7 +48,7 @@ public class AnnotationHandlerMapping {
         }
         for (RequestMethod requestMethod : mapping.method()) {
             var key = new HandlerKey(mapping.value(), requestMethod);
-            var execution = new MethodHandlerExecution(controllerInstance, method);
+            var execution = new RequestMappedHandlerExecution(controllerInstance, method);
             handlerExecutions.put(key, execution);
         }
     }
