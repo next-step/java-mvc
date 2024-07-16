@@ -13,17 +13,16 @@ import static org.mockito.Mockito.when;
 
 class HandlerMappingRegistryTest {
 
-    private HandlerMappingRegistry handlerMappingRegistry;
+    private final HandlerMappingRegistry handlerMappingRegistry = new HandlerMappingRegistry(new AnnotationHandlerMapping("samples"));
+    private final HttpServletRequest request = mock(HttpServletRequest.class);
 
     @BeforeEach
     void setUp() {
-        this.handlerMappingRegistry = new HandlerMappingRegistry(new AnnotationHandlerMapping("samples"));
         this.handlerMappingRegistry.initialize();
     }
 
     @Test
     void 지원하는_handler가_없는_경우_예외가_발생한다() {
-        HttpServletRequest request = mock(HttpServletRequest.class);
         when(request.getRequestURI()).thenReturn("/error_path");
         when(request.getMethod()).thenReturn("GET");
 
@@ -34,7 +33,6 @@ class HandlerMappingRegistryTest {
 
     @Test
     void 지원하는_handler를_찾아_반환한다() {
-        HttpServletRequest request = mock(HttpServletRequest.class);
         when(request.getRequestURI()).thenReturn("/get-test");
         when(request.getMethod()).thenReturn("GET");
 

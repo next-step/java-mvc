@@ -15,12 +15,11 @@ import static org.mockito.Mockito.mock;
 class HandlerAdapterRegistryTest {
 
     private final HandlerAdapterRegistry handlerAdapterRegistry = new HandlerAdapterRegistry(new AnnotationHandlerAdapter());
+    private final HttpServletRequest request = mock(HttpServletRequest.class);
+    private final HttpServletResponse response = mock(HttpServletResponse.class);
 
     @Test
     void 지원가능한_adapter가_없으면_예외가_발생한다() {
-        HttpServletRequest request = mock(HttpServletRequest.class);
-        HttpServletResponse response = mock(HttpServletResponse.class);
-
         assertThatThrownBy(() -> handlerAdapterRegistry.handle("error-handler", request, response))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessage("지원가능한 adapter가 없습니다.");
@@ -28,8 +27,6 @@ class HandlerAdapterRegistryTest {
 
     @Test
     void handler에_맞는_adapter로_실행한다() throws Exception {
-        HttpServletRequest request = mock(HttpServletRequest.class);
-        HttpServletResponse response = mock(HttpServletResponse.class);
         HandlerExecution handlerExecution = new HandlerExecution(new TestController(), "findUserId");
 
         ModelAndView actual = handlerAdapterRegistry.handle(handlerExecution, request, response);

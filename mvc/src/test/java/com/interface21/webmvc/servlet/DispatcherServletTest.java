@@ -13,47 +13,35 @@ import static org.mockito.Mockito.*;
 
 class DispatcherServletTest {
 
-    private DispatcherServlet dispatcherServlet;
+    private final DispatcherServlet dispatcherServlet  = new DispatcherServlet("samples");;
+    private final HttpServletRequest request = mock(HttpServletRequest.class);
+    private final RequestDispatcher requestDispatcher = mock(RequestDispatcher.class);
+    private final HttpServletResponse response = mock(HttpServletResponse.class);
 
     @BeforeEach
     void setUp() {
-        dispatcherServlet = new DispatcherServlet("samples");
         dispatcherServlet.init();
     }
 
     @Test
     void get_root_path() throws ServletException, IOException {
-        // given
-        HttpServletRequest request = mock(HttpServletRequest.class);
-        RequestDispatcher requestDispatcher = mock(RequestDispatcher.class);
-        HttpServletResponse response = mock(HttpServletResponse.class);
-
         when(request.getRequestURI()).thenReturn("/");
         when(request.getMethod()).thenReturn("GET");
         when(request.getRequestDispatcher("/index.jsp")).thenReturn(requestDispatcher);
 
-        // when
         dispatcherServlet.service(request, response);
 
-        // then
         verify(requestDispatcher).forward(request, response);
     }
 
     @Test
     void get_register_view_path() throws ServletException, IOException {
-        // given
-        HttpServletRequest request = mock(HttpServletRequest.class);
-        RequestDispatcher requestDispatcher = mock(RequestDispatcher.class);
-        HttpServletResponse response = mock(HttpServletResponse.class);
-
         when(request.getRequestURI()).thenReturn("/register/view");
         when(request.getMethod()).thenReturn("GET");
         when(request.getRequestDispatcher("/register.jsp")).thenReturn(requestDispatcher);
 
-        // when
         dispatcherServlet.service(request, response);
 
-        // then
         verify(requestDispatcher).forward(request, response);
     }
 }
