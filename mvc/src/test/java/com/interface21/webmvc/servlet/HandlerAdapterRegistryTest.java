@@ -1,6 +1,5 @@
-package camp.nextstep;
+package com.interface21.webmvc.servlet;
 
-import com.interface21.webmvc.servlet.ModelAndView;
 import com.interface21.webmvc.servlet.mvc.tobe.annotation.AnnotationHandlerAdapter;
 import com.interface21.webmvc.servlet.mvc.tobe.annotation.HandlerExecution;
 import com.interface21.webmvc.servlet.view.JspView;
@@ -31,9 +30,9 @@ class HandlerAdapterRegistryTest {
     void handler에_맞는_adapter로_실행한다() throws Exception {
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
-        HandlerExecution handlerExecution = new HandlerExecution(new TestController(), "test");
+        HandlerExecution handlerExecution = new HandlerExecution(new TestController(), "findUserId");
 
         ModelAndView actual = handlerAdapterRegistry.handle(handlerExecution, request, response);
-        assertThat(actual.getView()).isEqualTo(new JspView("/test.jsp"));
+        assertThat(actual.getView()).isEqualTo(new JspView(""));
     }
 }

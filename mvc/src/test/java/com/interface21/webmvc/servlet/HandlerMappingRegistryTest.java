@@ -1,4 +1,4 @@
-package camp.nextstep;
+package com.interface21.webmvc.servlet;
 
 import com.interface21.webmvc.servlet.mvc.tobe.annotation.AnnotationHandlerMapping;
 import com.interface21.webmvc.servlet.mvc.tobe.annotation.HandlerExecution;

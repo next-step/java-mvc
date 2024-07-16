@@ -1,4 +1,4 @@
-package camp.nextstep;
+package com.interface21.webmvc.servlet;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -17,7 +17,7 @@ class DispatcherServletTest {
 
     @BeforeEach
     void setUp() {
-        dispatcherServlet = new DispatcherServlet("camp");
+        dispatcherServlet = new DispatcherServlet("samples");
         dispatcherServlet.init();
     }
 
