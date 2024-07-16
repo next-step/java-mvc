@@ -19,3 +19,12 @@
 ## 학습 테스트
 1. [Reflection API](study/src/test/java/reflection)
 2. [Servlet](study/src/test/java/servlet)
+
+
+## Mission 1
+- [ ] @MVC 구현하기
+  - [ ] @RequestMapping() 구현
+    - [ ] HTTP 메서드(GET, POST, PUT, DELETE 등)도 매핑 조건에 포함
+    - [ ] method 설정이 되어 있지 않으면 모든 HTTP method를 지원
+    - [ ] value에 url path 매핑
+  - [ ] AnnotationHandlerMappingTest 통과
