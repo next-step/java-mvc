@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,46 +32,45 @@ public class AnnotationHandlerMapping {
         final Reflections reflections = new Reflections(basePackage);
         final Set<Class<?>> handlerClasses = reflections.getTypesAnnotatedWith(Controller.class);
 
-        Map<HandlerKey, HandlerExecution> map = handlerClasses.stream()
-                        .map(controller -> {
-                            try {
-                                return controllerToHandlerExecutions(controller);
-                            } catch (Exception e) {
-                                throw new RuntimeException(e);
-                            }
-                        }).flatMap(map1 -> map1.entrySet().stream())
+        final Map<HandlerKey, HandlerExecution> map = handlerClasses.stream()
+                        .map(this::controllerToHandlerExecutions)
+                        .flatMap(handlerExecutionMap -> handlerExecutionMap.entrySet().stream())
                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
         handlerExecutions.putAll(map);
+
         log.info("Initialized AnnotationHandlerMapping!");
     }
 
-    private Map<HandlerKey, HandlerExecution> controllerToHandlerExecutions(final Class<?> controller) throws Exception {
-        Object instance = controller.getDeclaredConstructor()
-                .newInstance();
+    private Map<HandlerKey, HandlerExecution> controllerToHandlerExecutions(final Class<?> controller){
+        final Object instance = getInstanceOfController(controller);
 
         return Arrays.stream(controller.getMethods())
-                .filter(method -> method.isAnnotationPresent(RequestMapping.class))
-                .map(method -> {
-                    final RequestMapping requestMapping = method.getDeclaredAnnotation(RequestMapping.class);
-                    final String path = requestMapping.value();
-                    final RequestMethod[] methodTypes = requestMapping.method();
-                    final HandlerExecution handlerExecution;
-                    try {
-                        handlerExecution = new HandlerExecution(instance, method.getName());
-                    } catch (NoSuchMethodException e) {
-                        throw new RuntimeException(e);
-                    }
+                    .filter(method -> method.isAnnotationPresent(RequestMapping.class))
+                    .map(method -> methodToHandlerExecutions(instance, method))
+                    .flatMap(map -> map.entrySet().stream())
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
 
-                    return Arrays.stream(methodTypes)
-                            .map(methodType -> new HandlerKey(path, methodType))
-                            .collect(Collectors.toMap(
-                                    handlerKey -> handlerKey,
-                                    handlerKey -> handlerExecution
-                                    )
-                            );
-                }).flatMap(map -> map.entrySet().stream())
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    private Object getInstanceOfController(final Class<?> controller) {
+        try {
+            return controller.getDeclaredConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            throw new IllegalStateException("Controller instance creation failed");
+        }
+    }
+
+    private Map<HandlerKey, HandlerExecution> methodToHandlerExecutions(final Object instance, final Method method) {
+        final RequestMapping requestMapping = method.getDeclaredAnnotation(RequestMapping.class);
+        final RequestMethod[] methodTypes = requestMapping.method();
+
+        return Arrays.stream(methodTypes)
+                .map(methodType -> new HandlerKey(requestMapping.value(), methodType))
+                .collect(Collectors.toMap(
+                        handlerKey -> handlerKey,
+                        handlerKey -> new HandlerExecution(instance, method.getName())
+                        )
+                );
     }
 
     public Object getHandler(final HttpServletRequest request) {
