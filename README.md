@@ -35,3 +35,27 @@
   - 실행하여 반환한다.
 - HandlerKey
   - HttpServletRequest를 가지고 값을 파싱하여 생성할 수 있다.
+
+## 2단계 - 점진적인 리팩터링
+- ControllerScanner
+  - 패키지 내에 controller어노테이션을 가진 클래스를 찾아 인스턴스화된 map을 반환한다
+  - 예외는 기존 AnnotationHandlerMapping과 동일하다
+
+- HandlerMapping
+  - ManualHandlerMapping, AnnotationHandlerMapping를 HandlerMapping 인터페이스로 각각 추상화하여 저장할 수 있도록 한다.
+  - 저장과 동시에 초기화한다.
+- HandlerMappingRegistry
+  - mapping list를 가지며 생성 시 초기화한다.
+  - request에 해당하는 handler를 반환한다.
+    - request에 해당하는 handler가 없는 경우 예외가 발생햔다.
+    - HandlerMapping에서 Object(nullable)를 반환하고 못찾으면 Registry에서 예외를 반환하는 것으로 변경한다.
+- JspView
+  - redirect가 포함된 viewName인 경우 rending할 때 response로 해당 위치를 redirect시킨다.
+  - render를 실행하면 model을 포함하여 requestDispatcher로 forward한다.
+- HandleAdapter
+  - Object Handler가 지원가능한 handler인지 확인한다.
+  - 요청된 handler로 ModelAndView를 만들어 반환한다.
+- HandlerAdapterRegistry
+  - HandlerAdapter list를 가진다.
+  - 지원가능한 handler가 없는 경우 예외가 발생한다.
+  - 지원가능한 handler로 ModelAndView를 만들어 반환한다.

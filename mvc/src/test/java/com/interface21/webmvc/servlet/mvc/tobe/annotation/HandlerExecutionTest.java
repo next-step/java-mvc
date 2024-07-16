@@ -1,4 +1,4 @@
-package com.interface21.webmvc.servlet.mvc.tobe;
+package com.interface21.webmvc.servlet.mvc.tobe.annotation;
 
 import com.interface21.context.stereotype.Controller;
 import com.interface21.web.bind.annotation.RequestMapping;
@@ -44,7 +44,7 @@ class HandlerExecutionTest {
     }
 
     @Controller
-    static class HandlerExecutionController {
+    private static class HandlerExecutionController {
         @RequestMapping
         public ModelAndView handleError(HttpServletResponse response, HttpServletRequest request) {
             return null;

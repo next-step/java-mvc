@@ -1,4 +1,4 @@
-package com.interface21.webmvc.servlet.mvc.tobe;
+package com.interface21.webmvc.servlet.mvc.tobe.annotation;
 
 import com.interface21.webmvc.servlet.ModelAndView;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,7 +16,7 @@ public class HandlerExecution {
         this.method = getMethod(handler, methodName);
     }
 
-    private static Method getMethod(Object handler, String methodName) {
+    private Method getMethod(Object handler, String methodName) {
         try {
             return handler.getClass()
                     .getMethod(methodName, HttpServletRequest.class, HttpServletResponse.class);
