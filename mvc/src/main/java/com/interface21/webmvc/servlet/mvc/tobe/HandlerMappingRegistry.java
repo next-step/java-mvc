@@ -17,6 +17,10 @@ public class HandlerMappingRegistry {
         ).toList();
     }
 
+    public void initialize() {
+        handlerMappings.forEach(HandlerMapping::initialize);
+    }
+
     public Object getHandler(final HttpServletRequest request) {
         return handlerMappings.stream()
                 .map(handlerMapping -> handlerMapping.getHandler(request))

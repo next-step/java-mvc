@@ -23,9 +23,7 @@ public class DispatcherServlet extends HttpServlet {
 
     public DispatcherServlet() {
         final ManualHandlerMapping manualHandlerMapping = new ManualHandlerMapping();
-        manualHandlerMapping.initialize();
         final AnnotationHandlerMapping annotationHandlerMapping = new AnnotationHandlerMapping("samples");
-        annotationHandlerMapping.initialize();
 
         this.handlerMappingRegistry = new HandlerMappingRegistry(manualHandlerMapping, annotationHandlerMapping);
         this.handlerAdapterRegistry = new HandlerAdapterRegistry(new ControllerHandlerAdapter(), new HandlerExecutionHandlerAdapter());
@@ -33,6 +31,7 @@ public class DispatcherServlet extends HttpServlet {
 
     @Override
     public void init() {
+        handlerMappingRegistry.initialize();
     }
 
     @Override
