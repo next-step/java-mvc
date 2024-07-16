@@ -42,12 +42,12 @@ public class AnnotationHandlerMapping {
     }
 
     private void mappingHandler(final Object controllerInstance, final Method method) {
-        var mapping = method.getAnnotation(RequestMapping.class);
-        if (mapping == null) {
+        var handler = method.getAnnotation(RequestMapping.class);
+        if (handler == null) {
             return;
         }
-        for (RequestMethod requestMethod : mapping.method()) {
-            var key = new HandlerKey(mapping.value(), requestMethod);
+        for (RequestMethod requestMethod : handler.method()) {
+            var key = new HandlerKey(handler.value(), requestMethod);
             var execution = new RequestMappedHandlerExecution(controllerInstance, method);
             handlerExecutions.put(key, execution);
         }
