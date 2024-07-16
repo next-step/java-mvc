@@ -1,7 +1,5 @@
 package camp.nextstep;
 
-import camp.nextstep.manual.ManualHandlerAdapter;
-import camp.nextstep.manual.ManualHandlerMapping;
 import com.interface21.webmvc.servlet.mvc.tobe.annotation.AnnotationHandlerAdapter;
 import com.interface21.webmvc.servlet.mvc.tobe.annotation.AnnotationHandlerMapping;
 import jakarta.servlet.ServletException;
@@ -20,13 +18,13 @@ public class DispatcherServlet extends HttpServlet {
     private final HandlerAdapterRegistry handlerAdapterRegistry;
 
     public DispatcherServlet() {
-        this.handlerMappingRegistry = new HandlerMappingRegistry(new ManualHandlerMapping());
-        this.handlerAdapterRegistry = new HandlerAdapterRegistry(new ManualHandlerAdapter());
+        this.handlerMappingRegistry = new HandlerMappingRegistry(new AnnotationHandlerMapping("camp"));
+        this.handlerAdapterRegistry = new HandlerAdapterRegistry(new AnnotationHandlerAdapter());
     }
 
     public DispatcherServlet(Object... basePackage) {
-        this.handlerMappingRegistry = new HandlerMappingRegistry(new ManualHandlerMapping(), new AnnotationHandlerMapping(basePackage));
-        this.handlerAdapterRegistry = new HandlerAdapterRegistry(new ManualHandlerAdapter(), new AnnotationHandlerAdapter());
+        this.handlerMappingRegistry = new HandlerMappingRegistry(new AnnotationHandlerMapping(basePackage));
+        this.handlerAdapterRegistry = new HandlerAdapterRegistry(new AnnotationHandlerAdapter());
     }
 
     @Override
