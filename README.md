@@ -22,5 +22,5 @@
 
 
 🚀 1단계 - @MVC 구현하기
-- [ ] : 1. @MVC Framework 테스트 통과하기
+- [x] : 1. @MVC Framework 테스트 통과하기
 - [ ] : 2. JspView 클래스를 구현한다.
