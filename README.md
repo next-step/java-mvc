@@ -71,3 +71,17 @@ public class TestController {
         - 없으면 예외를 던진다
 - `HandlerExecution` 의 `handle` 를 호출한다.
     - 만들어진 객체와 메서드정보로 메서드를 실행시킨다.
+
+## 2단계 - 점진적인 리팩터링
+
+### 요구사항 1 - Legacy MVC 와 @MVC 통합하기
+
+- 컨트롤러 인터페이스 기반 MVC 프레임워크와 @MVC 프레임워크가 공존하도록 만들자.
+- HandlerMapping 인터페이스를 분리한다.
+  - ManualHandlerMapping, AnnotationHandlerMapping 두 가지를 묶는다.
+- `DispatcherServlet` 에서 만든 `AnnotationHandlerMapping` 를 추가한다
+  - ManualHandlerMapping, AnnotationHandlerMapping 를 하나의 List<HandlerMapping> 로 관리한다
+- AnnotationHandlerMapping 또는 ManualHandlerMapping 클래스에서 찾은 컨트롤러를 실행한다
+  - 요청 URL 에 따라 적절한 Handler 를 실행한다
+
+![img.png](img.png)
