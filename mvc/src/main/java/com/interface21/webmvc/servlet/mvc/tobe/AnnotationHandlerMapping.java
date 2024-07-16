@@ -2,7 +2,7 @@ package com.interface21.webmvc.servlet.mvc.tobe;
 
 import com.interface21.web.bind.annotation.RequestMapping;
 import com.interface21.web.bind.annotation.RequestMethod;
-import com.interface21.webmvc.servlet.mvc.exception.AnnotationHandlerMappingException;
+import com.interface21.webmvc.servlet.mvc.exception.HandlerMappingException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,6 +78,6 @@ public class AnnotationHandlerMapping implements HandlerMapping {
         if (handlerExecutions.containsKey(handlerKey)) {
             return this.handlerExecutions.get(handlerKey);
         }
-        throw new AnnotationHandlerMappingException("No handler found");
+        throw new HandlerMappingException("No handler found");
     }
 }

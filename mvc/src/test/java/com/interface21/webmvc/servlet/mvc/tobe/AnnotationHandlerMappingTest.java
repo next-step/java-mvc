@@ -1,7 +1,7 @@
 package com.interface21.webmvc.servlet.mvc.tobe;
 
 import com.interface21.web.bind.annotation.RequestMethod;
-import com.interface21.webmvc.servlet.mvc.exception.AnnotationHandlerMappingException;
+import com.interface21.webmvc.servlet.mvc.exception.HandlerMappingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -83,7 +83,7 @@ class AnnotationHandlerMappingTest {
         when(request.getMethod()).thenReturn("GET");
 
         assertThatThrownBy(() -> handlerMapping.getHandler(request))
-                .isInstanceOf(AnnotationHandlerMappingException.class)
+                .isInstanceOf(HandlerMappingException.class)
                 .hasMessage("No handler found");
     }
 }
