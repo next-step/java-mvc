@@ -59,3 +59,10 @@
   - HandlerAdapter list를 가진다.
   - 지원가능한 handler가 없는 경우 예외가 발생한다.
   - 지원가능한 handler로 ModelAndView를 만들어 반환한다.
+
+## 3단계 - JSON View 구현하기
+- JsonView
+  - response에 contentType을 application/json으로 설정한다.
+  - objectMapper를 통해 model을 Serialization한다.
+    - 그 값의 길이를 contentLength로 설정한다
+    - response에 직렬화한 body를 저장한다
