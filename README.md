@@ -22,9 +22,9 @@
 
 
 ## Mission 1
-- [ ] @MVC 구현하기
-  - [ ] @RequestMapping() 구현
-    - [ ] HTTP 메서드(GET, POST, PUT, DELETE 등)도 매핑 조건에 포함
-    - [ ] method 설정이 되어 있지 않으면 모든 HTTP method를 지원
-    - [ ] value에 url path 매핑
-  - [ ] AnnotationHandlerMappingTest 통과
+- [X] @MVC 구현하기
+  - [X] AnnotationHandlerMapping 구현
+    - [X] initialize 메서드 구현
+    - [X] getHandler 메서드 구현
+  - [X] AnnotationHandlerMappingTest 통과
+  - [X] HandlerExecution 구현
