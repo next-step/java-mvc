@@ -28,27 +28,27 @@ public class AnnotationHandlerMapping {
 
     public void initialize() {
         log.info("Initialized AnnotationHandlerMapping!");
-        var classes = new Reflections(basePackage).getTypesAnnotatedWith(Controller.class);
-        classes.forEach(this::mappingController);
+        var controllers = new Reflections(basePackage).getTypesAnnotatedWith(Controller.class);
+        controllers.forEach(this::mappingController);
     }
 
     private void mappingController(Class<?> controller) {
         try {
-            var classInstance = controller.getDeclaredConstructor().newInstance();
-            Arrays.stream(controller.getMethods()).forEach(method -> mappingHandler(classInstance, method));
+            var controllerInstance = controller.getDeclaredConstructor().newInstance();
+            Arrays.stream(controller.getMethods()).forEach(method -> mappingHandler(controllerInstance, method));
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException |
                  InvocationTargetException ignored) {
         }
     }
 
-    private void mappingHandler(final Object classInstance, final Method method) {
+    private void mappingHandler(final Object controllerInstance, final Method method) {
         var mapping = method.getAnnotation(RequestMapping.class);
         if (mapping == null) {
             return;
         }
         for (RequestMethod requestMethod : mapping.method()) {
             var key = new HandlerKey(mapping.value(), requestMethod);
-            var execution = new MethodHandlerExecution(classInstance, method);
+            var execution = new MethodHandlerExecution(controllerInstance, method);
             handlerExecutions.put(key, execution);
         }
     }

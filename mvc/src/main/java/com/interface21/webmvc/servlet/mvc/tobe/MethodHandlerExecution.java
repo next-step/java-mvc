@@ -8,16 +8,16 @@ import java.lang.reflect.Method;
 
 public class MethodHandlerExecution extends HandlerExecution {
 
-    private final Object classInstance;
+    private final Object controllerInstance;
     private final Method method;
 
-    public MethodHandlerExecution(Object classInstance, Method method) {
-        this.classInstance = classInstance;
+    public MethodHandlerExecution(Object controllerInstance, Method method) {
+        this.controllerInstance = controllerInstance;
         this.method = method;
     }
 
     @Override
     public ModelAndView handle(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        return (ModelAndView) method.invoke(classInstance, request, response);
+        return (ModelAndView) method.invoke(controllerInstance, request, response);
     }
 }
