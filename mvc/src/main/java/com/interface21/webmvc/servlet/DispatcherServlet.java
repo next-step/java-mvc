@@ -17,11 +17,6 @@ public class DispatcherServlet extends HttpServlet {
     private final HandlerMappingRegistry handlerMappingRegistry;
     private final HandlerAdapterRegistry handlerAdapterRegistry;
 
-    public DispatcherServlet() {
-        this.handlerMappingRegistry = new HandlerMappingRegistry(new AnnotationHandlerMapping("camp"));
-        this.handlerAdapterRegistry = new HandlerAdapterRegistry(new AnnotationHandlerAdapter());
-    }
-
     public DispatcherServlet(Object... basePackage) {
         this.handlerMappingRegistry = new HandlerMappingRegistry(new AnnotationHandlerMapping(basePackage));
         this.handlerAdapterRegistry = new HandlerAdapterRegistry(new AnnotationHandlerAdapter());
