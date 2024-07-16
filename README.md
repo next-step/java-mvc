@@ -66,3 +66,8 @@
   - objectMapper를 통해 model을 Serialization한다.
     - 그 값의 길이를 contentLength로 설정한다
     - response에 직렬화한 body를 저장한다
+- legacy mvc를 제거한다
+  - 기존 app에 있던 servlet 클래스를 모두 mvc로 이동하여도 동작하도록 수정한다
+- UserController
+  - 현재 로그인중인 유저가 없으면 401로 리다이랙한다
+  - 현재 로그인중인 유저의 정보를 json으로 반환한다
