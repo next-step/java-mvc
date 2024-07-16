@@ -1,7 +1,6 @@
 package camp.nextstep;
 
 import com.interface21.webmvc.servlet.ModelAndView;
-import com.interface21.webmvc.servlet.View;
 import com.interface21.webmvc.servlet.mvc.asis.Controller;
 import com.interface21.webmvc.servlet.mvc.tobe.AnnotationHandlerMapping;
 import com.interface21.webmvc.servlet.mvc.tobe.HandlerExecution;
@@ -47,8 +46,7 @@ public class DispatcherServlet extends HttpServlet {
 
         try {
             final ModelAndView modelAndView = execute(handler, request, response);
-            final View view = modelAndView.getView();
-            view.render(modelAndView.getModel(), request, response);
+            modelAndView.renderView(request, response);
         } catch (final Throwable e) {
             log.error("Exception : {}", e.getMessage(), e);
             throw new ServletException(e.getMessage());
