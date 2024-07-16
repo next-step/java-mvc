@@ -13,9 +13,15 @@ public class JsonView implements View {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
+    private final String contentType;
+
+    public JsonView() {
+        this.contentType = APPLICATION_JSON_UTF8_VALUE;
+    }
+
     @Override
     public void render(final Map<String, ?> model, final HttpServletRequest request, HttpServletResponse response) throws Exception {
-        response.setContentType(APPLICATION_JSON_UTF8_VALUE);
+        response.setContentType(contentType);
 
         String responseBody = objectMapper.writeValueAsString(model);
         response.setContentLength(responseBody.length());
