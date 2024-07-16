@@ -85,3 +85,8 @@ public class TestController {
   - 요청 URL 에 따라 적절한 Handler 를 실행한다
 
 ![img.png](img.png)
+
+- HandlerMappingRegistry
+  - 각 handlerMapping 을 초기화하고, request 에 맞는 handler 를 반환한다.
+- HandlerAdapterRegistry
+  - handlerAdapter 들을 가지고 있다가, 요청을 공통적으로 처리한다
