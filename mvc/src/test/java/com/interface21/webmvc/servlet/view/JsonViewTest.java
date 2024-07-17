@@ -63,7 +63,7 @@ class JsonViewTest {
         new JsonView().render(Map.of("testKey", Map.of("innerKey", "innerValue")), request, response);
 
         verify(response).setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-        assertThat(stringWriter.toString()).isEqualTo("{\"innerKey\":\"innerValue\"}");
+        assertThat(stringWriter.toString()).isEqualTo("{\"testKey\":{\"innerKey\":\"innerValue\"}}");
     }
 
     @Test
