@@ -14,10 +14,10 @@ public class HandlerExecution {
 
     public HandlerExecution(final Object handler, final String methodName) {
             this.handler = handler;
-            this.method = findMethod(handler, methodName);
+            this.method = getHandlerMethod(handler, methodName);
     }
 
-    private Method findMethod(final Object handler, final String methodName){
+    private Method getHandlerMethod(final Object handler, final String methodName){
         try {
             return handler.getClass()
                     .getMethod(methodName, HttpServletRequest.class, HttpServletResponse.class);
