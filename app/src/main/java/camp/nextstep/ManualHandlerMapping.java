@@ -1,15 +1,21 @@
 package camp.nextstep;
 
-import camp.nextstep.controller.*;
+import camp.nextstep.controller.LoginController;
+import camp.nextstep.controller.LoginViewController;
+import camp.nextstep.controller.LogoutController;
+import camp.nextstep.controller.RegisterController;
+import camp.nextstep.controller.RegisterViewController;
+import com.interface21.webmvc.servlet.mvc.asis.Controller;
+import com.interface21.webmvc.servlet.mvc.asis.ForwardController;
+import com.interface21.webmvc.servlet.mvc.exception.HandlerMappingException;
 import com.interface21.webmvc.servlet.mvc.tobe.HandlerMapping;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.interface21.webmvc.servlet.mvc.asis.Controller;
-import com.interface21.webmvc.servlet.mvc.asis.ForwardController;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class ManualHandlerMapping implements HandlerMapping {
 
@@ -28,13 +34,14 @@ public class ManualHandlerMapping implements HandlerMapping {
 
         log.info("Initialized Handler Mapping!");
         controllers.keySet()
-            .forEach(path -> log.info("Path : {}, Controller : {}", path, controllers.get(path).getClass()));
+                .forEach(path -> log.info("Path : {}, Controller : {}", path, controllers.get(path).getClass()));
     }
 
     @Override
     public Controller getHandler(final HttpServletRequest request) {
         final String requestURI = request.getRequestURI();
         log.debug("Request Mapping Uri : {}", requestURI);
-        return controllers.get(requestURI);
+        return Optional.ofNullable(controllers.get(requestURI))
+                .orElseThrow(() -> new HandlerMappingException("No handler found"));
     }
 }
