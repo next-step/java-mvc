@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class ControllerScannerTest {
-    
+
     @DisplayName("Controller 어노테이션이 붙은 클래스를 찾아 인스턴스화한다.")
     @Test
     void testGetControllers() {
