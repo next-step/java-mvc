@@ -1,5 +1,6 @@
 package com.interface21.webmvc.servlet;
 
+import com.interface21.webmvc.servlet.view.JspView;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -15,6 +16,10 @@ public class ModelAndView {
     public ModelAndView(final View view) {
         this.view = view;
         this.model = new HashMap<>();
+    }
+
+    public static ModelAndView createJspView(final String viewName) {
+        return new ModelAndView(new JspView(viewName));
     }
 
     public void render(final HttpServletRequest request, final HttpServletResponse response) throws Exception {

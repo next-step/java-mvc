@@ -8,12 +8,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
-public class LogoutController {
+public class ForwardController {
 
-    @RequestMapping(value = "/logout", method = RequestMethod.GET)
-    public ModelAndView logout(HttpServletRequest request, HttpServletResponse response) {
-        final var session = request.getSession();
-        session.removeAttribute(UserSession.SESSION_KEY);
-        return ModelAndView.createJspView("redirect:/");
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public ModelAndView forward(HttpServletRequest request, HttpServletResponse response) {
+        return ModelAndView.createJspView("/index.jsp");
     }
 }
