@@ -4,6 +4,7 @@ import com.interface21.context.stereotype.Controller;
 import com.interface21.web.bind.annotation.RequestMapping;
 import com.interface21.web.bind.annotation.RequestMethod;
 import jakarta.servlet.http.HttpServletRequest;
+import org.reflections.ReflectionUtils;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,9 +45,9 @@ public class AnnotationHandlerMapping {
 
     private Map<HandlerKey, HandlerExecution> controllerToHandlerExecutions(final Class<?> controller){
         final Object instance = getInstanceOfController(controller);
+        final Set<Method> methods = ReflectionUtils.getAllMethods(controller, ReflectionUtils.withAnnotation(RequestMapping.class));
 
-        return Arrays.stream(controller.getMethods())
-                    .filter(method -> method.isAnnotationPresent(RequestMapping.class))
+        return methods.stream()
                     .map(method -> methodToHandlerExecutions(instance, method))
                     .flatMap(map -> map.entrySet().stream())
                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
