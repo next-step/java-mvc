@@ -19,3 +19,12 @@
 ## 학습 테스트
 1. [Reflection API](study/src/test/java/reflection)
 2. [Servlet](study/src/test/java/servlet)
+
+
+## Mission 1
+- [X] @MVC 구현하기
+  - [X] AnnotationHandlerMapping 구현
+    - [X] initialize 메서드 구현
+    - [X] getHandler 메서드 구현
+  - [X] AnnotationHandlerMappingTest 통과
+  - [X] HandlerExecution 구현
