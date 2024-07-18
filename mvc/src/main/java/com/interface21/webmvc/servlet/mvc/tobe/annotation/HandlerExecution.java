@@ -10,10 +10,12 @@ public class HandlerExecution {
 
     private final Object handler;
     private final Method method;
+    private final MethodParameters methodParameters;
 
     public HandlerExecution(Object handler, String methodName) {
         this.handler = handler;
         this.method = getMethod(handler, methodName);
+        this.methodParameters = new MethodParameters(this.method);
     }
 
     private Method getMethod(Object handler, String methodName) {
