@@ -40,17 +40,21 @@ public class MethodParameter {
         }
 
         try {
-            Object instance = parameterType.getDeclaredConstructor()
-                    .newInstance();
-            for (Field field : parameterType.getDeclaredFields()) {
-                field.setAccessible(true);
-                field.set(instance, request.getAttribute(field.getName()));
-                field.setAccessible(false);
-            }
-            return instance;
+            return parseObject(request);
         } catch (Exception e) {
             throw new RuntimeException("객체 파싱에서 문제가 발생했습니다.", e);
         }
+    }
+
+    private Object parseObject(HttpServletRequest request) throws Exception {
+        Object instance = parameterType.getDeclaredConstructor()
+                .newInstance();
+        for (Field field : parameterType.getDeclaredFields()) {
+            field.setAccessible(true);
+            field.set(instance, request.getAttribute(field.getName()));
+            field.setAccessible(false);
+        }
+        return instance;
     }
 
     private Object parseParameterType(String pathValue) {
