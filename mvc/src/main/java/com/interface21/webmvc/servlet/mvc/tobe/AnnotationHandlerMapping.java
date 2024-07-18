@@ -5,7 +5,9 @@ import com.interface21.web.bind.annotation.RequestMapping;
 import com.interface21.web.bind.annotation.RequestMethod;
 import jakarta.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.reflections.Reflections;
@@ -26,20 +28,14 @@ public class AnnotationHandlerMapping {
 
     public void initialize() {
         log.info("Initialized AnnotationHandlerMapping!");
-        Set<Class<?>> controllers = findControllerClasses();
+        Set<Class<?>> controllers = new Reflections(basePackage).getTypesAnnotatedWith(Controller.class);
         for (Class<?> controller : controllers) {
             registerHandlerMappings(controller);
         }
     }
 
-    private Set<Class<?>> findControllerClasses() {
-        Reflections reflections = new Reflections(basePackage);
-        return reflections.getTypesAnnotatedWith(Controller.class);
-    }
-
     private void registerHandlerMappings(Class<?> controller) {
-        Method[] methods = controller.getDeclaredMethods();
-        for (Method method : methods) {
+        for (Method method : controller.getDeclaredMethods()) {
             registerHandlerMapping(controller, method);
         }
     }
@@ -47,17 +43,21 @@ public class AnnotationHandlerMapping {
     private void registerHandlerMapping(Class<?> controller, Method method) {
         RequestMapping requestMapping = method.getAnnotation(RequestMapping.class);
         if (requestMapping != null) {
-            HandlerKey handlerKey = makeHandlerKey(requestMapping);
+            List<HandlerKey> handlerKeys = makeHandlerKeys(requestMapping);
             HandlerExecution handlerExecution = new HandlerExecution(controller, method);
-            handlerExecutions.put(handlerKey, handlerExecution);
-            log.info("Mapped {} to {}", handlerKey, handlerExecution);
+            for (HandlerKey handlerKey : handlerKeys) {
+                handlerExecutions.put(handlerKey, handlerExecution);
+                log.info("Mapped {} to {}", handlerKey, handlerExecution);
+            }
         }
     }
 
-    private HandlerKey makeHandlerKey(RequestMapping requestMapping) {
+    private List<HandlerKey> makeHandlerKeys(RequestMapping requestMapping) {
         String url = requestMapping.value();
-        RequestMethod requestMethod = requestMapping.method()[0];
-        return new HandlerKey(url, requestMethod);
+        RequestMethod[] methods = requestMapping.method();
+        return Arrays.stream(methods)
+                     .map(method -> new HandlerKey(url, method))
+                     .toList();
     }
 
     public Object getHandler(final HttpServletRequest request) {
