@@ -9,11 +9,11 @@
 
 ### 시작 가이드
 1. 미션을 시작하기 전에 학습 테스트를 먼저 진행합니다.
-    - [Junit3TestRunner](study/src/test/java/reflection/Junit3TestRunner.java)
-    - [Junit4TestRunner](study/src/test/java/reflection/Junit4TestRunner.java)
-    - [ReflectionTest](study/src/test/java/reflection/ReflectionTest.java)
-    - [ReflectionsTest](study/src/test/java/reflection/ReflectionsTest.java)
-    - 나머지 학습 테스트는 강의 시간에 풀어봅시다.
+  - [Junit3TestRunner](study/src/test/java/reflection/Junit3TestRunner.java)
+  - [Junit4TestRunner](study/src/test/java/reflection/Junit4TestRunner.java)
+  - [ReflectionTest](study/src/test/java/reflection/ReflectionTest.java)
+  - [ReflectionsTest](study/src/test/java/reflection/ReflectionsTest.java)
+  - 나머지 학습 테스트는 강의 시간에 풀어봅시다.
 2. 학습 테스트를 완료하면 LMS의 1단계 미션부터 진행합니다.
 
 ## 학습 테스트
@@ -78,5 +78,7 @@
 - MethodParameter
   - 타입을 가지고 있는다
   - HttpServletRequest에서 해당하는 타입과 이름에 맞는 값을 가져와 사용한다.
+- SupportParameterType
+  - 단순 지원 가능한 parameter 타입인지 확인한다
 - MethodParameters
   - method.invoke를 하기위해 각 파라미터의 파싱된 값을 배열로 반환한다
