@@ -25,12 +25,12 @@ class HandlerExecutionTest {
 
     @Test
     void HandleExecution을_생성한다() {
-        Assertions.assertDoesNotThrow(() -> new HandlerExecution(controller, method));
+        Assertions.assertDoesNotThrow(() -> new HandlerExecution(controller, method, ""));
     }
 
     @Test
     void request_와_response를_받아_특정_메소드를_실행한다() throws Exception {
-        HandlerExecution handlerExecution = new HandlerExecution(controller, method);
+        HandlerExecution handlerExecution = new HandlerExecution(controller, method, "");
         ModelAndView actual = handlerExecution.handle(mock(HttpServletRequest.class), mock(HttpServletResponse.class));
         assertThat(actual.getObject("name")).isEqualTo("jinyoung");
     }

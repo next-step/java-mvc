@@ -21,10 +21,10 @@ class MethodParametersTest {
 
     @Test
     void 메소드를_받아_파라미터리스트를_생성한다() {
-        MethodParameters actual = new MethodParameters(method);
+        MethodParameters actual = MethodParameters.of("", method);
         assertThat(actual.getValues()).containsExactly(
-                new MethodParameter(String.class, "userId"),
-                new MethodParameter(int.class, "userAge")
+                new MethodParameter(String.class, "userId", new PathParameter("", false, "")),
+                new MethodParameter(int.class, "userAge", new PathParameter("", false, ""))
         );
     }
 
@@ -35,7 +35,7 @@ class MethodParametersTest {
         when(request.getAttribute("userId")).thenReturn("jinyoung");
         when(request.getAttribute("userAge")).thenReturn(10);
 
-        MethodParameters methodParameters = new MethodParameters(method);
+        MethodParameters methodParameters = MethodParameters.of("", method);
         Object[] actual = methodParameters.parseValues(request, response);
         assertThat(actual).containsExactly("jinyoung", 10);
     }

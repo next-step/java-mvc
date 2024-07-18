@@ -31,7 +31,7 @@ class HandlerAdapterRegistryTest {
     void handler에_맞는_adapter로_실행한다() throws Exception {
         Method method = TestController.class
                 .getMethod("findUserId", HttpServletRequest.class, HttpServletResponse.class);
-        HandlerExecution handlerExecution = new HandlerExecution(new TestController(), method);
+        HandlerExecution handlerExecution = new HandlerExecution(new TestController(), method, "");
 
         ModelAndView actual = handlerAdapterRegistry.handle(handlerExecution, request, response);
         assertThat(actual.getView()).isEqualTo(new JspView(""));

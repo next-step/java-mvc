@@ -12,14 +12,16 @@ public class MethodParameter {
 
     private final Class<?> parameterType;
     private final String parameterName;
+    private final PathParameter pathParameter;
 
-    public MethodParameter(Class<?> parameterType, String parameterName) {
+    public MethodParameter(Class<?> parameterType, String parameterName, PathParameter pathParameter) {
         this.parameterType = parameterType;
         this.parameterName = parameterName;
+        this.pathParameter = pathParameter;
     }
 
-    public MethodParameter(Parameter parameter) {
-        this(parameter.getType(), parameter.getName());
+    public static MethodParameter of(String urlPattern, Parameter parameter) {
+        return new MethodParameter(parameter.getType(), parameter.getName(), PathParameter.of(urlPattern, parameter));
     }
 
     public Object parseValue(HttpServletRequest request, HttpServletResponse response) {
@@ -48,11 +50,11 @@ public class MethodParameter {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MethodParameter that = (MethodParameter) o;
-        return Objects.equals(parameterType, that.parameterType) && Objects.equals(parameterName, that.parameterName);
+        return Objects.equals(parameterType, that.parameterType) && Objects.equals(parameterName, that.parameterName) && Objects.equals(pathParameter, that.pathParameter);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(parameterType, parameterName);
+        return Objects.hash(parameterType, parameterName, pathParameter);
     }
 }

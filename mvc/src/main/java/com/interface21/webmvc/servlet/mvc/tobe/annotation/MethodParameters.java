@@ -11,13 +11,17 @@ public class MethodParameters {
 
     private final List<MethodParameter> values;
 
-    public MethodParameters(Method method) {
-        this.values = parseMethodParameters(method);
+    public MethodParameters(List<MethodParameter> values) {
+        this.values = values;
     }
 
-    private List<MethodParameter> parseMethodParameters(Method method) {
+    public static MethodParameters of(String urlPattern, Method method) {
+        return new MethodParameters(parseMethodParameters(urlPattern, method));
+    }
+
+    private static List<MethodParameter> parseMethodParameters(String urlPattern, Method method) {
         return Arrays.stream(method.getParameters())
-                .map(MethodParameter::new)
+                .map(parameter -> MethodParameter.of(urlPattern, parameter))
                 .toList();
     }
 

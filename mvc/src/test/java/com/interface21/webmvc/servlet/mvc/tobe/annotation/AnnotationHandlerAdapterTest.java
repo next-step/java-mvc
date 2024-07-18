@@ -25,7 +25,7 @@ class AnnotationHandlerAdapterTest {
 
     @Test
     void HandlerExecution_handler를_지원가능으로_판단한다() {
-        HandlerExecution handlerExecution = new HandlerExecution(new HandlerExecutionController(), method);
+        HandlerExecution handlerExecution = new HandlerExecution(new HandlerExecutionController(), method, "");
         boolean actual = annotationHandlerAdapter.accept(handlerExecution);
         assertThat(actual).isTrue();
     }
@@ -38,7 +38,7 @@ class AnnotationHandlerAdapterTest {
 
     @Test
     void handling된_ModelAndView를_반환한다() throws Exception {
-        HandlerExecution handlerExecution = new HandlerExecution(new HandlerExecutionController(), method);
+        HandlerExecution handlerExecution = new HandlerExecution(new HandlerExecutionController(), method, "");
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
 

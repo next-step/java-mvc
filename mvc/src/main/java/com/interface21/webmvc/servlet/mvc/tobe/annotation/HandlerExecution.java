@@ -12,10 +12,10 @@ public class HandlerExecution {
     private final Method method;
     private final MethodParameters methodParameters;
 
-    public HandlerExecution(Object handler, Method method) {
+    public HandlerExecution(Object handler, Method method, String urlPattern) {
         this.handler = handler;
         this.method = method;
-        this.methodParameters = new MethodParameters(method);
+        this.methodParameters = MethodParameters.of("", method);
     }
 
     public ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response) throws Exception {
