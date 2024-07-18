@@ -84,4 +84,9 @@
   - method.invoke를 하기위해 각 파라미터의 파싱된 값을 배열로 반환한다
 - PathVariable
   - 어노테이션에 PathVariable이 있는 경우 url의 PathVariable을 파싱하여 반환한다
-  - PatiVariable에 value값이 있으면 url의 해당 이름으로 파싱하여 반환한다
+  - PathVariable에 value값이 있으면 url의 해당 이름으로 파싱하여 반환한다
+  - PathParameter
+    - PathVariable 존재여부와 파싱에 필요한 값을 가진다
+    - PathVariable이 없는데 파싱하려하는 경우 예외가 발생한다.
+    - 만약 pathValue가 비었다면 pathParameterName을 가지고 url 패턴에서 뽑아낸다
+    - pathValue가 있다면 해당 값을 가지고 url 패턴에서 뽑아낸다
