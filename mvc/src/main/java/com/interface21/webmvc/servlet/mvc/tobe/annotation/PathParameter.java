@@ -1,6 +1,7 @@
 package com.interface21.webmvc.servlet.mvc.tobe.annotation;
 
 import com.interface21.web.bind.annotation.PathVariable;
+import com.interface21.webmvc.servlet.mvc.tobe.support.PathPatternUtil;
 
 import java.lang.reflect.Parameter;
 import java.util.Objects;
@@ -27,9 +28,12 @@ public class PathParameter {
         return new PathParameter(urlPattern, false, EMPTY_PATH_VALUE);
     }
 
-    public String parsePathVariable(String parameterName) {
+    public String parsePathVariable(String url, String parameterName) {
         if (!isPathVariable) {
             throw new IllegalStateException("PathVariable이 없는 경우 호출할 수 없다");
+        }
+        if (pathValue.equals(EMPTY_PATH_VALUE)) {
+            return PathPatternUtil.getUriValue(urlPattern, url, parameterName);
         }
         return null;
     }

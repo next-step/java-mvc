@@ -32,9 +32,16 @@ class PathParameterTest {
     @Test
     void PathVariable값이_없는데_파싱하려는_경우_예외가_발생한다() {
         PathParameter pathParameter = new PathParameter("/", false, "age");
-        assertThatThrownBy(() -> pathParameter.parsePathVariable("userAge"))
+        assertThatThrownBy(() -> pathParameter.parsePathVariable("/1", "userAge"))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessage("PathVariable이 없는 경우 호출할 수 없다");
+    }
+
+    @Test
+    void PathVariable이_빈값이면_파라미터이름으로_파싱한다() {
+        PathParameter pathParameter = new PathParameter("/{userAge}", true, "");
+        String actual = pathParameter.parsePathVariable("/1", "userAge");
+        assertThat(actual).isEqualTo("1");
     }
 
     private static class TestUserController {
