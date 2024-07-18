@@ -1,6 +1,7 @@
 package com.interface21.webmvc.servlet.mvc.tobe.annotation;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.lang.reflect.Parameter;
 import java.util.Objects;
@@ -21,7 +22,13 @@ public class MethodParameter {
         this(parameter.getType(), parameter.getName());
     }
 
-    public Object parseValue(HttpServletRequest request) {
+    public Object parseValue(HttpServletRequest request, HttpServletResponse response) {
+        if (HttpServletRequest.class.isAssignableFrom(parameterType)) {
+            return request;
+        }
+        if (HttpServletResponse.class.isAssignableFrom(parameterType)) {
+            return response;
+        }
         if (isSupport(parameterType)) {
             return request.getAttribute(parameterName);
         }

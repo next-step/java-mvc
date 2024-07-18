@@ -2,6 +2,7 @@ package com.interface21.webmvc.servlet.mvc.tobe.annotation;
 
 import com.interface21.webmvc.servlet.ModelAndView;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Parameter;
@@ -28,9 +29,10 @@ class MethodParameterTest {
     @Test
     void HttpServletRequest에서_parameterType에_해당하는_값을_파싱한다() {
         HttpServletRequest request = mock(HttpServletRequest.class);
+        HttpServletResponse response = mock(HttpServletResponse.class);
         when(request.getAttribute("userAge")).thenReturn(10);
 
-        Object actual = new MethodParameter(int.class, "userAge").parseValue(request);
+        Object actual = new MethodParameter(int.class, "userAge").parseValue(request, response);
         assertAll(
                 () -> assertThat(actual.getClass()).isEqualTo(Integer.class),
                 () -> assertThat(actual).isEqualTo(10)

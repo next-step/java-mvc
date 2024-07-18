@@ -2,10 +2,10 @@ package com.interface21.webmvc.servlet.mvc.tobe.annotation;
 
 import com.interface21.webmvc.servlet.ModelAndView;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -31,11 +31,12 @@ class MethodParametersTest {
     @Test
     void request에서_파싱한_값을_반환한다() {
         HttpServletRequest request = mock(HttpServletRequest.class);
+        HttpServletResponse response = mock(HttpServletResponse.class);
         when(request.getAttribute("userId")).thenReturn("jinyoung");
         when(request.getAttribute("userAge")).thenReturn(10);
 
         MethodParameters methodParameters = new MethodParameters(method);
-        List<Object> actual = methodParameters.parseValues(request);
+        Object[] actual = methodParameters.parseValues(request, response);
         assertThat(actual).containsExactly("jinyoung", 10);
     }
 
