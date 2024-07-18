@@ -3,6 +3,7 @@ package com.interface21.webmvc.servlet.mvc.tobe.annotation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Parameter;
 import java.util.Objects;
 
@@ -37,7 +38,19 @@ public class MethodParameter {
         if (isSupport(parameterType)) {
             return request.getAttribute(parameterName);
         }
-        throw new IllegalStateException("실행 불가");
+
+        try {
+            Object instance = parameterType.getDeclaredConstructor()
+                    .newInstance();
+            for (Field field : parameterType.getDeclaredFields()) {
+                field.setAccessible(true);
+                field.set(instance, request.getAttribute(field.getName()));
+                field.setAccessible(false);
+            }
+            return instance;
+        } catch (Exception e) {
+            throw new RuntimeException("객체 파싱에서 문제가 발생했습니다.", e);
+        }
     }
 
     private Object parseParameterType(String pathValue) {

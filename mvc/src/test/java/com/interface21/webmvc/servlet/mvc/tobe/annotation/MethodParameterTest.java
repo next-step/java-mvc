@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Parameter;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -66,6 +67,18 @@ class MethodParameterTest {
     }
 
     @Test
+    void 타입이_객체인_경우_각_attribute를_파싱하여_반환한다() {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        HttpServletResponse response = mock(HttpServletResponse.class);
+        when(request.getAttribute("userId")).thenReturn("jinyoung");
+        when(request.getAttribute("password")).thenReturn("1234");
+        when(request.getAttribute("age")).thenReturn(10);
+
+        Object actual = new MethodParameter(TestUser.class, "testUser", new PathParameter("", false, "")).parseValue(request, response);
+        assertThat(actual).isEqualTo(new TestUser("jinyoung", "1234", 10));
+    }
+
+    @Test
     void equals() {
         MethodParameter methodParameter = new MethodParameter(String.class, "name", new PathParameter("", false, ""));
         assertThat(methodParameter).isEqualTo(new MethodParameter(String.class, "name", new PathParameter("", false, "")));
@@ -75,6 +88,34 @@ class MethodParameterTest {
 
         public ModelAndView createString(String userId) {
             return null;
+        }
+    }
+
+    public static class TestUser {
+        private String userId;
+        private String password;
+        private int age;
+
+        public TestUser() {
+        }
+
+        public TestUser(String userId, String password, int age) {
+            this.userId = userId;
+            this.password = password;
+            this.age = age;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            TestUser testUser = (TestUser) o;
+            return age == testUser.age && Objects.equals(userId, testUser.userId) && Objects.equals(password, testUser.password);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(userId, password, age);
         }
     }
 }
