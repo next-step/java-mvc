@@ -17,7 +17,7 @@ public class DispatcherServlet extends HttpServlet {
     private final HandlerAdapterRegistry handlerAdapterRegistry;
 
     public DispatcherServlet() {
-        this.handlerMappingRegistry = new HandlerMappingRegistry(new AnnotationHandlerMapping("camp.nextstep"));
+        this.handlerMappingRegistry = new HandlerMappingRegistry();
         this.handlerAdapterRegistry = new HandlerAdapterRegistry(new HandlerExecutionHandlerAdapter());
     }
 

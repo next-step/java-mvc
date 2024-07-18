@@ -10,9 +10,9 @@ import java.util.stream.Stream;
 public class HandlerMappingRegistry {
     private final List<HandlerMapping> handlerMappings;
 
-    public HandlerMappingRegistry(final HandlerMapping handlerMapping, final HandlerMapping... handlerMappings) {
+    public HandlerMappingRegistry(final HandlerMapping... handlerMappings) {
         this.handlerMappings = Stream.concat(
-                Stream.of(handlerMapping),
+                Stream.of(new AnnotationHandlerMapping("camp.nextstep")),
                 Stream.of(handlerMappings)
         ).toList();
     }
