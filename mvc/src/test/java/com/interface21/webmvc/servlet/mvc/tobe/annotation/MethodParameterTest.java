@@ -27,6 +27,22 @@ class MethodParameterTest {
     }
 
     @Test
+    void 타입이_HttpServletRequest인_경우_request를_그대로_반환한다() {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        HttpServletResponse response = mock(HttpServletResponse.class);
+        Object actual = new MethodParameter(HttpServletRequest.class, "request").parseValue(request, response);
+        assertThat(actual).isEqualTo(request);
+    }
+
+    @Test
+    void 타입이_HttpServletResponse인_경우_response를_그대로_반환한다() {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        HttpServletResponse response = mock(HttpServletResponse.class);
+        Object actual = new MethodParameter(HttpServletResponse.class, "response").parseValue(request, response);
+        assertThat(actual).isEqualTo(response);
+    }
+
+    @Test
     void HttpServletRequest에서_parameterType에_해당하는_값을_파싱한다() {
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
