@@ -8,7 +8,6 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -23,12 +22,9 @@ class MethodParametersTest {
     @Test
     void 메소드를_받아_파라미터리스트를_생성한다() {
         MethodParameters actual = new MethodParameters(method);
-        assertAll(
-                () -> assertThat(actual.getValues()).hasSize(2),
-                () -> assertThat(actual.getValues()).containsExactly(
-                        new MethodParameter(String.class, "userId"),
-                        new MethodParameter(int.class, "userAge")
-                )
+        assertThat(actual.getValues()).containsExactly(
+                new MethodParameter(String.class, "userId"),
+                new MethodParameter(int.class, "userAge")
         );
     }
 
