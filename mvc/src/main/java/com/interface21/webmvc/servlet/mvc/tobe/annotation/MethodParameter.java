@@ -4,6 +4,8 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import java.lang.reflect.Parameter;
 
+import static com.interface21.webmvc.servlet.mvc.tobe.annotation.SupportParameterType.isSupport;
+
 public class MethodParameter {
 
     private final Class<?> parameterType;
@@ -19,7 +21,7 @@ public class MethodParameter {
     }
 
     public Object parseValue(HttpServletRequest request) {
-        if (parameterType.isPrimitive()) {
+        if (isSupport(parameterType)) {
             return request.getAttribute(parameterName);
         }
         throw new IllegalStateException("실행 불가");
