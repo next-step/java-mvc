@@ -12,19 +12,10 @@ public class HandlerExecution {
     private final Method method;
     private final MethodParameters methodParameters;
 
-    public HandlerExecution(Object handler, String methodName) {
+    public HandlerExecution(Object handler, Method method) {
         this.handler = handler;
-        this.method = getMethod(handler, methodName);
-        this.methodParameters = new MethodParameters(this.method);
-    }
-
-    private Method getMethod(Object handler, String methodName) {
-        try {
-            return handler.getClass()
-                    .getMethod(methodName, HttpServletRequest.class, HttpServletResponse.class);
-        } catch (NoSuchMethodException e) {
-            throw new IllegalArgumentException("요청된 method name에 해당하는 핸들링 메소드가 없습니다.");
-        }
+        this.method = method;
+        this.methodParameters = new MethodParameters(method);
     }
 
     public ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response) throws Exception {

@@ -51,7 +51,7 @@ public class AnnotationHandlerMapping implements HandlerMapping {
     private Map<HandlerKey, HandlerExecution> parseMethodHandler(Method method, Object controllerInstance) {
         RequestMapping requestMapping = method.getDeclaredAnnotation(RequestMapping.class);
         String url = requestMapping.value();
-        HandlerExecution handlerExecution = new HandlerExecution(controllerInstance, method.getName());
+        HandlerExecution handlerExecution = new HandlerExecution(controllerInstance, method);
 
         return Arrays.stream(requestMapping.method())
                 .map(requestMethod -> new HandlerKey(url, requestMethod))

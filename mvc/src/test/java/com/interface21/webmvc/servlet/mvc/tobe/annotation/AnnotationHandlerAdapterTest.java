@@ -8,6 +8,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Method;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.mock;
@@ -15,10 +17,15 @@ import static org.mockito.Mockito.mock;
 class AnnotationHandlerAdapterTest {
 
     private final AnnotationHandlerAdapter annotationHandlerAdapter = new AnnotationHandlerAdapter();
+    private final Method method = HandlerExecutionController.class
+            .getMethod("handle", HttpServletRequest.class, HttpServletResponse.class);
+
+    AnnotationHandlerAdapterTest() throws NoSuchMethodException {
+    }
 
     @Test
     void HandlerExecution_handler를_지원가능으로_판단한다() {
-        HandlerExecution handlerExecution = new HandlerExecution(new HandlerExecutionController(), "handle");
+        HandlerExecution handlerExecution = new HandlerExecution(new HandlerExecutionController(), method);
         boolean actual = annotationHandlerAdapter.accept(handlerExecution);
         assertThat(actual).isTrue();
     }
@@ -31,7 +38,7 @@ class AnnotationHandlerAdapterTest {
 
     @Test
     void handling된_ModelAndView를_반환한다() throws Exception {
-        HandlerExecution handlerExecution = new HandlerExecution(new HandlerExecutionController(), "handle");
+        HandlerExecution handlerExecution = new HandlerExecution(new HandlerExecutionController(), method);
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
 
