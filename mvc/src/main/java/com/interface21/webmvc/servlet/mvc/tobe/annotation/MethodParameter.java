@@ -32,12 +32,22 @@ public class MethodParameter {
             return response;
         }
         if (pathParameter.isPathVariable()) {
-            return pathParameter.parsePathVariable(request.getRequestURI(), parameterName);
+            return parseParameterType(pathParameter.parsePathVariable(request.getRequestURI(), parameterName));
         }
         if (isSupport(parameterType)) {
             return request.getAttribute(parameterName);
         }
         throw new IllegalStateException("실행 불가");
+    }
+
+    private Object parseParameterType(String pathValue) {
+        if (parameterType.equals(int.class) || parameterType.equals(Integer.class)) {
+            return Integer.parseInt(pathValue);
+        }
+        if (parameterType.equals(long.class) || parameterType.equals(Long.class)) {
+            return Long.parseLong(pathValue);
+        }
+        return pathValue;
     }
 
     public Class<?> getParameterType() {
