@@ -31,25 +31,13 @@ public class AnnotationHandlerMapping {
 
     public void initialize() {
         log.info("Initialized AnnotationHandlerMapping!");
-        try {
-            Reflections reflections = new Reflections(basePackages);
-            Set<Class<?>> controllerClasses = reflections.getTypesAnnotatedWith(Controller.class);
-            for (Class<?> controllerClass : controllerClasses) {
-                Constructor<?> controllerConstructor = controllerClass.getDeclaredConstructor();
-                Object controllerInstance = controllerConstructor.newInstance();
-                Method[] controllerMethods = controllerClass.getMethods();
 
-                String uriPrefix = extractUriPrefix(controllerClass);
-                for (Method controllerMethod : controllerMethods) {
-                    RequestMapping methodRequestMapping = controllerMethod.getAnnotation(RequestMapping.class);
-                    if (methodRequestMapping != null) {
-                        List<HandlerKey> handlerKeys = createHandlerKeys(uriPrefix, methodRequestMapping);
-                        handlerKeys.forEach(handlerKey -> handlerExecutions.put(handlerKey, new HandlerExecution(controllerInstance, controllerMethod)));
-                    }
-                }
-            }
-        } catch (InvocationTargetException | NoSuchMethodException | InstantiationException | IllegalAccessException e) {
-            throw new RuntimeException(e);
+        Reflections reflections = new Reflections(basePackages);
+        Set<Class<?>> controllerClasses = reflections.getTypesAnnotatedWith(Controller.class);
+        for (Class<?> controllerClass : controllerClasses) {
+            String uriPrefix = extractUriPrefix(controllerClass);
+            Object controllerInstance = createControllerInstance(controllerClass);
+            registerHandler(controllerClass, uriPrefix, controllerInstance);
         }
     }
 
@@ -59,6 +47,26 @@ public class AnnotationHandlerMapping {
             return "";
         }
         return controllerRequestMapping.value();
+    }
+
+    private Object createControllerInstance(Class<?> controllerClass) {
+        try {
+            Constructor<?> controllerConstructor = controllerClass.getDeclaredConstructor();
+            return controllerConstructor.newInstance();
+        } catch (InvocationTargetException | NoSuchMethodException | InstantiationException | IllegalAccessException e) {
+            log.error("Controller의 기본 생성자를 찾을 수 없습니다.");
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void registerHandler(Class<?> controllerClass, String uriPrefix, Object controllerInstance) {
+        for (Method controllerMethod : controllerClass.getMethods()) {
+            RequestMapping methodRequestMapping = controllerMethod.getAnnotation(RequestMapping.class);
+            if (methodRequestMapping != null) {
+                List<HandlerKey> handlerKeys = createHandlerKeys(uriPrefix, methodRequestMapping);
+                handlerKeys.forEach(handlerKey -> handlerExecutions.put(handlerKey, new HandlerExecution(controllerInstance, controllerMethod)));
+            }
+        }
     }
 
     private List<HandlerKey> createHandlerKeys(String uriPrefix, RequestMapping controllerRequestMapping) {
