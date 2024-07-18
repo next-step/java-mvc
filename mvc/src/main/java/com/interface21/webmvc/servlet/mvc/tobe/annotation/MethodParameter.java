@@ -31,6 +31,9 @@ public class MethodParameter {
         if (HttpServletResponse.class.isAssignableFrom(parameterType)) {
             return response;
         }
+        if (pathParameter.isPathVariable()) {
+            return pathParameter.parsePathVariable(request.getRequestURI(), parameterName);
+        }
         if (isSupport(parameterType)) {
             return request.getAttribute(parameterName);
         }

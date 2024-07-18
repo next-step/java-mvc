@@ -42,6 +42,17 @@ class MethodParameterTest {
         assertThat(actual).isEqualTo(response);
     }
 
+    // TODO: 123을 int일 경우 파싱하도록 수정
+    @Test
+    void PathVariable이_존재하면_파싱한_값으로_반환한다() {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        HttpServletResponse response = mock(HttpServletResponse.class);
+        when(request.getRequestURI()).thenReturn("/users/123");
+
+        Object actual = new MethodParameter(int.class, "userId", new PathParameter("/users/{userId}", true, "")).parseValue(request, response);
+        assertThat(actual).isEqualTo("123");
+    }
+
     @Test
     void HttpServletRequest에서_parameterType에_해당하는_값을_파싱한다() {
         HttpServletRequest request = mock(HttpServletRequest.class);
