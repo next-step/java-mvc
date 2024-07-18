@@ -35,7 +35,7 @@ public class PathParameter {
         if (pathValue.equals(EMPTY_PATH_VALUE)) {
             return PathPatternUtil.getUriValue(urlPattern, url, parameterName);
         }
-        return null;
+        return PathPatternUtil.getUriValue(urlPattern, url, pathValue);
     }
 
     public boolean isPathVariable() {

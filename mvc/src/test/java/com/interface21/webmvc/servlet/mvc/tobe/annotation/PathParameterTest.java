@@ -44,6 +44,13 @@ class PathParameterTest {
         assertThat(actual).isEqualTo("1");
     }
 
+    @Test
+    void PathVariable값이_있으면_해당값으로_파싱한다() {
+        PathParameter pathParameter = new PathParameter("/{age}", true, "age");
+        String actual = pathParameter.parsePathVariable("/1", "userAge");
+        assertThat(actual).isEqualTo("1");
+    }
+
     private static class TestUserController {
 
         public ModelAndView createString(String userId, @PathVariable(value = "age") int userAge) {
