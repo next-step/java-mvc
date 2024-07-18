@@ -55,6 +55,6 @@ public class TestController {
         - [x] 설정되지 않은 경우 모든 HTTP 메서드를 지원한다
       - [x] 클래스에 달린 경우 URI prefix로 활용한다
       - [x] 메서드에 달린 경우 등록한다    
-- [] `JspView` 클래스 구현하기 
-  - [] `DispatcherServlet` 클래스의 `service()` 메서드에서 뷰에 대한 처리를 하고 있는 부분을 파악한다
-  - [] 파악한 부분을 `JspView`로 옮긴다
+- [x] `JspView` 클래스 구현하기 
+  - [x] `DispatcherServlet` 클래스의 `service()` 메서드에서 뷰에 대한 처리를 하고 있는 부분을 파악한다
+  - [x] 파악한 부분을 `JspView`로 옮긴다
