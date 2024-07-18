@@ -3,6 +3,7 @@ package com.interface21.webmvc.servlet.mvc.tobe.annotation;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.lang.reflect.Parameter;
+import java.util.Objects;
 
 import static com.interface21.webmvc.servlet.mvc.tobe.annotation.SupportParameterType.isSupport;
 
@@ -33,5 +34,18 @@ public class MethodParameter {
 
     public String getParameterName() {
         return parameterName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MethodParameter that = (MethodParameter) o;
+        return Objects.equals(parameterType, that.parameterType) && Objects.equals(parameterName, that.parameterName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(parameterType, parameterName);
     }
 }

@@ -37,6 +37,12 @@ class MethodParameterTest {
         );
     }
 
+    @Test
+    void equals() {
+        MethodParameter methodParameter = new MethodParameter(String.class, "name");
+        assertThat(methodParameter).isEqualTo(new MethodParameter(String.class, "name"));
+    }
+
     private static class TestUserController {
 
         public ModelAndView createString(String userId) {
