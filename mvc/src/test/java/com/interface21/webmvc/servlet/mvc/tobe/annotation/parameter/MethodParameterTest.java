@@ -57,7 +57,7 @@ class MethodParameterTest {
     void HttpServletRequest에서_parameterType에_해당하는_값을_파싱한다() {
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
-        when(request.getAttribute("userAge")).thenReturn(10);
+        when(request.getParameter("userAge")).thenReturn("10");
 
         Object actual = new MethodParameter(int.class, "userAge", new PathParameter("", false, "")).parseValue(request, response);
         assertAll(
@@ -67,12 +67,12 @@ class MethodParameterTest {
     }
 
     @Test
-    void 타입이_객체인_경우_각_attribute를_파싱하여_반환한다() {
+    void 타입이_객체인_경우_각_parameter를_파싱하여_반환한다() {
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
-        when(request.getAttribute("userId")).thenReturn("jinyoung");
-        when(request.getAttribute("password")).thenReturn("1234");
-        when(request.getAttribute("age")).thenReturn(10);
+        when(request.getParameter("userId")).thenReturn("jinyoung");
+        when(request.getParameter("password")).thenReturn("1234");
+        when(request.getParameter("age")).thenReturn("10");
 
         Object actual = new MethodParameter(TestUser.class, "testUser", new PathParameter("", false, "")).parseValue(request, response);
         assertThat(actual).isEqualTo(new TestUser("jinyoung", "1234", 10));

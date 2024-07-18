@@ -35,10 +35,10 @@ public class MethodParameter {
         }
         if (pathParameter.isPathVariable()) {
             String parseValue = pathParameter.parsePathVariable(request.getRequestURI(), parameterName);
-            return parse(parameterType, parseValue);
+            return parseToType(parseValue);
         }
         if (isSupport(parameterType)) {
-            return request.getAttribute(parameterName);
+            return parseToType(request.getParameter(parameterName));
         }
 
         try {
@@ -48,12 +48,16 @@ public class MethodParameter {
         }
     }
 
+    private Object parseToType(String parseValue) {
+        return parse(parameterType, parseValue);
+    }
+
     private Object parseObject(HttpServletRequest request) throws Exception {
         Object instance = parameterType.getDeclaredConstructor()
                 .newInstance();
         for (Field field : parameterType.getDeclaredFields()) {
             field.setAccessible(true);
-            field.set(instance, request.getAttribute(field.getName()));
+            field.set(instance, parse(field.getType(), request.getParameter(field.getName())));
             field.setAccessible(false);
         }
         return instance;
