@@ -11,9 +11,9 @@ import java.util.stream.Stream;
 public class HandlerAdapterRegistry {
     private final List<HandlerAdapter> handlerAdapters;
 
-    public HandlerAdapterRegistry(final HandlerAdapter handlerAdapter, final HandlerAdapter... handlerAdapters) {
+    public HandlerAdapterRegistry(final HandlerAdapter... handlerAdapters) {
         this.handlerAdapters = Stream.concat(
-                Stream.of(handlerAdapter),
+                Stream.of(new HandlerExecutionHandlerAdapter()),
                 Stream.of(handlerAdapters)
         ).toList();
     }
