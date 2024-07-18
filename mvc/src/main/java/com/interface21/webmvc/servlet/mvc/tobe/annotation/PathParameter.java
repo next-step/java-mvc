@@ -27,6 +27,17 @@ public class PathParameter {
         return new PathParameter(urlPattern, false, EMPTY_PATH_VALUE);
     }
 
+    public String parsePathVariable(String parameterName) {
+        if (!isPathVariable) {
+            throw new IllegalStateException("PathVariable이 없는 경우 호출할 수 없다");
+        }
+        return null;
+    }
+
+    public boolean isPathVariable() {
+        return isPathVariable;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
