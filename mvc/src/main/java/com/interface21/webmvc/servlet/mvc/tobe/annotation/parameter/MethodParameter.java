@@ -1,4 +1,4 @@
-package com.interface21.webmvc.servlet.mvc.tobe.annotation;
+package com.interface21.webmvc.servlet.mvc.tobe.annotation.parameter;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -7,7 +7,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Parameter;
 import java.util.Objects;
 
-import static com.interface21.webmvc.servlet.mvc.tobe.annotation.SupportParameterType.isSupport;
+import static com.interface21.webmvc.servlet.mvc.tobe.annotation.parameter.SupportParameterType.isSupport;
 
 public class MethodParameter {
 

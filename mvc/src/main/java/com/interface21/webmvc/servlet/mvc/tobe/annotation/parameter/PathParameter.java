@@ -1,4 +1,4 @@
-package com.interface21.webmvc.servlet.mvc.tobe.annotation;
+package com.interface21.webmvc.servlet.mvc.tobe.annotation.parameter;
 
 import com.interface21.web.bind.annotation.PathVariable;
 import com.interface21.webmvc.servlet.mvc.tobe.support.PathPatternUtil;

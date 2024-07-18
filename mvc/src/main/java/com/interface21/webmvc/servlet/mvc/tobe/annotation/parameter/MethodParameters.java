@@ -1,4 +1,4 @@
-package com.interface21.webmvc.servlet.mvc.tobe.annotation;
+package com.interface21.webmvc.servlet.mvc.tobe.annotation.parameter;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

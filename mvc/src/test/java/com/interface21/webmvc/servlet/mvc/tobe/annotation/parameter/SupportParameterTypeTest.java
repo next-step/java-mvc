@@ -1,8 +1,8 @@
-package com.interface21.webmvc.servlet.mvc.tobe.annotation;
+package com.interface21.webmvc.servlet.mvc.tobe.annotation.parameter;
 
 import org.junit.jupiter.api.Test;
 
-import static com.interface21.webmvc.servlet.mvc.tobe.annotation.SupportParameterType.isSupport;
+import static com.interface21.webmvc.servlet.mvc.tobe.annotation.parameter.SupportParameterType.isSupport;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class SupportParameterTypeTest {
