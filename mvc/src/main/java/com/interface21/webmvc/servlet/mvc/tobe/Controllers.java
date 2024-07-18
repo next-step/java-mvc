@@ -8,7 +8,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class Controllers implements Iterable<Object> {
 
@@ -27,11 +26,8 @@ public class Controllers implements Iterable<Object> {
 
     private Object createInstance(final Class<?> controllerClass) {
         try {
-            final Constructor<?> declaredConstructor = controllerClass.getDeclaredConstructor();
-            declaredConstructor.setAccessible(true);
-            final Object controllerInstance = declaredConstructor.newInstance();
-            declaredConstructor.setAccessible(false);
-            return controllerInstance;
+            final Constructor<?> constructor = controllerClass.getConstructor();
+            return constructor.newInstance();
         } catch (final NoSuchMethodException exception) {
             throw new ControllerInitializeException("No-arg constructor is not found from " + controllerClass.getName(), exception);
         } catch (final InvocationTargetException | InstantiationException | IllegalAccessException exception) {
@@ -44,7 +40,4 @@ public class Controllers implements Iterable<Object> {
         return controllers.iterator();
     }
 
-    public Stream<Object> stream() {
-        return controllers.stream();
-    }
 }
