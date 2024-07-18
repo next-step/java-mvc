@@ -47,13 +47,15 @@ public class TestController {
     }
 }
 ```
-- [] `@RequestMapping`  구현하기 
-  - [] URL을 설정할 수 있다
-  - [] HTTP 메서드를 설정할 수 있다
-    - [] 설정되지 않은 경우 모든 HTTP 메서드를 지원한다  
-- [] `AnnotationHandlerMappingTest` 클래스의 테스트 통과하기 
-  - [] `AnnotationHandlerMapping`을 구현한다 
-  - [] `DispatcherServlet`의 `ManualHandlerMapping`을 `AnnotationHandlerMapping`으로 교체한다 
+- [x] `AnnotationHandlerMappingTest` 클래스의 테스트 통과하기 
+  - [x] `AnnotationHandlerMapping`을 구현한다
+    - [x] `@Controller`를 인식해서 처리한다 
+    - [x] `@RequestMapping`을 인식해서 처리한다
+      - URL과 HTTP 메서드가 있다. 
+        - [x] 설정되지 않은 경우 모든 HTTP 메서드를 지원한다
+      - [x] 클래스에 달린 경우 URI prefix로 활용한다
+      - [x] 메서드에 달린 경우 등록한다   
+- [] `DispatcherServlet`의 `ManualHandlerMapping`을 `AnnotationHandlerMapping`으로 교체한다 
 - [] `JspView` 클래스 구현하기 
   - [] `DispatcherServlet` 클래스의 `service()` 메서드에서 뷰에 대한 처리를 하고 있는 부분을 파악한다
   - [] 파악한 부분을 `JspView`로 옮긴다 
