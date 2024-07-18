@@ -44,11 +44,19 @@ public class AnnotationHandlerMapping {
         RequestMapping requestMapping = method.getAnnotation(RequestMapping.class);
         if (requestMapping != null) {
             List<HandlerKey> handlerKeys = makeHandlerKeys(requestMapping);
-            HandlerExecution handlerExecution = new HandlerExecution(controller, method);
+            HandlerExecution handlerExecution = new HandlerExecution(instantiate(controller), method);
             for (HandlerKey handlerKey : handlerKeys) {
                 handlerExecutions.put(handlerKey, handlerExecution);
                 log.info("Mapped {} to {}", handlerKey, handlerExecution);
             }
+        }
+    }
+
+    private Object instantiate(Class<?> clazz) {
+        try {
+            return clazz.getConstructor().newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
