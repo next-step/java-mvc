@@ -8,6 +8,7 @@ import java.lang.reflect.Parameter;
 import java.util.Objects;
 
 import static com.interface21.webmvc.servlet.mvc.tobe.annotation.parameter.SupportParameterType.isSupport;
+import static com.interface21.webmvc.servlet.mvc.tobe.annotation.parameter.SupportParameterType.parse;
 
 public class MethodParameter {
 
@@ -33,7 +34,8 @@ public class MethodParameter {
             return response;
         }
         if (pathParameter.isPathVariable()) {
-            return parseParameterType(pathParameter.parsePathVariable(request.getRequestURI(), parameterName));
+            String parseValue = pathParameter.parsePathVariable(request.getRequestURI(), parameterName);
+            return parse(parameterType, parseValue);
         }
         if (isSupport(parameterType)) {
             return request.getAttribute(parameterName);
@@ -55,16 +57,6 @@ public class MethodParameter {
             field.setAccessible(false);
         }
         return instance;
-    }
-
-    private Object parseParameterType(String pathValue) {
-        if (parameterType.equals(int.class) || parameterType.equals(Integer.class)) {
-            return Integer.parseInt(pathValue);
-        }
-        if (parameterType.equals(long.class) || parameterType.equals(Long.class)) {
-            return Long.parseLong(pathValue);
-        }
-        return pathValue;
     }
 
     public Class<?> getParameterType() {
