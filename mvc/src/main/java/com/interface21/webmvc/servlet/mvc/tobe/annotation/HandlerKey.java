@@ -5,6 +5,8 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.Objects;
 
+import static com.interface21.webmvc.servlet.mvc.tobe.support.PathPatternUtil.isUrlMatch;
+
 public class HandlerKey {
 
     private final String url;
@@ -17,6 +19,10 @@ public class HandlerKey {
 
     public static HandlerKey from(final HttpServletRequest request) {
         return new HandlerKey(request.getRequestURI(), RequestMethod.valueOf(request.getMethod()));
+    }
+
+    public boolean isMatchUrl(HandlerKey handlerKey) {
+        return this.url.equals(handlerKey.url) || isUrlMatch(this.url, handlerKey.url);
     }
 
     @Override
