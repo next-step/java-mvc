@@ -16,7 +16,7 @@ public class HandlerExecution {
     public HandlerExecution(Object handler, Method method, String urlPattern) {
         this.handler = handler;
         this.method = method;
-        this.methodParameters = MethodParameters.of("", method);
+        this.methodParameters = MethodParameters.of(urlPattern, method);
     }
 
     public ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response) throws Exception {
