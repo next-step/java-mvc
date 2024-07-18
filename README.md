@@ -71,3 +71,12 @@
 - UserController
   - 현재 로그인중인 유저가 없으면 401로 리다이랙한다
   - 현재 로그인중인 유저의 정보를 json으로 반환한다
+
+## 4단계 - Controller 메서드 인자 매핑
+- HandlerExecution은 method가 가지고 있는 파라미터의 정보를 함께 가진다
+  - 파라미터의 순서에 맞게 List로 저장한다.
+- MethodParameter
+  - 타입을 가지고 있는다
+  - HttpServletRequest에서 해당하는 타입과 이름에 맞는 값을 가져와 사용한다.
+- MethodParameters
+  - method.invoke를 하기위해 각 파라미터의 파싱된 값을 배열로 반환한다
