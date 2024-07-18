@@ -21,7 +21,8 @@ public class PathParameter {
 
     public static PathParameter of(String urlPattern, Parameter parameter) {
         if (parameter.isAnnotationPresent(PathVariable.class)) {
-            return null;
+            PathVariable pathVariable = parameter.getAnnotation(PathVariable.class);
+            return new PathParameter(urlPattern, true, pathVariable.value());
         }
         return new PathParameter(urlPattern, false, EMPTY_PATH_VALUE);
     }
