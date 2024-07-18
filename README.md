@@ -19,3 +19,17 @@
 ## 학습 테스트
 1. [Reflection API](study/src/test/java/reflection)
 2. [Servlet](study/src/test/java/servlet)
+
+
+---
+
+# 🚀 1단계 - @MVC 구현하기
+
+## 요구사항
+### 1. @MVC Framework 테스트 통과하기
+- [x] AnnotationHandlerMapping 를 이용해 HandlerExectutions를 등록한다.
+- [x] AnnotationHandlerMapping 을 이용해 HandlerExectutions를 찾는다.
+- [x] HandlerExecution 에서 인스턴스를 통해 ModelAndView 를 반환한다.
+
+### 2. JspView 클래스를 구현한다.
+- [x] JspView 에서 viewName 을 통해 JspView 를 반환한다.
