@@ -82,3 +82,6 @@
   - 단순 지원 가능한 parameter 타입인지 확인한다
 - MethodParameters
   - method.invoke를 하기위해 각 파라미터의 파싱된 값을 배열로 반환한다
+- PathVariable
+  - 어노테이션에 PathVariable이 있는 경우 url의 PathVariable을 파싱하여 반환한다
+  - PatiVariable에 value값이 있으면 url의 해당 이름으로 파싱하여 반환한다
