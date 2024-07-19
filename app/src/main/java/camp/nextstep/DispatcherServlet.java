@@ -1,5 +1,8 @@
 package camp.nextstep;
 
+import com.interface21.webmvc.servlet.ModelAndView;
+import com.interface21.webmvc.servlet.mvc.tobe.AnnotationHandlerMapping;
+import com.interface21.webmvc.servlet.mvc.tobe.HandlerExecution;
 import com.interface21.webmvc.servlet.view.JspView;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -16,6 +19,7 @@ public class DispatcherServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(DispatcherServlet.class);
 
     private ManualHandlerMapping manualHandlerMapping;
+    private AnnotationHandlerMapping annotationHandlerMapping;
 
     public DispatcherServlet() {
     }
@@ -24,6 +28,9 @@ public class DispatcherServlet extends HttpServlet {
     public void init() {
         this.manualHandlerMapping = new ManualHandlerMapping();
         this.manualHandlerMapping.initialize();
+
+        this.annotationHandlerMapping = new AnnotationHandlerMapping("camp.nextstep.controller");
+        this.annotationHandlerMapping.initialize();
     }
 
     @Override
@@ -32,6 +39,13 @@ public class DispatcherServlet extends HttpServlet {
         log.debug("Method : {}, Request URI : {}", request.getMethod(), requestURI);
 
         try {
+            HandlerExecution handlerExecution = annotationHandlerMapping.getHandler(request);
+            if (handlerExecution != null) {
+                ModelAndView modelAndView = handlerExecution.handle(request, response);
+                modelAndView.getView().render(modelAndView.getModel(), request, response);
+                return;
+            }
+
             final var controller = manualHandlerMapping.getHandler(requestURI);
             final var viewName = controller.execute(request, response);
 
@@ -39,7 +53,8 @@ public class DispatcherServlet extends HttpServlet {
             jspView.render(Collections.emptyMap(), request, response);
         } catch (Throwable e) {
             log.error("Exception : {}", e.getMessage(), e);
-            throw new ServletException(e.getMessage());
+            throw new RuntimeException(e);
+            //            throw new ServletException(e.getMessage());
         }
     }
 }
