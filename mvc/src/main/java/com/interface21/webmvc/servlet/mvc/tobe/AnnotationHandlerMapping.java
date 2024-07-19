@@ -35,9 +35,20 @@ public class AnnotationHandlerMapping {
         Reflections reflections = new Reflections(basePackages);
         Set<Class<?>> controllerClasses = reflections.getTypesAnnotatedWith(Controller.class);
         for (Class<?> controllerClass : controllerClasses) {
-            String uriPrefix = extractUriPrefix(controllerClass);
-            Object controllerInstance = createControllerInstance(controllerClass);
-            registerHandler(controllerClass, uriPrefix, controllerInstance);
+            registerHandler(controllerClass);
+        }
+    }
+
+    private void registerHandler(Class<?> controllerClass) {
+        String uriPrefix = extractUriPrefix(controllerClass);
+        Object controllerInstance = createControllerInstance(controllerClass);
+
+        for (Method controllerMethod : controllerClass.getMethods()) {
+            RequestMapping methodRequestMapping = controllerMethod.getAnnotation(RequestMapping.class);
+            if (methodRequestMapping != null) {
+                HandlerKeys handlerKeys = HandlerKeys.of(uriPrefix, methodRequestMapping);
+                handlerKeys.forEach(handlerKey -> handlerExecutions.put(handlerKey, new HandlerExecution(controllerInstance, controllerMethod)));
+            }
         }
     }
 
@@ -57,32 +68,6 @@ public class AnnotationHandlerMapping {
             log.error("Controller의 기본 생성자를 찾을 수 없습니다.");
             throw new ControllerDefaultConstructorNotFoundException(e);
         }
-    }
-
-    private void registerHandler(Class<?> controllerClass, String uriPrefix, Object controllerInstance) {
-        for (Method controllerMethod : controllerClass.getMethods()) {
-            RequestMapping methodRequestMapping = controllerMethod.getAnnotation(RequestMapping.class);
-            if (methodRequestMapping != null) {
-                List<HandlerKey> handlerKeys = createHandlerKeys(uriPrefix, methodRequestMapping);
-                handlerKeys.forEach(handlerKey -> handlerExecutions.put(handlerKey, new HandlerExecution(controllerInstance, controllerMethod)));
-            }
-        }
-    }
-
-    private List<HandlerKey> createHandlerKeys(String uriPrefix, RequestMapping controllerRequestMapping) {
-        String uri = uriPrefix + controllerRequestMapping.value();
-        RequestMethod[] requestMethods = controllerRequestMapping.method();
-        if (requestMethods == null || requestMethods.length == 0) {
-            return createHandlerKeys(RequestMethod.values(), uri);
-        }
-
-        return createHandlerKeys(requestMethods, uri);
-    }
-
-    private List<HandlerKey> createHandlerKeys(RequestMethod[] requestMethods, String uri) {
-        return Arrays.stream(requestMethods)
-                .map(requestMethod -> new HandlerKey(uri, requestMethod))
-                .toList();
     }
 
     public Object getHandler(final HttpServletRequest request) {
