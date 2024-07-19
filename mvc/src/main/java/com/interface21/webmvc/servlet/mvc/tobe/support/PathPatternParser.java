@@ -6,6 +6,8 @@ import java.util.regex.Pattern;
 
 public class PathPatternParser {
 
+    private static final Pattern PATH_VARIABLE_PATTERN = Pattern.compile("\\{([^}]+)}");
+
     private final Pattern pattern;
     private final List<String> variableNames = new ArrayList<>();
 
@@ -15,7 +17,7 @@ public class PathPatternParser {
     }
 
     private String buildRegex(String pattern) {
-        Matcher matcher = Pattern.compile("\\{([^}]+)}").matcher(pattern);
+        Matcher matcher = PATH_VARIABLE_PATTERN.matcher(pattern);
         StringBuffer buffer = new StringBuffer();
         while (matcher.find()) {
             variableNames.add(matcher.group(1));
