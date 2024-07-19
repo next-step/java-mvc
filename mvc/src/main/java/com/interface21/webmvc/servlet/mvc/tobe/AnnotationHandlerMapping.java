@@ -45,10 +45,8 @@ public class AnnotationHandlerMapping {
         if (requestMapping != null) {
             List<HandlerKey> handlerKeys = makeHandlerKeys(requestMapping);
             HandlerExecution handlerExecution = new HandlerExecution(instantiate(controller), method);
-            for (HandlerKey handlerKey : handlerKeys) {
-                handlerExecutions.put(handlerKey, handlerExecution);
-                log.info("Mapped {} to {}", handlerKey, handlerExecution);
-            }
+            handlerExecutions.putAll(handlerKeys.stream()
+                                                .collect(HashMap::new, (m, v) -> m.put(v, handlerExecution), HashMap::putAll));
         }
     }
 
