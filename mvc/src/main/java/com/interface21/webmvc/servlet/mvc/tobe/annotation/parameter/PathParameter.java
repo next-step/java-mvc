@@ -4,7 +4,6 @@ import com.interface21.web.bind.annotation.PathVariable;
 import com.interface21.webmvc.servlet.mvc.tobe.support.PathPatternUtil;
 
 import java.lang.reflect.Parameter;
-import java.util.Objects;
 
 public class PathParameter {
 
@@ -12,12 +11,12 @@ public class PathParameter {
 
     private final String urlPattern;
     private final boolean isPathVariable;
-    private final String pathValue;
+    private final String pathVariableValue;
 
-    public PathParameter(String urlPattern, boolean isPathVariable, String pathValue) {
+    private PathParameter(String urlPattern, boolean isPathVariable, String pathVariableValue) {
         this.urlPattern = urlPattern;
         this.isPathVariable = isPathVariable;
-        this.pathValue = pathValue;
+        this.pathVariableValue = pathVariableValue;
     }
 
     public static PathParameter of(String urlPattern, Parameter parameter) {
@@ -32,26 +31,21 @@ public class PathParameter {
         if (!isPathVariable) {
             throw new IllegalStateException("PathVariable이 없는 경우 호출할 수 없다");
         }
-        if (pathValue.equals(EMPTY_PATH_VALUE)) {
+        if (pathVariableValue.equals(EMPTY_PATH_VALUE)) {
             return PathPatternUtil.getUriValue(urlPattern, url, parameterName);
         }
-        return PathPatternUtil.getUriValue(urlPattern, url, pathValue);
+        return PathPatternUtil.getUriValue(urlPattern, url, pathVariableValue);
+    }
+
+    public String getUrlPattern() {
+        return urlPattern;
     }
 
     public boolean isPathVariable() {
         return isPathVariable;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        PathParameter that = (PathParameter) o;
-        return isPathVariable == that.isPathVariable && Objects.equals(urlPattern, that.urlPattern) && Objects.equals(pathValue, that.pathValue);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(urlPattern, isPathVariable, pathValue);
+    public String getPathVariableValue() {
+        return pathVariableValue;
     }
 }
