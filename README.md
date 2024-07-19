@@ -41,3 +41,8 @@
 ### 1.ControllerScanner 클래스 추가
 - [x] Reflections 를 이용해 Controller 를 찾는다.
 - [x] 각 클래스의 인스턴스를 생성한다.
+
+### 2. HandlerMapping 인터페이스 추가
+- [x] HandlerMapping 인터페이스를 추가한다.
+- [x] AnnotationHandlerMapping, ManualHandlerMapping 을 구현체로 수정한다.
+- [x] DispatcherServlet 초기화 과정에서 모두 초기화해서 List로 관리한다.

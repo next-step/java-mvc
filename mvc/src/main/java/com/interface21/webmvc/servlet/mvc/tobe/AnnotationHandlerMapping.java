@@ -13,13 +13,18 @@ import org.reflections.ReflectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AnnotationHandlerMapping {
+public class AnnotationHandlerMapping implements HandlerMapping {
 
     private static final Logger log = LoggerFactory.getLogger(AnnotationHandlerMapping.class);
+    private static final String BASE_CONTROLLER_PACKAGE = "camp.nextstep.controller";
 
     private final Object[] basePackage;
     private final ControllerScanner controllerScanner;
     private final Map<HandlerKey, HandlerExecution> handlerExecutions;
+
+    public AnnotationHandlerMapping() {
+        this(BASE_CONTROLLER_PACKAGE);
+    }
 
     public AnnotationHandlerMapping(final Object... basePackage) {
         this.basePackage = basePackage;
@@ -60,6 +65,7 @@ public class AnnotationHandlerMapping {
                      .toList();
     }
 
+    @Override
     public Object getHandler(final HttpServletRequest request) {
         String requestURI = request.getRequestURI();
         String method = request.getMethod();
