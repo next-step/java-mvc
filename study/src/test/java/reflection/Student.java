@@ -5,6 +5,10 @@ public class Student {
 
     private int age;
 
+    protected String protectedField;
+
+    public String publicSuperClassField;
+
     public String getName() {
         return name;
     }
