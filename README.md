@@ -33,3 +33,11 @@
 
 ### 2. JspView 클래스를 구현한다.
 - [x] JspView 에서 viewName 을 통해 JspView 를 반환한다.
+
+# 🚀 2단계 - 점진적인 리팩터링
+
+## 요구사항
+
+### 1.ControllerScanner 클래스 추가
+- [x] Reflections 를 이용해 Controller 를 찾는다.
+- [x] 각 클래스의 인스턴스를 생성한다.
