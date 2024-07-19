@@ -8,6 +8,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collections;
+
 public class DispatcherServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -34,7 +36,7 @@ public class DispatcherServlet extends HttpServlet {
             final var viewName = controller.execute(request, response);
 
             JspView jspView = new JspView(viewName);
-            jspView.render(null, request, response);
+            jspView.render(Collections.emptyMap(), request, response);
         } catch (Throwable e) {
             log.error("Exception : {}", e.getMessage(), e);
             throw new ServletException(e.getMessage());
