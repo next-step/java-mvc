@@ -9,6 +9,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -18,7 +19,7 @@ class AnnotationHandlerMappingTest {
 
     @BeforeEach
     void setUp() {
-        handlerMapping = new AnnotationHandlerMapping("samples");
+        handlerMapping = new AnnotationHandlerMapping("samples.success");
         handlerMapping.initialize();
     }
 
@@ -91,5 +92,13 @@ class AnnotationHandlerMappingTest {
 
         final var handlerExecution = (HandlerExecution) handlerMapping.getHandler(request);
         assertThat(handlerExecution).isNotNull();
+    }
+
+    @DisplayName("기본 생성자가 없는 Controller가 있을 경우 예외를 발생시킨다")
+    @Test
+    void with() {
+        handlerMapping = new AnnotationHandlerMapping("samples.fail");
+        assertThatThrownBy(() -> handlerMapping.initialize())
+                .isInstanceOf(ControllerDefaultConstructorNotFoundException.class);
     }
 }

@@ -1,4 +1,4 @@
-package samples;
+package samples.success;
 
 import com.interface21.web.bind.annotation.RequestMapping;
 import com.interface21.web.bind.annotation.RequestMethod;

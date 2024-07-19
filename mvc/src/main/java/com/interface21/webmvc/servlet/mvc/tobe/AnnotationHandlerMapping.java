@@ -55,7 +55,7 @@ public class AnnotationHandlerMapping {
             return controllerConstructor.newInstance();
         } catch (InvocationTargetException | NoSuchMethodException | InstantiationException | IllegalAccessException e) {
             log.error("Controller의 기본 생성자를 찾을 수 없습니다.");
-            throw new RuntimeException(e);
+            throw new ControllerDefaultConstructorNotFoundException(e);
         }
     }
 
