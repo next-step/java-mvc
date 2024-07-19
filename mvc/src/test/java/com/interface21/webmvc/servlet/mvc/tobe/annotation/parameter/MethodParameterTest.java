@@ -1,5 +1,6 @@
 package com.interface21.webmvc.servlet.mvc.tobe.annotation.parameter;
 
+import com.interface21.web.bind.annotation.PathVariable;
 import com.interface21.webmvc.servlet.ModelAndView;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,15 +16,19 @@ import static org.mockito.Mockito.when;
 
 class MethodParameterTest {
 
+    private final Parameter[] parameters = TestUserController.class
+            .getMethod("createString", String.class, HttpServletRequest.class, HttpServletResponse.class, int.class, int.class, TestUser.class)
+            .getParameters();
+
+    MethodParameterTest() throws NoSuchMethodException {
+    }
+
     @Test
-    void Parameter를_받아_type과_이름을_저장한다() throws NoSuchMethodException {
-        Parameter parameter = TestUserController.class
-                .getMethod("createString", String.class)
-                .getParameters()[0];
-        MethodParameter actual = MethodParameter.of("", parameter);
+    void Parameter를_받아_Parser를_저장한다() {
+        MethodParameter actual = MethodParameter.of("", parameters[0]);
         assertAll(
-                () -> assertThat(actual.getParameterType()).isEqualTo(String.class),
-                () -> assertThat(actual.getParameterName()).isEqualTo("userId")
+                () -> assertThat(actual.getMethodParameterParsers()).hasSize(4),
+                () -> assertThat(actual.getDefaultParameterParser()).isInstanceOf(ObjectParameterParser.class)
         );
     }
 
@@ -31,7 +36,7 @@ class MethodParameterTest {
     void 타입이_HttpServletRequest인_경우_request를_그대로_반환한다() {
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
-        Object actual = new MethodParameter(HttpServletRequest.class, "request", new PathParameter("", false, "")).parseValue(request, response);
+        Object actual = MethodParameter.of("", parameters[1]).parseValue(request, response);
         assertThat(actual).isEqualTo(request);
     }
 
@@ -39,7 +44,7 @@ class MethodParameterTest {
     void 타입이_HttpServletResponse인_경우_response를_그대로_반환한다() {
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
-        Object actual = new MethodParameter(HttpServletResponse.class, "response", new PathParameter("", false, "")).parseValue(request, response);
+        Object actual = MethodParameter.of("", parameters[2]).parseValue(request, response);
         assertThat(actual).isEqualTo(response);
     }
 
@@ -49,7 +54,7 @@ class MethodParameterTest {
         HttpServletResponse response = mock(HttpServletResponse.class);
         when(request.getRequestURI()).thenReturn("/users/123");
 
-        Object actual = new MethodParameter(int.class, "userId", new PathParameter("/users/{userId}", true, "")).parseValue(request, response);
+        Object actual = MethodParameter.of("/users/{userId}", parameters[3]).parseValue(request, response);
         assertThat(actual).isEqualTo(123);
     }
 
@@ -59,7 +64,7 @@ class MethodParameterTest {
         HttpServletResponse response = mock(HttpServletResponse.class);
         when(request.getParameter("userAge")).thenReturn("10");
 
-        Object actual = new MethodParameter(int.class, "userAge", new PathParameter("", false, "")).parseValue(request, response);
+        Object actual = MethodParameter.of("", parameters[4]).parseValue(request, response);
         assertAll(
                 () -> assertThat(actual.getClass()).isEqualTo(Integer.class),
                 () -> assertThat(actual).isEqualTo(10)
@@ -74,19 +79,20 @@ class MethodParameterTest {
         when(request.getParameter("password")).thenReturn("1234");
         when(request.getParameter("age")).thenReturn("10");
 
-        Object actual = new MethodParameter(TestUser.class, "testUser", new PathParameter("", false, "")).parseValue(request, response);
+        Object actual = MethodParameter.of("", parameters[5]).parseValue(request, response);
         assertThat(actual).isEqualTo(new TestUser("jinyoung", "1234", 10));
-    }
-
-    @Test
-    void equals() {
-        MethodParameter methodParameter = new MethodParameter(String.class, "name", new PathParameter("", false, ""));
-        assertThat(methodParameter).isEqualTo(new MethodParameter(String.class, "name", new PathParameter("", false, "")));
     }
 
     private static class TestUserController {
 
-        public ModelAndView createString(String userId) {
+        public ModelAndView createString(
+                String userName,
+                HttpServletRequest request,
+                HttpServletResponse response,
+                @PathVariable int userId,
+                int userAge,
+                TestUser testUser
+        ) {
             return null;
         }
     }

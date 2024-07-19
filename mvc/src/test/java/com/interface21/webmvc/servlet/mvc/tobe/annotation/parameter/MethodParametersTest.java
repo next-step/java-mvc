@@ -22,18 +22,15 @@ class MethodParametersTest {
     @Test
     void 메소드를_받아_파라미터리스트를_생성한다() {
         MethodParameters actual = MethodParameters.of("", method);
-        assertThat(actual.getValues()).containsExactly(
-                new MethodParameter(String.class, "userId", new PathParameter("", false, "")),
-                new MethodParameter(int.class, "userAge", new PathParameter("", false, ""))
-        );
+        assertThat(actual.getValues()).hasSize(2);
     }
 
     @Test
     void request에서_파싱한_값을_반환한다() {
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
-        when(request.getAttribute("userId")).thenReturn("jinyoung");
-        when(request.getAttribute("userAge")).thenReturn(10);
+        when(request.getParameter("userId")).thenReturn("jinyoung");
+        when(request.getParameter("userAge")).thenReturn("10");
 
         MethodParameters methodParameters = MethodParameters.of("", method);
         Object[] actual = methodParameters.parseValues(request, response);
