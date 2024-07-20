@@ -1,6 +1,7 @@
 package com.interface21.webmvc.servlet.mvc.tobe.annotation;
 
 import com.interface21.webmvc.servlet.ModelAndView;
+import com.interface21.webmvc.servlet.mvc.tobe.annotation.parameter.MethodParameters;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -10,22 +11,15 @@ public class HandlerExecution {
 
     private final Object handler;
     private final Method method;
+    private final MethodParameters methodParameters;
 
-    public HandlerExecution(Object handler, String methodName) {
+    public HandlerExecution(Object handler, Method method, String urlPattern) {
         this.handler = handler;
-        this.method = getMethod(handler, methodName);
-    }
-
-    private Method getMethod(Object handler, String methodName) {
-        try {
-            return handler.getClass()
-                    .getMethod(methodName, HttpServletRequest.class, HttpServletResponse.class);
-        } catch (NoSuchMethodException e) {
-            throw new IllegalArgumentException("요청된 method name에 해당하는 핸들링 메소드가 없습니다.");
-        }
+        this.method = method;
+        this.methodParameters = MethodParameters.of(urlPattern, method);
     }
 
     public ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response) throws Exception {
-        return (ModelAndView) method.invoke(handler, request, response);
+        return (ModelAndView) method.invoke(handler, methodParameters.parseValues(request, response));
     }
 }

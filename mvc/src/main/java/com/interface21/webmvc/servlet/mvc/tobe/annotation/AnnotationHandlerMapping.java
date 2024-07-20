@@ -51,7 +51,7 @@ public class AnnotationHandlerMapping implements HandlerMapping {
     private Map<HandlerKey, HandlerExecution> parseMethodHandler(Method method, Object controllerInstance) {
         RequestMapping requestMapping = method.getDeclaredAnnotation(RequestMapping.class);
         String url = requestMapping.value();
-        HandlerExecution handlerExecution = new HandlerExecution(controllerInstance, method.getName());
+        HandlerExecution handlerExecution = new HandlerExecution(controllerInstance, method, url);
 
         return Arrays.stream(requestMapping.method())
                 .map(requestMethod -> new HandlerKey(url, requestMethod))
@@ -64,6 +64,11 @@ public class AnnotationHandlerMapping implements HandlerMapping {
     @Override
     public Object getHandler(final HttpServletRequest request) {
         HandlerKey handlerKey = HandlerKey.from(request);
-        return handlerExecutions.get(handlerKey);
+        return handlerExecutions.entrySet()
+                .stream()
+                .filter(entry -> entry.getKey().isMatchUrl(handlerKey))
+                .findAny()
+                .map(Entry::getValue)
+                .orElse(null);
     }
 }

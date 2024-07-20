@@ -9,11 +9,11 @@
 
 ### 시작 가이드
 1. 미션을 시작하기 전에 학습 테스트를 먼저 진행합니다.
-    - [Junit3TestRunner](study/src/test/java/reflection/Junit3TestRunner.java)
-    - [Junit4TestRunner](study/src/test/java/reflection/Junit4TestRunner.java)
-    - [ReflectionTest](study/src/test/java/reflection/ReflectionTest.java)
-    - [ReflectionsTest](study/src/test/java/reflection/ReflectionsTest.java)
-    - 나머지 학습 테스트는 강의 시간에 풀어봅시다.
+  - [Junit3TestRunner](study/src/test/java/reflection/Junit3TestRunner.java)
+  - [Junit4TestRunner](study/src/test/java/reflection/Junit4TestRunner.java)
+  - [ReflectionTest](study/src/test/java/reflection/ReflectionTest.java)
+  - [ReflectionsTest](study/src/test/java/reflection/ReflectionsTest.java)
+  - 나머지 학습 테스트는 강의 시간에 풀어봅시다.
 2. 학습 테스트를 완료하면 LMS의 1단계 미션부터 진행합니다.
 
 ## 학습 테스트
@@ -71,3 +71,22 @@
 - UserController
   - 현재 로그인중인 유저가 없으면 401로 리다이랙한다
   - 현재 로그인중인 유저의 정보를 json으로 반환한다
+
+## 4단계 - Controller 메서드 인자 매핑
+- HandlerExecution은 method가 가지고 있는 파라미터의 정보를 함께 가진다
+  - 파라미터의 순서에 맞게 List로 저장한다.
+- MethodParameter
+  - 타입을 가지고 있는다
+  - HttpServletRequest에서 해당하는 타입과 이름에 맞는 값을 가져와 사용한다.
+- SupportParameterType
+  - 단순 지원 가능한 parameter 타입인지 확인한다
+- MethodParameters
+  - method.invoke를 하기위해 각 파라미터의 파싱된 값을 배열로 반환한다
+- PathVariable
+  - 어노테이션에 PathVariable이 있는 경우 url의 PathVariable을 파싱하여 반환한다
+  - PathVariable에 value값이 있으면 url의 해당 이름으로 파싱하여 반환한다
+  - PathParameter
+    - PathVariable 존재여부와 파싱에 필요한 값을 가진다
+    - PathVariable이 없는데 파싱하려하는 경우 예외가 발생한다.
+    - 만약 pathValue가 비었다면 pathParameterName을 가지고 url 패턴에서 뽑아낸다
+    - pathValue가 있다면 해당 값을 가지고 url 패턴에서 뽑아낸다

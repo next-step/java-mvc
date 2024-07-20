@@ -8,6 +8,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
 import samples.TestController;
 
+import java.lang.reflect.Method;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
@@ -27,7 +29,9 @@ class HandlerAdapterRegistryTest {
 
     @Test
     void handler에_맞는_adapter로_실행한다() throws Exception {
-        HandlerExecution handlerExecution = new HandlerExecution(new TestController(), "findUserId");
+        Method method = TestController.class
+                .getMethod("findUserId", HttpServletRequest.class, HttpServletResponse.class);
+        HandlerExecution handlerExecution = new HandlerExecution(new TestController(), method, "");
 
         ModelAndView actual = handlerAdapterRegistry.handle(handlerExecution, request, response);
         assertThat(actual.getView()).isEqualTo(new JspView(""));
