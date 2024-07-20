@@ -1,0 +1,27 @@
+package com.interface21.webmvc.servlet.mvc.tobe;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class HandlerAdapters {
+    private final List<HandlerAdapter> values;
+
+    private HandlerAdapters() {
+        this.values = new ArrayList<>();
+    }
+
+    public static HandlerAdapters create() {
+        return new HandlerAdapters();
+    }
+
+    public void add(HandlerAdapter handlerAdapter) {
+        values.add(handlerAdapter);
+    }
+
+    public HandlerAdapter findBy(Object handler) {
+        return values.stream()
+                .filter(handlerAdapter -> handlerAdapter.supports(handler))
+                .findAny()
+                .orElseThrow(() -> new IllegalArgumentException("지원하는 Handler가 없습니다."));
+    }
+}
