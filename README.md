@@ -90,7 +90,7 @@ public class RegisterController {
 - AnnotationHandlerMapping를 구현하는 동안 ManualHandlerMapping도 유지해야 한다.
 - [x] HandlerMapping 인터페이스 추가 
   - 초기화한 2개의 HandlerMapping을 List로 관리 
-- [] HandlerAdapter 인터페이스 추가 
+- [x] HandlerAdapter 인터페이스 추가 
   - HandlerMapping 구현체에서 찾은 컨트롤러를 실행해야 한다 
   - [x] AnnotationHandlerMapping은 HandlerExecution을 반환한다
   - [x] ManualHandlerMapping은 Controller를 반환한다 
