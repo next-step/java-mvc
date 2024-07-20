@@ -1,5 +1,10 @@
 package com.interface21.webmvc.servlet.mvc.tobe;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -7,11 +12,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 class AnnotationHandlerMappingTest {
 
@@ -54,14 +54,15 @@ class AnnotationHandlerMappingTest {
     }
 
     @DisplayName("클래스 수준에 선언된 @RequestMapping의 uri는 prefix로 사용된다.")
-    @Test
-    void withClassRequestMapping() throws Exception {
+    @ParameterizedTest(name = "method = {0}")
+    @ValueSource(strings = {"GET", "POST"})
+    void withClassRequestMapping(String method) throws Exception {
         final var request = mock(HttpServletRequest.class);
         final var response = mock(HttpServletResponse.class);
 
         when(request.getAttribute("name")).thenReturn("kim");
-        when(request.getRequestURI()).thenReturn("/prefix/get-test");
-        when(request.getMethod()).thenReturn("GET");
+        when(request.getRequestURI()).thenReturn("/prefix");
+        when(request.getMethod()).thenReturn(method);
 
         final var handlerExecution = (HandlerExecution) handlerMapping.getHandler(request);
         final var modelAndView = handlerExecution.handle(request, response);
