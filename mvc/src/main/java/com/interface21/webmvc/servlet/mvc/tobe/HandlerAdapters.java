@@ -22,6 +22,6 @@ public class HandlerAdapters {
         return values.stream()
                 .filter(handlerAdapter -> handlerAdapter.supports(handler))
                 .findAny()
-                .orElseThrow(() -> new IllegalArgumentException("지원하는 Handler가 없습니다."));
+                .orElseThrow(() -> new HandlerAdapterNotFoundException(handler.getClass().getSimpleName()));
     }
 }

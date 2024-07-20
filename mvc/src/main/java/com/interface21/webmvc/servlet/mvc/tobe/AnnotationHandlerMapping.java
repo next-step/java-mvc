@@ -54,6 +54,9 @@ public class AnnotationHandlerMapping implements HandlerMapping {
         return controllerRequestMapping.value();
     }
 
+    /**
+     * @return 요청에 해당하는 Handler가 없을 경우 null을 반환
+     */
     @Override
     public Object getHandler(final HttpServletRequest request) {
         return handlerExecutions.get(new HandlerKey(request.getRequestURI(), RequestMethod.valueOf(request.getMethod())));
