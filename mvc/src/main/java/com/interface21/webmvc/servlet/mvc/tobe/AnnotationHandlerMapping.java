@@ -32,11 +32,15 @@ public class AnnotationHandlerMapping {
         for (Class<?> controllerClass : controllersMap.keySet()) {
             String uriPrefix = extractUriPrefix(controllerClass);
 
-        for (Method controllerMethod : controllerClass.getMethods()) {
-            RequestMapping methodRequestMapping = controllerMethod.getAnnotation(RequestMapping.class);
-            if (methodRequestMapping != null) {
+            Set<Method> requestMappingMethods = ReflectionUtils.getAllMethods(controllerClass, ReflectionUtils.withAnnotation(RequestMapping.class));
+            for (Method requestMappingMethod : requestMappingMethods) {
+                Object controller = controllersMap.get(controllerClass);
+                HandlerExecution handlerExecution = new HandlerExecution(controller, requestMappingMethod);
+
+                RequestMapping methodRequestMapping = requestMappingMethod.getAnnotation(RequestMapping.class);
                 HandlerKeys handlerKeys = HandlerKeys.of(uriPrefix, methodRequestMapping);
-                handlerKeys.forEach(handlerKey -> handlerExecutions.put(handlerKey, new HandlerExecution(controllerInstance, controllerMethod)));
+
+                handlerKeys.forEach(handlerKey -> handlerExecutions.put(handlerKey, handlerExecution));
             }
         }
     }

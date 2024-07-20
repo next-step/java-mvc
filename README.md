@@ -80,10 +80,10 @@ public class RegisterController {
 }
 ```
 ### AnnotationHandlerMapping
-- [] Controller Scanner 추가하기 
-  - [] `@Controller`가 설정된 모든 클래스를 찾아 인스턴스를 생성해야 한다.
+- [x] Controller Scanner 추가하기 
+  - [x] `@Controller`가 설정된 모든 클래스를 찾아 인스턴스를 생성해야 한다.
     - `Map<Class<?>, Object>`
-- [] 컨트롤러 메서드 정보로 HandlerExecution 생성하기 
+- [x] 컨트롤러 메서드 정보로 HandlerExecution 생성하기 
   - `ReflectionUtils.getAllMethods()` 활용 
 
 ### DispatcherServlet
