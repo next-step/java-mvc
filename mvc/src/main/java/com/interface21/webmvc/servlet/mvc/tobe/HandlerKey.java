@@ -9,13 +9,9 @@ public class HandlerKey {
     private final String url;
     private final RequestMethod requestMethod;
 
-    private HandlerKey(final String url, final RequestMethod requestMethod) {
+    public HandlerKey(final String url, final RequestMethod requestMethod) {
         this.url = url;
         this.requestMethod = requestMethod;
-    }
-
-    public static HandlerKey of(final String url, final RequestMethod requestMethod) {
-        return new HandlerKey(url, requestMethod);
     }
 
     public String getUrl() {

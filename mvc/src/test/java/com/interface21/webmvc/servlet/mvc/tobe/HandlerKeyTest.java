@@ -16,7 +16,7 @@ class HandlerKeyTest {
         final RequestMethod requestMethod = RequestMethod.GET;
 
         // when
-        final HandlerKey handlerKey = HandlerKey.of(url, requestMethod);
+        final HandlerKey handlerKey = new HandlerKey(url, requestMethod);
 
         // then
         assertAll(
