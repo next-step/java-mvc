@@ -1,5 +1,6 @@
 package com.interface21.webmvc.servlet.mvc.tobe;
 
+import com.interface21.webmvc.servlet.ControllerScanner;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import samples.TestController;
