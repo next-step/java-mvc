@@ -76,9 +76,6 @@ public class AnnotationHandlerMapping implements HandlerMapping {
     @Override
     public HandlerExecution getHandler(final HttpServletRequest request) {
         final HandlerKey handlerKey = HandlerKey.from(request);
-        if (handlerExecutions.containsKey(handlerKey)) {
-            return this.handlerExecutions.get(handlerKey);
-        }
-        throw new HandlerMappingException("No handler found");
+        return this.handlerExecutions.get(handlerKey);
     }
 }
