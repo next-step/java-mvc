@@ -29,6 +29,6 @@ public class HandlerMappings {
                 .map(handlerMapping -> handlerMapping.getHandler(request))
                 .filter(Objects::nonNull)
                 .findAny()
-                .orElseThrow(() -> new HandlerNotFoundException(request.getRequestURI()));  //TODO 커스텀 예외
+                .orElseThrow(() -> new HandlerNotFoundException(request.getRequestURI()));
     }
 }
