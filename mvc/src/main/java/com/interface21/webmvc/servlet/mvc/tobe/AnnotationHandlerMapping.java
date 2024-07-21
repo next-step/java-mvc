@@ -5,6 +5,7 @@ import com.interface21.web.bind.annotation.RequestMethod;
 import jakarta.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.reflections.ReflectionUtils;
@@ -29,20 +30,11 @@ public class AnnotationHandlerMapping implements HandlerMapping {
 
         ControllerScanner controllerScanner = ControllerScanner.from(basePackages);
         Map<Class<?>, Object> controllersMap = controllerScanner.scan();
-        
+
         for (Class<?> controllerClass : controllersMap.keySet()) {
             String uriPrefix = extractUriPrefix(controllerClass);
-
-            Set<Method> requestMappingMethods = ReflectionUtils.getAllMethods(controllerClass, ReflectionUtils.withAnnotation(RequestMapping.class));
-            for (Method requestMappingMethod : requestMappingMethods) {
-                Object controller = controllersMap.get(controllerClass);
-                HandlerExecution handlerExecution = new HandlerExecution(controller, requestMappingMethod);
-
-                RequestMapping methodRequestMapping = requestMappingMethod.getAnnotation(RequestMapping.class);
-                HandlerKeys handlerKeys = HandlerKeys.of(uriPrefix, methodRequestMapping);
-
-                handlerKeys.forEach(handlerKey -> handlerExecutions.put(handlerKey, handlerExecution));
-            }
+            List<HandlerExecution> handlerExecutions = createHandlerExecutions(controllerClass, controllersMap);
+            registerHandlerExecutions(uriPrefix, handlerExecutions);
         }
     }
 
@@ -52,6 +44,20 @@ public class AnnotationHandlerMapping implements HandlerMapping {
             return "";
         }
         return controllerRequestMapping.value();
+    }
+
+    private List<HandlerExecution> createHandlerExecutions(Class<?> controllerClass, Map<Class<?>, Object> controllersMap) {
+        Set<Method> requestMappingMethods = ReflectionUtils.getAllMethods(controllerClass, ReflectionUtils.withAnnotation(RequestMapping.class));
+        return requestMappingMethods.stream()
+                .map(method -> new HandlerExecution(controllersMap.get(controllerClass), method))
+                .toList();
+    }
+
+    private void registerHandlerExecutions(String uriPrefix, List<HandlerExecution> handlerExecutions) {
+        handlerExecutions.forEach(handlerExecution -> {
+            HandlerKeys handlerKeys = HandlerKeys.of(uriPrefix, handlerExecution.extractRequestMappingAnnotation());
+            handlerKeys.forEach(handlerKey -> this.handlerExecutions.put(handlerKey, handlerExecution));
+        });
     }
 
     /**
