@@ -52,10 +52,6 @@ public class DispatcherServlet extends HttpServlet {
         final String requestURI = request.getRequestURI();
         log.debug("Method : {}, Request URI : {}", request.getMethod(), requestURI);
 
-        if (requestURI.equals("/service-worker.js")) {
-            return;
-        }
-
         try {
             Object handler = handlerMappings.getHandler(request);
 
