@@ -27,6 +27,6 @@
   - [X] 스캔한 컨트롤러 정보를 바탕으로 Map<HandlerKey, HandlerExecution> handlerExecutions을 생성한다.
 - [X] DispatcherServlet 에서  ManualHandlerMapping, AnnotationHandlerMapping을 모두 초기화
   - [X] HandlerMapping 인터페이스 추가
-  - [ ] HandlerAdapter 인터페이스 추가
+  - [X] HandlerAdapter 인터페이스 추가
 
 
