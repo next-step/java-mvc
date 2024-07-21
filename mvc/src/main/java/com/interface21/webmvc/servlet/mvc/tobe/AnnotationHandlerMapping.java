@@ -18,27 +18,20 @@ public class AnnotationHandlerMapping {
 
     private static final Logger log = LoggerFactory.getLogger(AnnotationHandlerMapping.class);
 
-    private final Object[] basePackage;
+    private final ControllerScanner scanner;
     private final Map<HandlerKey, HandlerExecution> handlerExecutions;
 
     public AnnotationHandlerMapping(final Object... basePackage) {
-        this.basePackage = basePackage;
+        this.scanner = new ControllerScanner(basePackage);
         this.handlerExecutions = new HashMap<>();
     }
 
     public void initialize() {
-        log.info("Initialized AnnotationHandlerMapping!");
-        var controllers = new Reflections(basePackage).getTypesAnnotatedWith(Controller.class);
-        controllers.forEach(this::mappingController);
+        scanner.getControllers().forEach(this::mappingMethods);
     }
 
-    private void mappingController(Class<?> controller) {
-        try {
-            var controllerInstance = controller.getDeclaredConstructor().newInstance();
-            Arrays.stream(controller.getMethods()).forEach(method -> mappingHandler(controllerInstance, method));
-        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException |
-                 InvocationTargetException ignored) {
-        }
+    private void mappingMethods(Class<?> controller, Object controllerInstance) {
+        Arrays.stream(controller.getMethods()).forEach(method -> mappingHandler(controllerInstance, method));
     }
 
     private void mappingHandler(final Object controllerInstance, final Method method) {

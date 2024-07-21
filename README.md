@@ -23,7 +23,7 @@
 
 ### [STEP2 TODO]  Legacy MVC와 @MVC 통합하기
 - [ ] AnnotationHandlerMapping initialize 리팩토링
-  - [ ] ControllerScanner 에게 컨트롤러를 찾아서 인스턴스 생성하는 역할을 맡긴다.
+  - [X] ControllerScanner 에게 컨트롤러를 찾아서 인스턴스 생성하는 역할을 맡긴다.
   - [ ] 스캔한 컨트롤러 정보를 바탕으로 Map<HandlerKey, HandlerExecution> handlerExecutions을 생성한다.
 - [ ] DispatcherServlet 에서  ManualHandlerMapping, AnnotationHandlerMapping을 모두 초기화
   - [ ] HandlerMapping 인터페이스 추가
