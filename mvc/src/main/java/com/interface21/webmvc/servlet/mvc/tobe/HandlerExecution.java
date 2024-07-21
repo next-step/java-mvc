@@ -4,9 +4,18 @@ import com.interface21.webmvc.servlet.ModelAndView;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-public class HandlerExecution {
+import java.lang.reflect.Method;
 
-    public ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response) throws Exception {
-        return null;
+public class HandlerExecution {
+    private final Object controllerInstance;
+    private final Method method;
+
+    public HandlerExecution(Object controllerInstance, Method method) {
+        this.controllerInstance = controllerInstance;
+        this.method = method;
+    }
+
+    public ModelAndView handle(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        return (ModelAndView) method.invoke(controllerInstance, request, response);
     }
 }

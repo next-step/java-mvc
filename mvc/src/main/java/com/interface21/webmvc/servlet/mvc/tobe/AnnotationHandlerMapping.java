@@ -16,8 +16,6 @@ import java.util.Map;
 
 public class AnnotationHandlerMapping {
 
-    private static final Logger log = LoggerFactory.getLogger(AnnotationHandlerMapping.class);
-
     private final ControllerScanner scanner;
     private final Map<HandlerKey, HandlerExecution> handlerExecutions;
 
@@ -27,11 +25,8 @@ public class AnnotationHandlerMapping {
     }
 
     public void initialize() {
-        scanner.getControllers().forEach(this::mappingMethods);
-    }
-
-    private void mappingMethods(Class<?> controller, Object controllerInstance) {
-        Arrays.stream(controller.getMethods()).forEach(method -> mappingHandler(controllerInstance, method));
+        scanner.getControllers().forEach((controller, instance) ->
+                Arrays.stream(controller.getMethods()).forEach(method -> mappingHandler(instance, method)));
     }
 
     private void mappingHandler(final Object controllerInstance, final Method method) {
@@ -41,7 +36,7 @@ public class AnnotationHandlerMapping {
         }
         for (RequestMethod requestMethod : handler.method()) {
             var key = new HandlerKey(handler.value(), requestMethod);
-            var execution = new RequestMappedHandlerExecution(controllerInstance, method);
+            var execution = new HandlerExecution(controllerInstance, method);
             handlerExecutions.put(key, execution);
         }
     }
