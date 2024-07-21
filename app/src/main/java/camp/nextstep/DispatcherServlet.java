@@ -1,6 +1,5 @@
 package camp.nextstep;
 
-import com.interface21.webmvc.servlet.mvc.asis.Controller;
 import com.interface21.webmvc.servlet.mvc.tobe.AnnotationHandlerMapping;
 import com.interface21.webmvc.servlet.view.JspView;
 import jakarta.servlet.ServletException;
@@ -19,7 +18,6 @@ public class DispatcherServlet extends HttpServlet {
     private final HandlerMappingRegistry handlerMappings = new HandlerMappingRegistry();
 
     public DispatcherServlet() {
-        handlerMappings.addHandlerMapping(new ManualHandlerMapping());
         handlerMappings.addHandlerMapping(new AnnotationHandlerMapping(BASE_PACKAGE));
     }
 
@@ -34,8 +32,8 @@ public class DispatcherServlet extends HttpServlet {
         log.debug("Method : {}, Request URI : {}", request.getMethod(), requestURI);
 
         try {
-            final var controller = (Controller) handlerMappings.getHandler(request);
-            final var viewName = controller.execute(request, response);
+            final var controller = handlerMappings.getHandler(request);
+            final var viewName = controller.handle(request, response);
             move(viewName, request, response);
         } catch (Throwable e) {
             log.error("Exception : {}", e.getMessage(), e);

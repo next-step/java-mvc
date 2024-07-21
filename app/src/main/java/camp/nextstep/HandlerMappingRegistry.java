@@ -1,10 +1,12 @@
 package camp.nextstep;
 
+import com.interface21.webmvc.servlet.mvc.tobe.HandlerExecution;
 import com.interface21.webmvc.servlet.mvc.tobe.HandlerMapping;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class HandlerMappingRegistry {
     private final List<HandlerMapping> handlerMappings = new ArrayList<>();
@@ -18,7 +20,10 @@ public class HandlerMappingRegistry {
         handlerMappings.forEach(HandlerMapping::initialize);
     }
 
-    public Object getHandler(final HttpServletRequest request) {
-        return null;
+    public HandlerExecution getHandler(final HttpServletRequest request) {
+        return handlerMappings.stream().map(mapping -> mapping.getHandler(request))
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(null);
     }
 }
