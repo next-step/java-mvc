@@ -1,5 +1,6 @@
 package com.interface21.webmvc.servlet;
 
+import com.interface21.webmvc.servlet.view.JspView;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -15,6 +16,10 @@ public class ModelAndView {
     public ModelAndView(final View view) {
         this.view = view;
         this.model = new HashMap<>();
+    }
+
+    public static ModelAndView ofJspView(final String path) {
+        return new ModelAndView(new JspView(path));
     }
 
     public ModelAndView addObject(final String attributeName, final Object attributeValue) {
