@@ -30,11 +30,18 @@ public class DispatcherServlet extends HttpServlet {
 
     @Override
     public void init() {
+        initializeHandlerMappings();
+        initializeHandlerAdapters();
+    }
+
+    private void initializeHandlerMappings() {
         handlerMappings = HandlerMappings.create();
         handlerMappings.add(new ManualHandlerMapping());
         handlerMappings.add(new AnnotationHandlerMapping("camp.nextstep"));
         handlerMappings.initialize();
+    }
 
+    private void initializeHandlerAdapters() {
         handlerAdapters = HandlerAdapters.create();
         handlerAdapters.add(new ControllerInterfaceHandlerAdapter());
         handlerAdapters.add(new RequestMappingHandlerAdapter());
