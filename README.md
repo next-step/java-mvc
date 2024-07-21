@@ -32,6 +32,6 @@
 
 - [x] : 1. ControllerScanner 클래스를 통해 컨트롤러를 찾는 기능 추가
 - [x] : 2. 컨트롤러의 메서드 정보로 HandlerExecution을 생성한다.
-- [ ] : 3. HandlerMapping 인터페이스 추가
+- [x] : 3. HandlerMapping 인터페이스 추가
 - [ ] : 4. HandlerAdapter 인터페이스 추가
 
