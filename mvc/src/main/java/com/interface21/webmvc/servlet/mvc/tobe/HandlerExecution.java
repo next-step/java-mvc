@@ -1,9 +1,9 @@
 package com.interface21.webmvc.servlet.mvc.tobe;
 
-import com.interface21.web.bind.annotation.RequestMapping;
 import com.interface21.webmvc.servlet.ModelAndView;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 public class HandlerExecution {
@@ -19,7 +19,7 @@ public class HandlerExecution {
         return (ModelAndView) method.invoke(handler, request, response);
     }
 
-    public RequestMapping extractRequestMappingAnnotation() {
-        return method.getAnnotation(RequestMapping.class);
+    public <T extends Annotation> T extractAnnotation(Class<T> annotationType) {
+        return method.getAnnotation(annotationType);
     }
 }
