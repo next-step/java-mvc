@@ -23,3 +23,7 @@
 ## 1단계 미션 요구사항
 - [x] 1.@MVC Framework 테스트 통과하기
 - [x] 2.JspView 클래스를 구현
+
+## 2단계 미션 요구사항
+- [x] 1.AnnotationHandlerMapping 클래스 구현
+- [ ] 2.DispatcherServlet 클래스 구현
