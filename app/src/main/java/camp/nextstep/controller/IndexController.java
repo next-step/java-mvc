@@ -10,7 +10,7 @@ import java.util.Objects;
 
 
 @Controller
-public class IndexController  {
+public class IndexController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String execute(final HttpServletRequest request, final HttpServletResponse response) {
