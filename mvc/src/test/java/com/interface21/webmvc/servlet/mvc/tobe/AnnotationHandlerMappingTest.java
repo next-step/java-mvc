@@ -8,8 +8,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -70,6 +73,23 @@ class AnnotationHandlerMappingTest {
         final var modelAndView = handlerExecution.handle(request, response);
 
         assertThat(modelAndView.getObject("id")).isEqualTo("gugu");
+    }
+
+    @Test
+    @DisplayName("String 파라미터를 바인딩한 Controller 메서드를 호출할 수 있다")
+    void createStringArgumentsHandleTest() throws Exception {
+        final var request = new MockHttpServletRequest("POST", "/users-string");
+        final var response = new MockHttpServletResponse();
+        request.addParameter("userId", "jongmin");
+        request.addParameter("password", "1234");
+
+        final var handlerExecution = handlerMapping.getHandler(request);
+        final var modelAndView = handlerExecution.handle(request, response);
+
+        assertSoftly(softly->{
+            softly.assertThat(modelAndView.getObject("userId")).isEqualTo("jongmin");
+            softly.assertThat(modelAndView.getObject("password")).isEqualTo("1234");
+        });
     }
 
 }
