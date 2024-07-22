@@ -92,4 +92,21 @@ class AnnotationHandlerMappingTest {
         });
     }
 
+    @Test
+    @DisplayName("long 과 int 파라미터를 바인딩한 Controller 메서드를 호출할 수 있다")
+    void createLongIntArgumentsHandleTest() throws Exception {
+        final var request = new MockHttpServletRequest("POST", "/users-int-long");
+        final var response = new MockHttpServletResponse();
+
+        request.addParameter("id", "1");
+        request.addParameter("age", "30");
+
+        final var handlerExecution = handlerMapping.getHandler(request);
+        final var modelAndView = handlerExecution.handle(request, response);
+
+        assertSoftly(softly->{
+            softly.assertThat(modelAndView.getObject("id")).isEqualTo(1L);
+            softly.assertThat(modelAndView.getObject("age")).isEqualTo(30);
+        });
+    }
 }
