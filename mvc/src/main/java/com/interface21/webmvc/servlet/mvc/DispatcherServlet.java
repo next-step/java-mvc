@@ -1,4 +1,4 @@
-package camp.nextstep;
+package com.interface21.webmvc.servlet.mvc;
 
 import com.interface21.webmvc.servlet.ModelAndView;
 import com.interface21.webmvc.servlet.mvc.tobe.AnnotationHandlerAdapter;
@@ -17,18 +17,19 @@ public class DispatcherServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static final Logger log = LoggerFactory.getLogger(DispatcherServlet.class);
 
+    private final String basePackage;
     HandlerMappingRegistry handlerMappingRegistry = new HandlerMappingRegistry();
     HandlerAdapterRegistry handlerAdapterRegistry = new HandlerAdapterRegistry();
 
-    public DispatcherServlet() {
+    public DispatcherServlet(String basePackage) {
+        this.basePackage = basePackage;
     }
 
     @Override
     public void init() {
-        handlerMappingRegistry.addHandlerMapping(new ManualHandlerMapping());
-        handlerMappingRegistry.addHandlerMapping(new AnnotationHandlerMapping("camp.nextstep.controller"));
-
-        handlerAdapterRegistry.addHandlerAdapter(new ManualHandlerAdapter());
+        AnnotationHandlerMapping basePackageHandlerMapping = new AnnotationHandlerMapping(basePackage);
+        basePackageHandlerMapping.initialize();
+        handlerMappingRegistry.addHandlerMapping(basePackageHandlerMapping);
         handlerAdapterRegistry.addHandlerAdapter(new AnnotationHandlerAdapter());
     }
 
