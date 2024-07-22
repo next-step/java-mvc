@@ -46,10 +46,10 @@ public class DispatcherServlet extends HttpServlet {
 
         Object handler = getHandler(request);
 
-        ModelAndView mv = getHandlerAdapter(handler, request, response);
+        ModelAndView modelAndView = getHandlerAdapter(handler, request, response);
 
         try {
-            render(mv, request, response);
+            render(modelAndView, request, response);
         } catch (Exception e) {
             throw new ServletException("응답을 그리던 중에 예외가 발생했습니다.", e);
         }
