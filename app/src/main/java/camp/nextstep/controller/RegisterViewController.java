@@ -10,7 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class RegisterViewController {
 
     @RequestMapping(value = "/register/view", method = RequestMethod.GET)
-    public String execute(final HttpServletRequest req, final HttpServletResponse res) throws Exception {
+    public String registerView(final HttpServletRequest req, final HttpServletResponse res) throws Exception {
         return "/register.jsp";
     }
 

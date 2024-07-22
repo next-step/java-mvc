@@ -13,7 +13,7 @@ import java.util.Objects;
 public class IndexController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String execute(final HttpServletRequest request, final HttpServletResponse response) {
+    public String index(final HttpServletRequest request, final HttpServletResponse response) {
         return "/index.jsp";
     }
 
