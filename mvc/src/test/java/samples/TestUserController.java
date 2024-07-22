@@ -14,7 +14,7 @@ public class TestUserController {
 
     private static final Logger log = LoggerFactory.getLogger(TestUserController.class);
 
-    @RequestMapping(value = "/users", method = RequestMethod.POST)
+    @RequestMapping(value = "/users-string", method = RequestMethod.POST)
     public ModelAndView create_string(String userId, String password) {
         log.debug("userId: {}, password: {}", userId, password);
         ModelAndView mav = new ModelAndView(new JsonView());
@@ -23,7 +23,7 @@ public class TestUserController {
         return mav;
     }
 
-    @RequestMapping(value = "/users", method = RequestMethod.POST)
+    @RequestMapping(value = "/users-int-long", method = RequestMethod.POST)
     public ModelAndView create_int_long(long id, int age) {
         log.debug("id: {}, age: {}", id, age);
         ModelAndView mav = new ModelAndView(new JsonView());
@@ -32,7 +32,7 @@ public class TestUserController {
         return mav;
     }
 
-    @RequestMapping(value = "/users", method = RequestMethod.POST)
+    @RequestMapping(value = "/users-javabean", method = RequestMethod.POST)
     public ModelAndView create_javabean(TestUser testUser) {
         log.debug("testUser: {}", testUser);
         ModelAndView mav = new ModelAndView(new JsonView());
