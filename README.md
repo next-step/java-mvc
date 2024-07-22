@@ -26,9 +26,9 @@
 
 ### 1단계
 기능 요구 사항
-1. - [ ] @MVC Framework 테스트 통과하기
-      - [ ] AnnotationHandlerMapping#initialize 가 호출되면 @RequestMapping 정보를 참고해 맵핑 정보를 초기화한다
-      - [ ] AnnotationHandlerMapping#handler 를 호출하면 @RequestMapping 에 맵핑된 handleExecution 을 반환한다
+1. - [X] @MVC Framework 테스트 통과하기
+      - [X] AnnotationHandlerMapping#initialize 가 호출되면 @RequestMapping 정보를 참고해 맵핑 정보를 초기화한다
+      - [X] AnnotationHandlerMapping#handler 를 호출하면 @RequestMapping 에 맵핑된 handleExecution 을 반환한다
 
 2. - [ ] JspView 클래스를 구현한다.
   
