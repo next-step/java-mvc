@@ -1,12 +1,7 @@
-package camp.nextstep;
+package com.interface21.webmvc.servlet.mvc;
 
-import com.interface21.webmvc.servlet.ModelAndView;
-import com.interface21.webmvc.servlet.View;
-import com.interface21.webmvc.servlet.mvc.tobe.AnnotationHandlerMapping;
-import com.interface21.webmvc.servlet.mvc.tobe.HandlerAdapter;
-import com.interface21.webmvc.servlet.mvc.tobe.HandlerAdapters;
-import com.interface21.webmvc.servlet.mvc.tobe.HandlerMappings;
-import com.interface21.webmvc.servlet.mvc.tobe.RequestMappingHandlerAdapter;
+import com.interface21.webmvc.servlet.mvc.handler.AnnotationHandlerMapping;
+import com.interface21.webmvc.servlet.mvc.handler.RequestMappingHandlerAdapter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
