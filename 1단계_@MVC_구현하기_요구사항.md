@@ -17,6 +17,30 @@ DispatcherServlet 클래스의 service 메서드에서 어떤 부분이 뷰에 �
 
 [x] com.interface21.webmvc.servlet.view JspView 클래스에서 render 메서드 본문을 구현한다
 
+[forward 와 sendRedirect 의 차이]
+
+RequestDispatcher 와 forward 란 클라이언트로부터 요청을 받고 이를 다른 리소스(서블릿, html, jsp) 로 넘겨주는 역할을 하는 인터페이스
+- forward()
+   - 사용자 요청에 의해 컨테이너에서 생성된 request, response 를 다른 리소스로 넘겨주는 역할을 한다.
+   - response 하지 않고 다른 리소스로 전달하는 역할 
+  
+```java
+request.getRequestDispatcher(viewName).forward(request, response);
+```
+
+- sendRedirect()
+   - 클라이언트와 서버간의 통신이 끊김
+
+```java
+if (viewName.startsWith(JspView.REDIRECT_PREFIX)) { // prefix 가 redirect 로 시작하면 sendRedirect 메서드 호출
+            response.sendRedirect(viewName.substring(JspView.REDIRECT_PREFIX.length()));
+            return;
+}
+```
+
+- 참고: https://sgcomputer.tistory.com/235 
+
+
 ### 참고사항
 프레임워크 영역과 서비스 영역을 분리하기 위해 멀티모듈을 적용했다.
 mvc 모듈은 프레임워크, app 모듈은 프로덕션 영역이다.
