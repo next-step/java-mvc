@@ -1,5 +1,6 @@
 package samples;
 
+import com.interface21.context.stereotype.Controller;
 import com.interface21.web.bind.annotation.PathVariable;
 import com.interface21.web.bind.annotation.RequestMapping;
 import com.interface21.web.bind.annotation.RequestMethod;
@@ -8,6 +9,7 @@ import com.interface21.webmvc.servlet.view.JsonView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Controller
 public class TestUserController {
 
     private static final Logger log = LoggerFactory.getLogger(TestUserController.class);
