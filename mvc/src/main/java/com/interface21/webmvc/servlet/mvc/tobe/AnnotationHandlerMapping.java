@@ -88,25 +88,4 @@ public class AnnotationHandlerMapping {
     public Object getHandler(final HttpServletRequest request) {
         return this.mappingRegistry.getMethod(request.getRequestURI(), RequestMethod.valueOf(request.getMethod()));
     }
-
-    static class MappingRegistry {
-        private final Map<RequestMappingInfo, HandlerExecution> handlerExecutions = new HashMap<>();
-
-        public void register(final RequestMappingInfo mapping, final Object handler, final Method method) {
-            handlerExecutions.put(mapping, new HandlerExecution(handler, method));
-        }
-
-        public HandlerExecution getMethod(final String url, final RequestMethod requestMethod) {
-            for (RequestMappingInfo mapping : handlerExecutions.keySet()) {
-                final boolean match = mapping.isMatch(url, requestMethod);
-
-                if (match) {
-                    return this.handlerExecutions.get(mapping);
-                }
-            }
-
-            return null;
-        }
-
-    }
 }
