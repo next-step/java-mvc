@@ -15,7 +15,7 @@ Tomcat 구현하기 미션에서 적용한 Controller 인터페이스는 2단계
 webmvc.org.springframework.web.servlet.view 패키지에서 JspView 클래스를 찾을 수 있다.
 DispatcherServlet 클래스의 service 메서드에서 어떤 부분이 뷰에 대한 처리를 하고 있는지 파악해서 JspView 클래스로 옮겨보자.
 
-[ ] com.interface21.webmvc.servlet.view JspView 클래스에서 render 메서드 본문을 구현한다
+[x] com.interface21.webmvc.servlet.view JspView 클래스에서 render 메서드 본문을 구현한다
 
 ### 참고사항
 프레임워크 영역과 서비스 영역을 분리하기 위해 멀티모듈을 적용했다.
