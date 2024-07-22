@@ -106,3 +106,13 @@ public class RegisterController {
     }
     
     ```
+    
+## 🚀 3단계 - JSON View 구현하기
+### JsonView 클래스 구현하기 
+- [] HTML 이외에 JSON으로도 응답이 가능해야 한다 
+
+### Legacy MVC 제거하기 
+- [] app 모듈의 컨트롤러를 모두 애노테이션 기반으로 변경한다 
+- [] asis 패키지의 레거시 코드를 제거한다 
+  - [] 서비스가 정상 동작해야 한다 
+- [] DispatcherServlet을 mvc 패키지로 이동한다
