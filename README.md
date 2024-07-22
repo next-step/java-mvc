@@ -115,4 +115,9 @@ public class RegisterController {
 - [x] DispatcherServlet을 mvc 패키지로 이동한다
 
 ### JsonView 클래스 구현하기
-- [] HTML 이외에 JSON으로도 응답이 가능해야 한다
+- [x] HTML 이외에 JSON으로도 응답이 가능해야 한다
+- [x] JSON을 자바 객체로 변환할 때 [Jackson 라이브러리](https://github.com/FasterXML/jackson)를 사용한다  
+  - [x] [공식문서](https://github.com/FasterXML/jackson-docs)를 읽고 사용 방법을 익힌다 
+  - [x] JSON으로 응답할 때 ContentType은 `MediaType.APPLICATION_JSON_UTF8_VALUE`로 변환한다
+  - [x] model에 데이터가 1개면 값을 그대로 반환한다 
+  - [x] model에 데이터가 2개 이상이면 Map 형태 그대로 JSON으로 변환 후 반환한다 
