@@ -109,6 +109,7 @@ public class TestController {
 - 아래 컨트롤러를 추가해서 정상 동작하지 테스트한다.
 
 ```java
+
 @Controller
 public class UserController {
 
@@ -128,3 +129,47 @@ public class UserController {
     }
 }
 ```
+
+## 4단계 - Controller 메서드 인자 매핑
+
+### 요구사항 - Controller 메서드의 인자 타입에 따라 자동으로 형 변환을 한 후 매핑하는 등의 작업을 자동 처리
+
+- 다음과 같이 개발하는 것이 가능하면 좋겠다.
+
+```java
+public class TestUserController {
+    private static final Logger logger = LoggerFactory.getLogger(TestUsersController.class);
+
+    @RequestMapping(value = "/users", method = RequestMethod.POST)
+    public ModelAndView create_string(String userId, String password) {
+        logger.debug("userId: {}, password: {}", userId, password);
+        return null;
+    }
+
+    @RequestMapping(value = "/users", method = RequestMethod.POST)
+    public ModelAndView create_int_long(long id, int age) {
+        logger.debug("id: {}, age: {}", id, age);
+        return null;
+    }
+
+    @RequestMapping(value = "/users", method = RequestMethod.POST)
+    public ModelAndView create_javabean(TestUser testUser) {
+        logger.debug("testUser: {}", testUser);
+        return null;
+    }
+
+
+    @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
+    public ModelAndView show_pathvariable(@PathVariable long id) {
+        logger.debug("userId: {}", id);
+        return null;
+    }
+}
+```
+
+- Controller 의 메서드의 파라미터의 타입에 따라 자동으로 형변환 후 맵핑처리
+    - String, 이나 primitiveType, wrapperType 과 같은 기본적인 타입 맵핑 처리
+    - 객체타입은 객체를 Reflection 으로 생성해 맵핑해준다.
+        - 기본 class 는 기본생성자 이용
+        - record class 는 canonical 생성자 이용
+    - PathVariable 은 `@RequestMapping.value` 의 url 중 특정 pattern 을 토대로 맵핑해 넣어준다.
