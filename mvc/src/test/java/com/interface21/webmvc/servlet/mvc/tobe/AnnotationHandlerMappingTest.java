@@ -127,4 +127,16 @@ class AnnotationHandlerMappingTest {
                 .extracting("userId", "password", "age")
                 .containsExactly("1", "1234", 31);
     }
+
+    @Test
+    @DisplayName("pathVariable 타입의 파라미터를 바인딩한 Controller 메서드를 호출할 수 있다")
+    void createPathVariableArgumentsHandleTest() throws Exception {
+        final var request = new MockHttpServletRequest("GET", "/users/1");
+        final var response = new MockHttpServletResponse();
+
+        final var handlerExecution = handlerMapping.getHandler(request);
+        final var modelAndView = handlerExecution.handle(request, response);
+
+        assertThat(modelAndView.getObject("id")).isEqualTo(1L);
+    }
 }
