@@ -12,6 +12,10 @@ public class HandlerMappingRegistry {
         this.handlerMappings = Arrays.asList(handlerMappings);
     }
 
+    public void initialize() {
+        handlerMappings.forEach(HandlerMapping::initialize);
+    }
+
     public HandlerMapping getHandlerMapping(final HttpServletRequest request) {
         return handlerMappings.stream()
                 .filter(handlerMapping -> handlerMapping.getHandler(request) != null)
