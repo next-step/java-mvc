@@ -35,16 +35,16 @@
 
 ## Mission 2
 
-- [ ] Legacy MVC와 @MVC 통합하기
+- [X] Legacy MVC와 @MVC 통합하기
     - [x] ControllerScanner 추가
         - [x] Relfections 객체로 @Controller가 설정된 모든 클래스를 찾는 기능 구현
         - [x] 각 클래스의 인스턴스를 생성하는 기능 구현
     - [x] Map<HandlerKey, HandlerExecution> handlerExecutions을 생성하는 기능 구현
         - [x] @RequestMapping이 붙어있는 메서드 정보를 찾아서 HandlerKey와 HandlerExecution 객체를 생성
         - [x] Map<HandlerKey, HandlerExecution> handlerExecutions을 생성
-    - [ ] AnnotationHandlerMapping과 ManualHandlerMapping를 통합
-        - [ ] HandlerMapping 인터페이스 추가
-        - [ ] DispatcherServlet의 초기화 과정에서 ManualHandlerMapping, AnnotationHandlerMapping을 모두 초기화
-        - [ ] DispatcherServlet의 getHandler 메서드에서 ManualHandlerMapping, AnnotationHandlerMapping을 모두 조회
-        - [ ] HandlerAdapter 인터페이스 추가
+    - [X] AnnotationHandlerMapping과 ManualHandlerMapping를 통합
+        - [X] HandlerMapping 인터페이스 추가
+        - [X] DispatcherServlet의 초기화 과정에서 ManualHandlerMapping, AnnotationHandlerMapping을 모두 초기화
+        - [X] DispatcherServlet의 getHandler 메서드에서 ManualHandlerMapping, AnnotationHandlerMapping을 모두 조회
+        - [X] HandlerAdapter 인터페이스 추가
 
