@@ -31,4 +31,8 @@ public class MethodParameter {
         }
         return annotation.value();
     }
+
+    public boolean isAssignableFrom(final Class<?> clazz) {
+        return getParameterType().isAssignableFrom(clazz);
+    }
 }
