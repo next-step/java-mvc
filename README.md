@@ -38,4 +38,4 @@
 ### 🚀 3단계 - JSON View 구현하기
 #### 기능 요구 사항
 - [x] : 1. JsonView 클래스를 구현한다.
-- [ ] : 2. Legacy MVC 제거하기
+- [x] : 2. Legacy MVC 제거하기
