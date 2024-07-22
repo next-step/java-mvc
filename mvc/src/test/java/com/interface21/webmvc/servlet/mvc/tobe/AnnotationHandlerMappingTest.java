@@ -86,7 +86,7 @@ class AnnotationHandlerMappingTest {
         final var handlerExecution = handlerMapping.getHandler(request);
         final var modelAndView = handlerExecution.handle(request, response);
 
-        assertSoftly(softly->{
+        assertSoftly(softly -> {
             softly.assertThat(modelAndView.getObject("userId")).isEqualTo("jongmin");
             softly.assertThat(modelAndView.getObject("password")).isEqualTo("1234");
         });
@@ -104,9 +104,27 @@ class AnnotationHandlerMappingTest {
         final var handlerExecution = handlerMapping.getHandler(request);
         final var modelAndView = handlerExecution.handle(request, response);
 
-        assertSoftly(softly->{
+        assertSoftly(softly -> {
             softly.assertThat(modelAndView.getObject("id")).isEqualTo(1L);
             softly.assertThat(modelAndView.getObject("age")).isEqualTo(30);
         });
+    }
+
+    @Test
+    @DisplayName("javabean 타입의 파라미터를 바인딩한 Controller 메서드를 호출할 수 있다")
+    void createJavabeanArgumentsHandleTest() throws Exception {
+        final var request = new MockHttpServletRequest("POST", "/users-javabean");
+        final var response = new MockHttpServletResponse();
+
+        request.addParameter("userId", "1");
+        request.addParameter("password", "1234");
+        request.addParameter("age", "31");
+
+        final var handlerExecution = handlerMapping.getHandler(request);
+        final var modelAndView = handlerExecution.handle(request, response);
+
+        assertThat(modelAndView.getObject("testUser"))
+                .extracting("userId", "password", "age")
+                .containsExactly("1", "1234", 31);
     }
 }
