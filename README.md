@@ -42,34 +42,45 @@
 
 ## 기능 요구 사항
 
-### 🚀 2단계 - 점진적인 리팩터링
-
-#### 미션 설명
-
-새로운 MVC 프레임워크를 추가하면 기존에 구현한 컨트롤러 인터페이스 기반 MVC 프레임워크로 만든 컨트롤러도 변경 해야 할까?
-실습 코드는 컨트롤러 클래스의 갯수가 적고 시스템 영향도 파악이 어렵지 않고 금방 바꿀 수 있다.
-하지만 실제 서비스 되는 프로덕션 코드는 복잡하고 영향 범위가 훨씬 크다.
-수백 개에서 수천 개의 클래스를 변경해야 될 수도 있다.
-변경이 쉽지 않기 때문에 기존 코드를 유지하면서 신규 기능을 추가해야 한다.
+### 🚀 3단계 - JSON View 구현하기
 
 #### 기능 요구 사항
 
-Legacy MVC와 @MVC 통합하기
+1. JsonView 클래스를 구현한다.
 
-컨트롤러 인터페이스 기반 MVC 프레임워크와 @MVC 프레임워크가 공존하도록 만들자.
-예를 들면, 회원가입 컨트롤러를 아래처럼 어노테이션 기반 컨트롤러로 변경해도 정상 동작해야 한다.
+   `webmvc.org.springframework.web.servlet.view` 패키지에서 JsonView 클래스를 찾을 수 있다.
+   HTML 이외에 JSON으로 응답할 수 있도록 JsonView 클래스를 구현해보자.
 
+2. Legacy MVC 제거하기
+
+   app 모듈에 있는 모든 컨트롤러를 어노테이션 기반 MVC로 변경한다.
+   그리고 asis 패키지에 있는 레거시 코드를 삭제해도 서비스가 정상 동작하도록 리팩터링하자.
+   Legacy MVC를 제거하고 나서 DispatcherServlet도 app 패키지가 아닌 mvc 패키지로 옮겨보자.
+
+#### 힌트
+아래 컨트롤러를 추가해서 정상 동작하는지 테스트한다.
 ```java
 @Controller
-public class RegisterController {
+public class UserController {
 
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ModelAndView save(HttpServletRequest req, HttpServletResponse res) {
-        ...
-    }
+    private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
-    @RequestMapping(value = "/register", method = RequestMethod.GET)
-    public ModelAndView show(HttpServletRequest req, HttpServletResponse res) {
-        ...
+    @RequestMapping(value = "/api/user", method = RequestMethod.GET)
+    public ModelAndView show(HttpServletRequest request, HttpServletResponse response) {
+        final String account = request.getParameter("account");
+        log.debug("user id : {}", account);
+
+        final ModelAndView modelAndView = new ModelAndView(new JsonView());
+        final User user = InMemoryUserRepository.findByAccount(account)
+                .orElseThrow();
+
+        modelAndView.addObject("user", user);
+        return modelAndView;
     }
-}```
+}
+```
+
+* JSON을 자바 객체로 변환할 때 Jackson 라이브러리를 사용한다.
+* Jackson 라이브러리 공식 문서를 읽어보고 사용법을 익힌다.
+* JSON으로 응답할 때 ContentType은 MediaType.APPLICATION_JSON_UTF8_VALUE으로 반환해야 한다.
+* model에 데이터가 1개면 값을 그대로 반환하고 2개 이상이면 Map 형태 그대로 JSON으로 변환해서 반환한다.
