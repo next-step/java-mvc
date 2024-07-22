@@ -33,6 +33,7 @@ class ReflectionsTest {
         Set<Class<?>> repositories = reflections.getTypesAnnotatedWith(Repository.class);
         for (Class<?> aClass : repositories) {
             log.info(aClass.getName());
+
         }
     }
 }
