@@ -3,6 +3,7 @@ package com.interface21.webmvc.servlet.mvc.tobe;
 import com.interface21.webmvc.servlet.ModelAndView;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 public class HandlerExecution {
@@ -16,5 +17,9 @@ public class HandlerExecution {
 
     public ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response) throws Exception {
         return (ModelAndView) method.invoke(handler, request, response);
+    }
+
+    public <T extends Annotation> T extractAnnotation(Class<T> annotationType) {
+        return method.getAnnotation(annotationType);
     }
 }

@@ -58,3 +58,51 @@ public class TestController {
 - [x] `JspView` 클래스 구현하기 
   - [x] `DispatcherServlet` 클래스의 `service()` 메서드에서 뷰에 대한 처리를 하고 있는 부분을 파악한다
   - [x] 파악한 부분을 `JspView`로 옮긴다
+
+## 🚀 2단계 - 점진적인 리팩터링
+- 기존 코드를 유지하면서 신규 기능을 추가해야 한다
+### Legacy MVC와 @MVC 통합하기
+- Legacy MVC 프레임워크와 @MVC 프레임워크가 공존하도록 만들자
+- 회원가입 컨트롤러를 아래와 같이 변경해도 정상 동작해야 한다
+```java
+@Controller
+public class RegisterController {
+
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public ModelAndView save(HttpServletRequest req, HttpServletResponse res) {
+        // ...
+    }
+
+    @RequestMapping(value = "/register", method = RequestMethod.GET)
+    public ModelAndView show(HttpServletRequest req, HttpServletResponse res) {
+        // ...
+    }
+}
+```
+### AnnotationHandlerMapping
+- [x] Controller Scanner 추가하기 
+  - [x] `@Controller`가 설정된 모든 클래스를 찾아 인스턴스를 생성해야 한다.
+    - `Map<Class<?>, Object>`
+- [x] 컨트롤러 메서드 정보로 HandlerExecution 생성하기 
+  - `ReflectionUtils.getAllMethods()` 활용 
+
+### DispatcherServlet
+- AnnotationHandlerMapping를 구현하는 동안 ManualHandlerMapping도 유지해야 한다.
+- [x] HandlerMapping 인터페이스 추가 
+  - 초기화한 2개의 HandlerMapping을 List로 관리 
+- [x] HandlerAdapter 인터페이스 추가 
+  - HandlerMapping 구현체에서 찾은 컨트롤러를 실행해야 한다 
+  - [x] AnnotationHandlerMapping은 HandlerExecution을 반환한다
+  - [x] ManualHandlerMapping은 Controller를 반환한다 
+  - 둘 다 메서드를 실행해야 한다 
+    ```java
+    Object handler = getHandler(req);
+    if (handler instanceof Controller) {
+        ModelAndView mav = ((Controller)handler).execute(req, resp);
+    } else if (handler instanceof HandlerExecution) {
+        ModelAndView mav = ((HandlerExecution)handler).handle(req, resp);
+    } else {
+        // throw exception
+    }
+    
+    ```

@@ -1,4 +1,4 @@
-package samples;
+package samples.success;
 
 public class TestUser {
     private String userId;

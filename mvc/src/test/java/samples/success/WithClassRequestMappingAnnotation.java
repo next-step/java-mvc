@@ -1,4 +1,4 @@
-package samples;
+package samples.success;
 
 import com.interface21.context.stereotype.Controller;
 import com.interface21.web.bind.annotation.RequestMapping;
@@ -16,9 +16,17 @@ public class WithClassRequestMappingAnnotation {
 
     private static final Logger log = LoggerFactory.getLogger(WithClassRequestMappingAnnotation.class);
 
-    @RequestMapping(value = "/get-test", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public ModelAndView findUserId(final HttpServletRequest request, final HttpServletResponse response) {
         log.info("WithClassRequestMappingAnnotation controller get method");
+        final var modelAndView = new ModelAndView(new JspView(""));
+        modelAndView.addObject("name", request.getAttribute("name"));
+        return modelAndView;
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    public ModelAndView findUserIdPost(final HttpServletRequest request, final HttpServletResponse response) {
+        log.info("WithClassRequestMappingAnnotation controller post method");
         final var modelAndView = new ModelAndView(new JspView(""));
         modelAndView.addObject("name", request.getAttribute("name"));
         return modelAndView;
