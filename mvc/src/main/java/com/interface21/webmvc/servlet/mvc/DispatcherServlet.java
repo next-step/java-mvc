@@ -3,7 +3,6 @@ package camp.nextstep;
 import com.interface21.webmvc.servlet.ModelAndView;
 import com.interface21.webmvc.servlet.View;
 import com.interface21.webmvc.servlet.mvc.tobe.AnnotationHandlerMapping;
-import com.interface21.webmvc.servlet.mvc.tobe.ControllerInterfaceHandlerAdapter;
 import com.interface21.webmvc.servlet.mvc.tobe.HandlerAdapter;
 import com.interface21.webmvc.servlet.mvc.tobe.HandlerAdapters;
 import com.interface21.webmvc.servlet.mvc.tobe.HandlerMappings;
@@ -36,14 +35,12 @@ public class DispatcherServlet extends HttpServlet {
 
     private void initializeHandlerMappings() {
         handlerMappings = HandlerMappings.create();
-        handlerMappings.add(new ManualHandlerMapping());
         handlerMappings.add(new AnnotationHandlerMapping("camp.nextstep"));
         handlerMappings.initialize();
     }
 
     private void initializeHandlerAdapters() {
         handlerAdapters = HandlerAdapters.create();
-        handlerAdapters.add(new ControllerInterfaceHandlerAdapter());
         handlerAdapters.add(new RequestMappingHandlerAdapter());
     }
 
