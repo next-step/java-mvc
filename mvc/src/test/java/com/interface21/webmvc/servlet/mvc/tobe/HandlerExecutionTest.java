@@ -37,7 +37,7 @@ class HandlerExecutionTest {
     @Test
     @DisplayName("넘겨 받은 객와의 메소드 이름으로 handle 메서드를 실행할 수 있다")
     void handleTest() throws Exception {
-        final HandlerExecution handlerExecution = new HandlerExecution(instance, clazz.getDeclaredMethod("successMethod", requestClass, responseClass));
+        final HandlerExecution handlerExecution = new HandlerExecution(instance, clazz.getDeclaredMethod("successMethod", requestClass, responseClass), new ArgumentResolvers(""));
 
         final ModelAndView handle = handlerExecution.handle(request, response);
 
@@ -48,7 +48,7 @@ class HandlerExecutionTest {
     @ValueSource(strings = {"voidMethod", "wrongReturnMethod"})
     @DisplayName("handle 메서드의 return type 이 ModelAndView 가 아니면 예외를 던진다")
     void handleFailTest(final String methodName) throws Exception {
-        final HandlerExecution handlerExecution = new HandlerExecution(instance, clazz.getDeclaredMethod(methodName, requestClass, responseClass));
+        final HandlerExecution handlerExecution = new HandlerExecution(instance, clazz.getDeclaredMethod(methodName, requestClass, responseClass), new ArgumentResolvers(""));
 
         assertThatThrownBy(() -> handlerExecution.handle(request, response))
                 .isInstanceOf(HandlerExecutionFailException.class)

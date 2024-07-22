@@ -35,7 +35,7 @@ class HandlerAdapterRegistryTest {
     @Test
     @DisplayName("등록된 HandlerAdapter 을 통해 ModelAndView 를 반환받을 수 있다")
     void handlerAdapterTest() throws Exception {
-        final ModelAndView modelAndView = handlerAdapterRegistry.handle(request, response, new HandlerExecution(instance, clazz.getDeclaredMethod("successMethod", requestClass, responseClass)));
+        final ModelAndView modelAndView = handlerAdapterRegistry.handle(request, response, new HandlerExecution(instance, clazz.getDeclaredMethod("successMethod", requestClass, responseClass), new ArgumentResolvers("")));
 
         assertThat(modelAndView).isEqualTo(ModelAndView.ofJspView("test"));
     }

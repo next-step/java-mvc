@@ -17,7 +17,7 @@ class HandlerExecutionHandlerAdapterTest {
     @DisplayName("HandlerExecution 의 구현체면 true 를 반환한다")
     void supportTestTrue() throws NoSuchMethodException {
         final HandlerExecutionHandlerAdapter handlerExecutionHandlerAdapter = new HandlerExecutionHandlerAdapter();
-        final HandlerExecution handler = new HandlerExecution("test", String.class.getMethod("charAt", int.class));
+        final HandlerExecution handler = new HandlerExecution("test", String.class.getMethod("charAt", int.class), new ArgumentResolvers(""));
 
         assertThat(handlerExecutionHandlerAdapter.supports(handler)).isTrue();
     }
