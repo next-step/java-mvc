@@ -30,7 +30,7 @@
       - [X] AnnotationHandlerMapping#initialize 가 호출되면 @RequestMapping 정보를 참고해 맵핑 정보를 초기화한다
       - [X] AnnotationHandlerMapping#handler 를 호출하면 @RequestMapping 에 맵핑된 handleExecution 을 반환한다
 
-2. - [ ] JspView 클래스를 구현한다.
+2. - [X] JspView 클래스를 구현한다.
   
 - DispatcherServlet 클래스의 service 메서드에서 어떤 부분이 뷰에 대한 처리를 하고 있는지 파악해서 JspView 클래스로 옮겨보자.
 
