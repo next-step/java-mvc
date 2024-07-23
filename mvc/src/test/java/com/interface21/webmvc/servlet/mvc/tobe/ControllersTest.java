@@ -14,7 +14,7 @@ class ControllersTest {
     void createTest() {
         final Controllers controllers = new Controllers("samples");
 
-        assertThat(controllers).hasSize(1);
+        assertThat(controllers).hasSize(2);
     }
 
     @Test

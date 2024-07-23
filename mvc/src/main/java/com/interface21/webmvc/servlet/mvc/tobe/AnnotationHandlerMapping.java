@@ -2,7 +2,6 @@ package com.interface21.webmvc.servlet.mvc.tobe;
 
 import com.interface21.web.bind.annotation.RequestMapping;
 import com.interface21.web.bind.annotation.RequestMethod;
-import com.interface21.webmvc.servlet.mvc.exception.HandlerMappingException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,7 +58,7 @@ public class AnnotationHandlerMapping implements HandlerMapping {
         final String url = requestMapping.value();
 
         for (final RequestMethod requestMethod : initRequestMethods(requestMapping)) {
-            handlers.put(new HandlerKey(url, requestMethod), new HandlerExecution(controllerInstance, requestMappingMethod));
+            handlers.put(new HandlerKey(url, requestMethod), new HandlerExecution(controllerInstance, requestMappingMethod, new ArgumentResolvers(url)));
         }
 
         return handlers;
@@ -76,6 +75,11 @@ public class AnnotationHandlerMapping implements HandlerMapping {
     @Override
     public HandlerExecution getHandler(final HttpServletRequest request) {
         final HandlerKey handlerKey = HandlerKey.from(request);
-        return this.handlerExecutions.get(handlerKey);
+        return handlerExecutions.entrySet()
+                .stream()
+                .filter(entry -> entry.getKey().matches(handlerKey))
+                .findAny()
+                .map(Map.Entry::getValue)
+                .orElse(null);
     }
 }
