@@ -1,5 +1,6 @@
 package camp.nextstep;
 
+import com.interface21.webmvc.servlet.mvc.asis.Controller;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,12 +29,11 @@ public class DispatcherServlet extends HttpServlet {
 
     @Override
     protected void service(final HttpServletRequest request, final HttpServletResponse response) throws ServletException {
-        final String requestURI = request.getRequestURI();
-        log.debug("Method : {}, Request URI : {}", request.getMethod(), requestURI);
+        log.debug("Method : {}, Request URI : {}", request.getMethod(), request.getRequestURI());
 
         try {
-            final var controller = manualHandlerMapping.getHandler(requestURI);
-            final var modelAndView = controller.execute(request, response);
+            final var controller = manualHandlerMapping.getHandler(request);
+            final var modelAndView = ((Controller) controller).execute(request, response);
             modelAndView.getView().render(new HashMap<>(), request, response);
         } catch (Throwable e) {
             log.error("Exception : {}", e.getMessage(), e);
