@@ -19,6 +19,7 @@ class AnnotationHandlerMappingTest {
         handlerMapping.initialize();
     }
 
+
     @Test
     void get() throws Exception {
         final var request = mock(HttpServletRequest.class);
