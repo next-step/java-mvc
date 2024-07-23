@@ -12,7 +12,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class AnnotationHandlerMapping {
+public class AnnotationHandlerMapping implements HandlerMapping, HandlerAdapter {
 
     private static final Logger log = LoggerFactory.getLogger(AnnotationHandlerMapping.class);
 
@@ -31,6 +31,14 @@ public class AnnotationHandlerMapping {
         var mapping = MethodScanner.mappingInstanceAndMethods(classObjectMap, RequestMapping.class);
 
         this.handlerExecutions = mappingController(mapping);
+
+        this.handlerExecutions.keySet()
+                .forEach(path -> log.info("Path : {}, HandlerExecution : {}", path, handlerExecutions.get(path).getClass()));
+    }
+
+    @Override
+    public boolean supports(HttpServletRequest request) {
+        return handlerExecutions.containsKey(new HandlerKey(request.getRequestURI(), RequestMethod.from(request.getMethod())));
     }
 
 
@@ -58,5 +66,4 @@ public class AnnotationHandlerMapping {
                 .map(handlerKey -> Map.entry(handlerKey, new HandlerExecution(methodToExecute)))
                 ;
     }
-
 }

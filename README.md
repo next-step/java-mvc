@@ -53,6 +53,7 @@
     - [X] `Map<HandlerKey, HandlerExecution> handlerExecutions`을 생성한다.  
     - [ ] `HandlerKey`에 매핑된 인스턴스의 메서드를 실행한다
 3. `HandlerMapping`
-   - [ ] URL에 맵핑된 인스턴스를 조회하는 기능을 명세한 인터페이스다
+   - [X] URL에 맵핑된 인스턴스를 조회하는 기능을 명세한 인터페이스다
+   - [X] DispatcherServlet에서 HandlerMapping 구현체를 생성한다
 4. `HandlerAdapter`  
-   - [ ] `HandlerMapping` 를 통해 찾은 인스턴스의 메서드를 호출하고 결과를 반환하는 기능이 명세된 인터페이스다 
+   - [X] `HandlerMapping` 를 통해 찾은 인스턴스의 메서드를 호출하고 결과를 반환하는 기능이 명세된 인터페이스다 
