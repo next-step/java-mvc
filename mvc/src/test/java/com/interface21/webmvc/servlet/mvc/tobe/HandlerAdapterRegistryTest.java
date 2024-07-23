@@ -34,4 +34,12 @@ class HandlerAdapterRegistryTest {
 				.isInstanceOf(IllegalStateException.class)
 				.hasMessage("지원가능한 adapter가 없습니다.");
 	}
+
+	@DisplayName("중복되는 handlerAdapter를 추가하면 예외가 발생한다.")
+	@Test
+	void addDuplicatedHandlerAdapter() {
+		assertThatThrownBy(() -> handlerAdapterRegistry.add(new AnnotationMethodHandlerAdapter()))
+				.isInstanceOf(IllegalArgumentException.class)
+				.hasMessage("이미 등록된 handlerAdapter 입니다.");
+	}
 }

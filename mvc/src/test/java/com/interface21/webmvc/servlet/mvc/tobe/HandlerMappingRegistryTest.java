@@ -39,4 +39,15 @@ class HandlerMappingRegistryTest {
 				.isInstanceOf(IllegalArgumentException.class)
 				.hasMessage("요청된 request를 처리할 수 있는 handler가 없습니다.");
 	}
+
+	@DisplayName("중복되는 handlerMapping을 추가하면 예외가 발생한다.")
+	@Test
+	void addDuplicatedHandlerMapping() {
+		when(request.getRequestURI()).thenReturn("/get-test");
+		when(request.getMethod()).thenReturn("GET");
+
+		assertThatThrownBy(() -> handlerMappingRegistry.add(new AnnotationHandlerMapping("samples")))
+				.isInstanceOf(IllegalArgumentException.class)
+				.hasMessage("이미 등록된 handler mapping 입니다.");
+	}
 }

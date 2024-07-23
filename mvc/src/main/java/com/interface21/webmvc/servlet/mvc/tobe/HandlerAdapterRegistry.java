@@ -28,6 +28,12 @@ public class HandlerAdapterRegistry {
 	}
 
 	public void add(final HandlerAdapter handlerAdapter) {
+		handlerAdapters.stream()
+				.filter(adapter -> adapter.getClass().equals(handlerAdapter.getClass()))
+				.findAny()
+				.ifPresent(adapter -> {
+					throw new IllegalArgumentException("이미 등록된 handlerAdapter 입니다.");
+				});
 		handlerAdapters.add(handlerAdapter);
 	}
 }

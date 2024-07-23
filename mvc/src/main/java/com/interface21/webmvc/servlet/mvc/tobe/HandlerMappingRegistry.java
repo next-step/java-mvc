@@ -27,6 +27,12 @@ public class HandlerMappingRegistry {
 	}
 
 	public void add(final HandlerMapping handlerMapping) {
+		handlerMappings.stream()
+				.filter(mapping -> mapping.getClass().equals(handlerMapping.getClass()))
+				.findAny()
+				.ifPresent(mapping -> {
+					throw new IllegalArgumentException("이미 등록된 handler mapping 입니다.");
+				});
 		handlerMappings.add(handlerMapping);
 	}
 }
