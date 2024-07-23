@@ -2,6 +2,8 @@ package camp.nextstep.controller;
 
 import camp.nextstep.domain.User;
 import camp.nextstep.dao.InMemoryUserDao;
+import com.interface21.webmvc.servlet.ModelAndView;
+import com.interface21.webmvc.servlet.view.JspView;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import com.interface21.webmvc.servlet.mvc.asis.Controller;
@@ -13,18 +15,21 @@ public class LoginController implements Controller {
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);
 
     @Override
-    public String execute(final HttpServletRequest req, final HttpServletResponse res) throws Exception {
+    public ModelAndView execute(final HttpServletRequest req, final HttpServletResponse res) throws Exception {
         if (UserSession.isLoggedIn(req.getSession())) {
-            return "redirect:/index.jsp";
+            JspView jspView = new JspView( "redirect:/index.jsp");
+            return new ModelAndView(jspView);
         }
 
         final var user = InMemoryUserDao.findByAccount(req.getParameter("account"));
         if (user == null) {
-            return "redirect:/401.jsp";
+            JspView jspView = new JspView( "redirect:/401.jsp");
+            return new ModelAndView(jspView);
         }
 
         log.info("User : {}", user);
-        return login(req, user);
+        JspView jspView = new JspView(login(req, user));
+        return new ModelAndView(jspView);
     }
 
     private String login(final HttpServletRequest request, final User user) {
