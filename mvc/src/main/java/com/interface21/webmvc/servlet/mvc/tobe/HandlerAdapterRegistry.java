@@ -26,4 +26,8 @@ public class HandlerAdapterRegistry {
 				.findAny()
 				.orElseThrow(() -> new IllegalStateException("지원가능한 adapter가 없습니다."));
 	}
+
+	public void add(final HandlerAdapter handlerAdapter) {
+		handlerAdapters.add(handlerAdapter);
+	}
 }

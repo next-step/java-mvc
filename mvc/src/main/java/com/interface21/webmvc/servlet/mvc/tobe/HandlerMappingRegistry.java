@@ -25,4 +25,8 @@ public class HandlerMappingRegistry {
 				.findAny()
 				.orElseThrow(() -> new IllegalArgumentException("요청된 request를 처리할 수 있는 handler가 없습니다."));
 	}
+
+	public void add(final HandlerMapping handlerMapping) {
+		handlerMappings.add(handlerMapping);
+	}
 }
