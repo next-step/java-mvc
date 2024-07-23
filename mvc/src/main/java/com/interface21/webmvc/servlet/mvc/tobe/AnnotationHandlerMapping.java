@@ -1,9 +1,8 @@
 package com.interface21.webmvc.servlet.mvc.tobe;
 
-import com.interface21.core.util.ReflectionUtils;
+import com.interface21.core.util.StreamUtils;
 import com.interface21.web.bind.annotation.RequestMapping;
 import com.interface21.web.bind.annotation.RequestMethod;
-import com.interface21.webmvc.servlet.mvc.asis.Controller;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +17,6 @@ public class AnnotationHandlerMapping {
     private static final Logger log = LoggerFactory.getLogger(AnnotationHandlerMapping.class);
 
     private final Object[] basePackage;
-    private final static HandlerExecution handlerExecution = new HandlerExecution();
     private Map<HandlerKey, HandlerExecution> handlerExecutions;
 
     public AnnotationHandlerMapping(final Object... basePackage) {
@@ -28,8 +26,11 @@ public class AnnotationHandlerMapping {
 
     public void initialize() {
         log.info("Initialized AnnotationHandlerMapping!");
-        var methods = ReflectionUtils.getMethodsWithAnnotationType(basePackage, RequestMapping.class);
-        this.handlerExecutions = mappingHandlerExecution(methods);
+        var classes = ControllerScanner.scanControllers(basePackage);
+        var classObjectMap = ControllerScanner.newInstances(classes);
+        var mapping = MethodScanner.mappingInstanceAndMethods(classObjectMap, RequestMapping.class);
+
+        this.handlerExecutions = mappingController(mapping);
     }
 
 
@@ -38,16 +39,24 @@ public class AnnotationHandlerMapping {
     }
 
 
-    private static Map<HandlerKey, HandlerExecution> mappingHandlerExecution(List<Method> methods) {
-        return methods.stream()
-                .flatMap(method -> {
-                    var annotation = method.getAnnotation(RequestMapping.class);
-                    var path = annotation.value();
-                    return Stream.of(annotation.method())
-                            .map(requestMethod -> Map.entry(path, requestMethod));
-                })
-                .map(it -> Map.entry(new HandlerKey(it.getKey(), it.getValue()), handlerExecution))
-                .distinct()
+    private Map<HandlerKey, HandlerExecution> mappingController(Map<Object, List<Method>> mapping) {
+        return mapping.entrySet()
+                .stream()
+                .flatMap(StreamUtils::flattenValues)
+                .flatMap(this::mappingKeyAndExecution)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
+
+
+    private Stream<Map.Entry<HandlerKey, HandlerExecution>> mappingKeyAndExecution(Map.Entry<Object, Method> entry) {
+
+        var requestMapping = entry.getValue().getAnnotation(RequestMapping.class);
+        var methodToExecute = entry.getValue();
+
+        return Arrays.stream(requestMapping.method())
+                .map(method -> new HandlerKey(requestMapping.value(), method))
+                .map(handlerKey -> Map.entry(handlerKey, new HandlerExecution(methodToExecute)))
+                ;
+    }
+
 }

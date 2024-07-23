@@ -44,18 +44,4 @@ public abstract class ReflectionUtils {
         }
     }
 
-
-    public static<T extends Annotation> List<Method> getMethodsWithAnnotationType(Object[] basePackage, Class<T> annotationTypes) {
-
-        Set<Class<?>> allClasses = getAllClass(new Reflections(basePackage, Scanners.SubTypes.filterResultsBy(s -> true)));
-
-        return allClasses.stream()
-                .flatMap(clazz -> Arrays.stream(clazz.getMethods()))
-                .filter(method -> method.isAnnotationPresent(annotationTypes))
-                .toList();
-    }
-
-    private static Set<Class<?>> getAllClass(Reflections reflections) {
-        return reflections.getSubTypesOf(Object.class);
-    }
 }
