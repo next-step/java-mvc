@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Method;
 import java.util.List;
 
-public class AnnotationHandlerMapping {
+public class AnnotationHandlerMapping implements HandlerMapping {
 
     private static final Logger log = LoggerFactory.getLogger(AnnotationHandlerMapping.class);
 
@@ -19,6 +19,7 @@ public class AnnotationHandlerMapping {
         this.basePackage = basePackage;
     }
 
+    @Override
     public void initialize() {
         log.info("Initialized AnnotationHandlerMapping!");
         final ControllerScanner controllerScanner = new ControllerScanner(basePackage);
@@ -27,6 +28,7 @@ public class AnnotationHandlerMapping {
         mappingRegistry.registerControllers(controllerBeans);
     }
 
+    @Override
     public Object getHandler(final HttpServletRequest request) {
         return this.mappingRegistry.getMethod(request.getRequestURI(), RequestMethod.valueOf(request.getMethod()));
     }
