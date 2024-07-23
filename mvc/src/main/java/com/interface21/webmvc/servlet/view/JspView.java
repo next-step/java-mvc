@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import com.interface21.webmvc.servlet.View;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class JspView implements View {
 
@@ -35,5 +36,18 @@ public class JspView implements View {
 
         RequestDispatcher requestDispatcher = request.getRequestDispatcher(viewName);
         requestDispatcher.forward(request, response);
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final JspView jspView = (JspView) o;
+        return Objects.equals(viewName, jspView.viewName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(viewName);
     }
 }

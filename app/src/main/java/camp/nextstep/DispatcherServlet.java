@@ -2,7 +2,7 @@ package camp.nextstep;
 
 import com.interface21.webmvc.servlet.ModelAndView;
 import com.interface21.webmvc.servlet.mvc.tobe.AnnotationHandlerMapping;
-import com.interface21.webmvc.servlet.mvc.tobe.ControllerHandlerAdapter;
+import com.interface21.webmvc.servlet.mvc.tobe.AnnotationMethodHandlerAdapter;
 import com.interface21.webmvc.servlet.mvc.tobe.HandlerAdapter;
 import com.interface21.webmvc.servlet.mvc.tobe.HandlerMapping;
 import jakarta.servlet.ServletException;
@@ -46,7 +46,7 @@ public class DispatcherServlet extends HttpServlet {
         addHandlerMapping(annotationHandlerMapping);
 
         // 핸들러 어댑터 추가
-        addHandlerAdapter(new ControllerHandlerAdapter());
+        addHandlerAdapter(new AnnotationMethodHandlerAdapter());
     }
 
     @Override
