@@ -1,7 +1,6 @@
-package camp.nextstep;
+package com.interface21.webmvc.servlet.mvc.tobe;
 
 import com.interface21.webmvc.servlet.ModelAndView;
-import com.interface21.webmvc.servlet.mvc.tobe.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,28 +21,9 @@ public class DispatcherServlet extends HttpServlet {
         this.handlerAdapterRegistry = new HandlerAdapterRegistry(new AnnotationMethodHandlerAdapter());
     }
 
-    public void addHandlerAdapter(HandlerAdapter handlerAdapter) {
-        handlerAdapterRegistry.add(handlerAdapter);
-    }
-
-    public void addHandlerMapping(HandlerMapping handlerMapping) {
-        handlerMappingRegistry.add(handlerMapping);
-    }
-
     @Override
     public void init() {
-        // 메뉴얼 핸들러 추가
-        ManualHandlerMapping manualHandlerMapping = new ManualHandlerMapping();
-        manualHandlerMapping.initialize();
-        addHandlerMapping(manualHandlerMapping);
-
-        // 어노테이션 핸들러 추가
-        AnnotationHandlerMapping annotationHandlerMapping = new AnnotationHandlerMapping("camp.nextstep.controller");
-        annotationHandlerMapping.initialize();
-        addHandlerMapping(annotationHandlerMapping);
-
-        // 핸들러 어댑터 추가
-        addHandlerAdapter(new AnnotationMethodHandlerAdapter());
+        handlerMappingRegistry.initialize();
     }
 
     @Override
