@@ -6,6 +6,7 @@ import com.interface21.webmvc.servlet.mvc.tobe.HandlerExecution;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.DelegatingServletOutputStream;
 
@@ -13,8 +14,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class JsonViewTest {
     private AnnotationHandlerMapping handlerMapping;
@@ -26,31 +26,61 @@ class JsonViewTest {
     }
 
     @Test
-    void test() throws Exception {
+    @DisplayName("모델 안에 1개의 원소만 있을 때는 값만 노출한다.")
+    void testOneItem() throws Exception {
         final var request = mock(HttpServletRequest.class);
-        final var response = mock(HttpServletResponse.class);
-
-        ByteArrayOutputStream targetStream = new ByteArrayOutputStream();
-        DelegatingServletOutputStream t = new DelegatingServletOutputStream(targetStream);
-
         when(request.getRequestURI()).thenReturn("/api/user");
         when(request.getMethod()).thenReturn("GET");
-        when(response.getOutputStream()).thenReturn(t);
 
-        final var handlerExecution = (HandlerExecution) handlerMapping.getHandler(request);
-        final ModelAndView modelAndView = handlerExecution.handle(request, response);
-        Map<String, Object> model = modelAndView.getModel();
+        final var targetStream = new ByteArrayOutputStream();
+        final var delegatingServletOutputStream = new DelegatingServletOutputStream(targetStream);
+        final var response = mock(HttpServletResponse.class);
+        when(response.getOutputStream()).thenReturn(delegatingServletOutputStream);
 
-        modelAndView.getView().render(model, request, response);
+        processRequest(request, response);
 
         assertThat(targetStream.toString()).isEqualTo("{\"a\":\"b\"}");
     }
 
-    // XXX: 테스트 추가
-    // user:{a:b} 말고 좀더 여러개 있는 걸로
+    private void processRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        final var handlerExecution = (HandlerExecution) handlerMapping.getHandler(request);
+        final ModelAndView modelAndView = handlerExecution.handle(request, response);
+        final Map<String, Object> model = modelAndView.getModel();
+        modelAndView.getView().render(model, request, response);
+    }
 
-    // XXX: 테스트추가
-    // 헤더 체크
+    @Test
+    @DisplayName("모델 안에 2개의 원소만 있을 때는 맵 자체를 노출한다.")
+    void testMultipleItems() throws Exception {
+        final var request = mock(HttpServletRequest.class);
+        when(request.getRequestURI()).thenReturn("/json-post-test");
+        when(request.getMethod()).thenReturn("POST");
 
+        final var targetStream = new ByteArrayOutputStream();
+        final var delegatingServletOutputStream = new DelegatingServletOutputStream(targetStream);
+        final var response = mock(HttpServletResponse.class);
+        when(response.getOutputStream()).thenReturn(delegatingServletOutputStream);
 
+        processRequest(request, response);
+
+        assertThat(targetStream.toString()).isEqualTo("{\"user\":{\"c\":\"d\"},\"age\":14}");
+    }
+
+    @Test
+    @DisplayName("JsonView 사용할 때 헤더는 잘 적용됐는지")
+    void testContentTypeHeader() throws Exception {
+        final var request = mock(HttpServletRequest.class);
+        when(request.getRequestURI()).thenReturn("/json-post-test");
+        when(request.getMethod()).thenReturn("POST");
+
+        final var targetStream = new ByteArrayOutputStream();
+        final var delegatingServletOutputStream = new DelegatingServletOutputStream(targetStream);
+        final var response = mock(HttpServletResponse.class);
+        when(response.getOutputStream()).thenReturn(delegatingServletOutputStream);
+
+        processRequest(request, response);
+
+        assertThat(targetStream.toString()).isEqualTo("{\"user\":{\"c\":\"d\"},\"age\":14}");
+        verify(response).addHeader("Content-Type", "application/json;charset=UTF-8");
+    }
 }
