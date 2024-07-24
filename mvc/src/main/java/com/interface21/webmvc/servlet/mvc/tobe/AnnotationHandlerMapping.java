@@ -1,10 +1,8 @@
 package com.interface21.webmvc.servlet.mvc.tobe;
 
-import com.interface21.context.stereotype.Controller;
 import com.interface21.web.bind.annotation.RequestMapping;
 import com.interface21.web.bind.annotation.RequestMethod;
 import jakarta.servlet.http.HttpServletRequest;
-import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +11,6 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 public class AnnotationHandlerMapping {
 
@@ -21,6 +18,7 @@ public class AnnotationHandlerMapping {
 
     private final Object[] basePackage;
     private final Map<HandlerKey, HandlerExecution> handlerExecutions;
+    private final ControllerScanner controllerScanner = ControllerScanner.getInstance();
 
     public AnnotationHandlerMapping(final Object... basePackage) {
         this.basePackage = basePackage;
@@ -29,8 +27,20 @@ public class AnnotationHandlerMapping {
 
     public void initialize() {
         log.info("Initialized AnnotationHandlerMapping!");
-        Set<Class<?>> controllers = new Reflections(basePackage).getTypesAnnotatedWith(Controller.class);
-        controllers.forEach(this::mappingHandler);
+        Controllers controllers = controllerScanner.scan(basePackage);
+        controllers.values().forEach(this::mappingHandler);
+    }
+
+    private void addHandlerExecution(Method method, Object controllerInstance) {
+        final var requestMapping = method.getAnnotation(RequestMapping.class);
+        final var handlerExecution = new HandlerExecution(controllerInstance, method);
+        final var httpPath = requestMapping.value();
+
+        Arrays.stream(requestMapping.method())
+                .forEach(requestMethod -> {
+                    final var handlerKey = new HandlerKey(httpPath, requestMethod);
+                    handlerExecutions.put(handlerKey, handlerExecution);
+                });
     }
 
     private void mappingHandler(Class<?> clazz) {
@@ -44,16 +54,7 @@ public class AnnotationHandlerMapping {
 
         } catch (NoSuchMethodException | InvocationTargetException | InstantiationException |
                  IllegalAccessException ignored) {
-            // nothing
         }
-    }
-
-    private void addHandlerExecution(Method method, Object controllerInstance) {
-        final var requestMapping = method.getAnnotation(RequestMapping.class);
-        final var handlerKey = new HandlerKey(requestMapping.value(), requestMapping.method()[0]);
-        final var handlerExecution = new HandlerExecution(controllerInstance, method);
-
-        handlerExecutions.put(handlerKey, handlerExecution);
     }
 
     public Object getHandler(final HttpServletRequest request) {
