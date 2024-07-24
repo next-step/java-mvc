@@ -11,7 +11,7 @@ class JsonConverterTest {
 
     @DisplayName("Map<String, ?> model 의 size가 0인 경우 빈 Json이 응답된다.")
     @Test
-    void test() {
+    void convertToJsonWhenModelIsEmpty() {
         JsonConverter jsonConverter = new JsonConverter();
         Map<String, User> modelMap = Map.of();
 
@@ -20,28 +20,18 @@ class JsonConverterTest {
         assertThat(json).isEqualTo("{}");
     }
 
-    @DisplayName("Map<String, ?> model 의 size가 1인 경우 value 만 JSON으로 변환한다.")
+    @DisplayName("Map<String, ?> model을 JSON으로 변환한다.")
     @Test
-    void test2() {
-        JsonConverter jsonConverter = new JsonConverter();
-        Map<String, User> modelMap = Map.of("user", new User("kim", 100));
-
-        String json = jsonConverter.convertModelToJson(modelMap);
-
-        assertThat(json).isEqualTo("{\"name\":\"kim\",\"age\":100}");
-    }
-
-    @DisplayName("Map<String, ?> model 의 size가 2 이상인 경우 Map 자체를 JSON으로 변환한다.")
-    @Test
-    void test3() {
+    void convertToJsonWhenModelIsNotEmpty() {
         JsonConverter jsonConverter = new JsonConverter();
         Map<String, Object> modelMap = Map.of(
                 "user", new User("kim", 100),
                 "nextstep", "jwp"
         );
 
-        String json = jsonConverter.convertModelToJson(modelMap);
+        String actual = jsonConverter.convertModelToJson(modelMap);
+        CharSequence[] expected = {"\"nextstep\":\"jwp\"", "\"user\":{\"name\":\"kim\",\"age\":100}"};
 
-        assertThat(json).contains("\"nextstep\":\"jwp\"", "\"user\":{\"name\":\"kim\",\"age\":100}");
+        assertThat(actual).contains(expected);
     }
 }

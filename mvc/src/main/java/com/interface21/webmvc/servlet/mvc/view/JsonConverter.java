@@ -18,11 +18,6 @@ public class JsonConverter {
 
     public String convertModelToJson(Map<String, ?> model) {
         try {
-            if (model.size() == 1) {
-                Object value = model.values().iterator().next();
-                return objectMapper.writeValueAsString(value);
-            }
-
             return objectMapper.writeValueAsString(model);
         } catch (JsonProcessingException e) {
             log.error("JSON 변환 실패", e);
