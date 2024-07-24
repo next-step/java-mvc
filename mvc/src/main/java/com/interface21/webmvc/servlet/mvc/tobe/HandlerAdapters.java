@@ -18,13 +18,11 @@ public class HandlerAdapters {
     }
 
     public HandlerAdapter getHandlerAdapter(final Object handler) throws ServletException {
-        for (final HandlerAdapter adapter : this.handlerAdapters) {
-            if (adapter.supports(handler)) {
-                return adapter;
-            }
-        }
-
-        throw new ServletException("No adapter for handler [" + handler +
-   				"]: The DispatcherServlet configuration needs to include a HandlerAdapter that supports this handler");
+        return this.handlerAdapters.stream()
+                .filter(adapter -> adapter.supports(handler))
+                .findFirst()
+                .orElseThrow(() ->
+                        new ServletException("No adapter for handler [" + handler +
+                                "]: The DispatcherServlet configuration needs to include a HandlerAdapter that supports this handler"));
    	}
 }

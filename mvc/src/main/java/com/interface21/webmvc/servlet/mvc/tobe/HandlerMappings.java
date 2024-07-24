@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class HandlerMappings {
     final List<HandlerMapping> handlerMappings = new ArrayList<>();
@@ -18,13 +19,10 @@ public class HandlerMappings {
     }
 
     public Object getHandler(final HttpServletRequest req) {
-        for (final HandlerMapping mapping : this.handlerMappings) {
-            final Object handler = mapping.getHandler(req);
-            if (handler != null) {
-                return handler;
-            }
-        }
-
-   		return null;
+        return this.handlerMappings.stream()
+                .map(mapping -> mapping.getHandler(req))
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(null);
    	}
 }

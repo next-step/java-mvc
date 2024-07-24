@@ -23,9 +23,8 @@ public class AnnotationHandlerMapping implements HandlerMapping {
     public void initialize() {
         log.info("Initialized AnnotationHandlerMapping!");
         final ControllerScanner controllerScanner = new ControllerScanner(basePackage);
-        final List<Object> controllerBeans = controllerScanner.createControllerBeans();
 
-        mappingRegistry.registerControllers(controllerBeans);
+        mappingRegistry.registerControllers(controllerScanner.getControllerBeans());
     }
 
     @Override

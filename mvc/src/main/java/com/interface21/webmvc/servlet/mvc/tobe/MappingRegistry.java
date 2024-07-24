@@ -22,7 +22,6 @@ class MappingRegistry {
         StringBuilder parentPath = extractClassLevelUrlPath(clazz);
 
         final String basePath = parentPath.toString();
-
         final Map<Method, RequestMappingInfo> methods = extractMethodMappings(handlerMethods, basePath);
 
         methods.forEach((method, mapping) -> register(mapping, handler, method));
@@ -37,7 +36,9 @@ class MappingRegistry {
     }
 
     private Map<Method, RequestMappingInfo> extractMethodMappings(final Method[] handlerMethods, final String basePath) {
-        return Arrays.stream(handlerMethods).collect(Collectors.toMap(
+        return Arrays.stream(handlerMethods)
+                .filter(method -> method.isAnnotationPresent(RequestMapping.class))
+                .collect(Collectors.toMap(
                 method -> method,
                 method -> extractRequestMappingInfo(basePath, method),
                 (existing, replacement) -> existing,
@@ -59,15 +60,11 @@ class MappingRegistry {
     }
 
     public HandlerExecution getMethod(final String url, final RequestMethod requestMethod) {
-        for (RequestMappingInfo mapping : handlerExecutions.keySet()) {
-            final boolean match = mapping.isMatch(url, requestMethod);
-
-            if (match) {
-                return this.handlerExecutions.get(mapping);
-            }
-        }
-
-        return null;
+        return handlerExecutions.keySet().stream()
+                .filter(mapping -> mapping.isMatch(url, requestMethod))
+                .findFirst()
+                .map(mapping -> handlerExecutions.get(mapping))
+                .orElse(null);
     }
 
 }
