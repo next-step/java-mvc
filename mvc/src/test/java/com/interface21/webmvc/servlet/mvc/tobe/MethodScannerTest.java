@@ -6,24 +6,18 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.interface21.web.bind.annotation.RequestMapping;
+import com.interface21.webmvc.servlet.mvc.tobe.fixtures.MockController;
 
 class MethodScannerTest {
 
     @DisplayName("클래스에서 어노테이션이 명시된 메서드를 모두 스캔한다")
     @Test
-    public void getAnnotationInstanceTest() {
+    public void getAnnotationInstanceTest() throws NoSuchMethodException {
 
-        var classes =
-                ControllerScanner.scanControllers(
-                        new Object[] {"com.interface21.webmvc.servlet.mvc.tobe.fixtures"});
         var methods =
-                classes.stream()
-                        .map(
-                                clazz ->
-                                        MethodScanner.scanMethodsWithAnnotation(
-                                                clazz, RequestMapping.class))
-                        .toList();
+                MethodScanner.scanMethodsWithAnnotation(MockController.class, RequestMapping.class);
 
-        assertThat(methods).hasSize(1);
+        var actual = MockController.class.getMethod("mockGet");
+        assertThat(methods).contains(actual);
     }
 }
