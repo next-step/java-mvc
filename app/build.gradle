@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'idea'
+    id 'com.diffplug.spotless' version '6.25.0'
 }
 
 group 'camp.nextstep'
@@ -43,5 +44,17 @@ idea {
 sourceSets {
     main {
         java.destinationDirectory.set(file('src/main/webapp/WEB-INF/classes'))
+    }
+}
+
+spotless {
+    java {
+        googleJavaFormat()
+
+        removeUnusedImports()
+        indentWithTabs(2)
+        indentWithSpaces(4)
+        trimTrailingWhitespace()
+        importOrder('java', 'jakarta', 'org', 'com', 'com.interface21')
     }
 }
