@@ -6,26 +6,21 @@ import java.util.*;
 
 import org.reflections.ReflectionUtils;
 
-import com.interface21.core.util.StreamUtils;
-
 public final class MethodScanner {
+
+    private MethodScanner() {}
 
     public static <T extends Annotation> Set<Method> scanMethodsWithAnnotation(
             Class<?> clazz, Class<T> annotationType) {
         return ReflectionUtils.getAllMethods(clazz, ReflectionUtils.withAnnotation(annotationType));
     }
 
-    public static <T extends Annotation> Map<Object, List<Method>> mappingInstanceAndMethods(
-            Map<Class<?>, Object> classObjectMap, Class<T> annotationType) {
-        return classObjectMap.entrySet().stream()
-                .map(
-                        entry ->
-                                Map.of(
-                                        entry.getValue(),
-                                        List.copyOf(
-                                                scanMethodsWithAnnotation(
-                                                        entry.getKey(), annotationType))))
-                .reduce(StreamUtils::pullAll)
-                .orElse(Map.of());
+    public static <T extends Annotation> List<InstanceMethods> mappingInstanceAndMethods(
+            List<Object> instances, Class<T> annotationType) {
+        return instances.stream().map(it -> InstanceMethods.of(it, annotationType)).toList();
+    }
+
+    public static <T extends Annotation> T scanAnnotation(Method method, Class<T> annotation) {
+        return method.getAnnotation(annotation);
     }
 }

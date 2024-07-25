@@ -29,10 +29,10 @@ public class AnnotationHandlerMapping implements HandlerMapping, HandlerAdapter 
     public void initialize() {
         log.info("Initialized AnnotationHandlerMapping!");
         var classes = ControllerScanner.scanControllers(basePackage);
-        var classObjectMap = ControllerScanner.newInstances(classes);
-        var mapping = MethodScanner.mappingInstanceAndMethods(classObjectMap, RequestMapping.class);
+        var classInstances = ControllerScanner.newInstances(classes);
+        var mapping = MethodScanner.mappingInstanceAndMethods(classInstances, RequestMapping.class);
 
-        this.handlerExecutions = mappingController(mapping);
+        this.handlerExecutions = createHandlerExecutionMap(mapping);
 
         this.handlerExecutions
                 .keySet()
@@ -55,9 +55,10 @@ public class AnnotationHandlerMapping implements HandlerMapping, HandlerAdapter 
                 new HandlerKey(request.getRequestURI(), RequestMethod.from(request.getMethod())));
     }
 
-    private Map<HandlerKey, HandlerExecution> mappingController(Map<Object, List<Method>> mapping) {
-        return mapping.entrySet().stream()
-                .flatMap(StreamUtils::flattenValues)
+    private Map<HandlerKey, HandlerExecution> createHandlerExecutionMap(
+            List<InstanceMethods> mapping) {
+        return mapping.stream()
+                .flatMap(InstanceMethods::flattenMethods)
                 .flatMap(this::mappingKeyAndExecution)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
@@ -65,15 +66,13 @@ public class AnnotationHandlerMapping implements HandlerMapping, HandlerAdapter 
     private Stream<Map.Entry<HandlerKey, HandlerExecution>> mappingKeyAndExecution(
             Map.Entry<Object, Method> entry) {
 
-        var requestMapping = entry.getValue().getAnnotation(RequestMapping.class);
-        var methodToExecute = entry.getValue();
+        var instance = entry.getKey();
+        var method = entry.getValue();
+        var requestMapping = MethodScanner.scanAnnotation(method, RequestMapping.class);
 
-        return Arrays.stream(requestMapping.method())
-                .map(method -> new HandlerKey(requestMapping.value(), method))
-                .map(
-                        handlerKey ->
-                                Map.entry(
-                                        handlerKey,
-                                        new HandlerExecution(entry.getKey(), methodToExecute)));
+        return StreamUtils.flattenValues(
+                        requestMapping.value(), Arrays.asList(requestMapping.method()))
+                .map(HandlerKey::of)
+                .map(handlerKey -> Map.entry(handlerKey, new HandlerExecution(instance, method)));
     }
 }

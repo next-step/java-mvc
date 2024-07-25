@@ -73,6 +73,14 @@ class StreamUtilsTest {
     }
 
     @Test
+    @DisplayName("List원소를 펼처서 Map.entry를 반한다")
+    public void flattenValues2Test() {
+
+        assertThat(StreamUtils.flattenValues("KEY", List.of("a", "b")))
+                .containsExactly(new SimpleEntry<>("KEY", "a"), new SimpleEntry<>("KEY", "b"));
+    }
+
+    @Test
     @DisplayName("flattenValues()는 null 세이프하지 않다")
     public void flattenValuesFailWhenParameterIsNull() {
 

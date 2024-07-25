@@ -1,5 +1,6 @@
 package com.interface21.webmvc.servlet.mvc.tobe;
 
+import java.util.Map;
 import java.util.Objects;
 
 import com.interface21.web.bind.annotation.RequestMethod;
@@ -12,6 +13,10 @@ public class HandlerKey {
     public HandlerKey(final String url, final RequestMethod requestMethod) {
         this.url = url;
         this.requestMethod = requestMethod;
+    }
+
+    public static HandlerKey of(Map.Entry<String, RequestMethod> entry) {
+        return new HandlerKey(entry.getKey(), entry.getValue());
     }
 
     @Override

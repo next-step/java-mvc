@@ -23,4 +23,8 @@ public final class StreamUtils {
         final var key = entry.getKey();
         return entry.getValue().stream().map(value -> Map.entry(key, value));
     }
+
+    public static <K, V> Stream<Map.Entry<K, V>> flattenValues(K key, List<V> values) {
+        return values.stream().map(it -> Map.entry(key, it));
+    }
 }
