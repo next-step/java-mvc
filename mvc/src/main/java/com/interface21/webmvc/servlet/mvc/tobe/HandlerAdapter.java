@@ -27,7 +27,8 @@ public interface HandlerAdapter {
             HandlerExecution handler, HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         final var modelAndView = handler.handle(request, response);
-        modelAndView.getView().render(modelAndView.getModel(), request, response);
+        var jspView = modelAndView.getView();
+        jspView.render(Map.of("id", "gugu"), request, response);
     }
 
     private static void render(

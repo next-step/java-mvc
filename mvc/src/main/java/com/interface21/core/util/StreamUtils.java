@@ -12,9 +12,13 @@ public final class StreamUtils {
         return a;
     }
 
+    /**
+     * <b> allowed Immutable Collection parameter <b>
+     */
     public static <K, V> Map<K, V> pullAll(Map<K, V> a, Map<K, V> b) {
-        a.putAll(b);
-        return a;
+        var aMap = new HashMap<>(a);
+        aMap.putAll(b);
+        return aMap;
     }
 
     public static <K, V> Stream<Map.Entry<K, V>> flattenValues(Map.Entry<K, List<V>> entry) {

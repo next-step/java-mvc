@@ -9,22 +9,17 @@ import com.interface21.webmvc.servlet.ModelAndView;
 
 public class HandlerExecution {
 
+    private final Object callerClass;
     private final Method method;
 
-    public HandlerExecution(Method method) {
+    public HandlerExecution(Object clazz, Method method) {
+        this.callerClass = clazz;
         this.method = method;
     }
 
     public ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response)
             throws Exception {
 
-        var modelAndView =
-                new ModelAndView(
-                        (model, request1, response1) -> {
-                            // do nothing
-                        });
-
-        modelAndView.addObject("id", "gugu");
-        return modelAndView;
+        return (ModelAndView) method.invoke(callerClass, request, response);
     }
 }
