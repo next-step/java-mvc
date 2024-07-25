@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 public class DispatcherServlet extends HttpServlet {
@@ -44,7 +43,7 @@ public class DispatcherServlet extends HttpServlet {
         ModelAndView modelAndView = getHandlerAdapter(handler, request, response);
 
         try {
-            render(modelAndView, request, response);
+            modelAndView.render(request, response);
         } catch (Exception e) {
             throw new ServletException("응답을 그리던 중에 예외가 발생했습니다.", e);
         }
@@ -70,10 +69,5 @@ public class DispatcherServlet extends HttpServlet {
         }
 
         throw new NoMappingException(request);
-    }
-
-    private void render(ModelAndView mav, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        Map<String, Object> model = mav.getModel();
-        mav.getView().render(model, request, response);
     }
 }
