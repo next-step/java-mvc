@@ -56,4 +56,19 @@ public class AnnotationHandlerMapping implements HandlerMapping {
                 .map(requestMethod -> new HandlerKey(url, requestMethod))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final AnnotationHandlerMapping that = (AnnotationHandlerMapping) o;
+        boolean deepEquals = Objects.deepEquals(basePackage, that.basePackage);
+        boolean equals = Objects.equals(handlerExecutions, that.handlerExecutions);
+        return Objects.deepEquals(basePackage, that.basePackage) && Objects.equals(handlerExecutions, that.handlerExecutions);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(Arrays.hashCode(basePackage), handlerExecutions);
+    }
 }

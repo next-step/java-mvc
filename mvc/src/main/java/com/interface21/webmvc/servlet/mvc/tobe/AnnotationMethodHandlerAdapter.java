@@ -17,4 +17,9 @@ public class AnnotationMethodHandlerAdapter implements HandlerAdapter{
         }
         throw new IllegalArgumentException("유효하지 않는 핸들러 : " + handler.getClass().getName());
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof AnnotationMethodHandlerAdapter;
+    }
 }

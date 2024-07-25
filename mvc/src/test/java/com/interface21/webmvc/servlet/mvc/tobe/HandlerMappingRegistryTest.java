@@ -43,10 +43,9 @@ class HandlerMappingRegistryTest {
 	@DisplayName("중복되는 handlerMapping을 추가하면 예외가 발생한다.")
 	@Test
 	void addDuplicatedHandlerMapping() {
-		when(request.getRequestURI()).thenReturn("/get-test");
-		when(request.getMethod()).thenReturn("GET");
-
-		assertThatThrownBy(() -> handlerMappingRegistry.add(new AnnotationHandlerMapping("samples")))
+		AnnotationHandlerMapping samples = new AnnotationHandlerMapping("samples");
+		samples.initialize();
+		assertThatThrownBy(() -> handlerMappingRegistry.add(samples))
 				.isInstanceOf(IllegalArgumentException.class)
 				.hasMessage("이미 등록된 handler mapping 입니다.");
 	}
