@@ -1,6 +1,5 @@
 package com.interface21.core.util;
 
-import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -18,8 +17,8 @@ public final class StreamUtils {
         return a;
     }
 
-    public static Stream<Map.Entry<Object, Method>> flattenValues(
-            Map.Entry<Object, List<Method>> entry) {
-        return entry.getValue().stream().map(method -> Map.entry(entry.getKey(), method));
+    public static <K, V> Stream<Map.Entry<K, V>> flattenValues(Map.Entry<K, List<V>> entry) {
+        final var key = entry.getKey();
+        return entry.getValue().stream().map(value -> Map.entry(key, value));
     }
 }
