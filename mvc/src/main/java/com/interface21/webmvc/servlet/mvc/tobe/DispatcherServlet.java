@@ -1,6 +1,8 @@
 package com.interface21.webmvc.servlet.mvc.tobe;
 
 import com.interface21.webmvc.servlet.ModelAndView;
+import com.interface21.webmvc.servlet.mvc.tobe.exception.HandlingExecutionException;
+import com.interface21.webmvc.servlet.mvc.tobe.exception.NoMappingException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -56,16 +58,18 @@ public class DispatcherServlet extends HttpServlet {
                               .orElse(null);
     }
 
-    private ModelAndView getHandlerAdapter(Object handler, HttpServletRequest request, HttpServletResponse response) {
+    private ModelAndView getHandlerAdapter(Object handler,
+                                           HttpServletRequest request,
+                                           HttpServletResponse response) throws ServletException {
         try {
             if (handler instanceof HandlerExecution handlerExecution) {
                 return handlerExecution.handle(request, response);
             }
         } catch (Exception e) {
-            throw new RuntimeException("핸들러 동작 중에 예외가 발생했습니다.", e);
+            throw new HandlingExecutionException(e);
         }
 
-        throw new RuntimeException("매핑이 없어요: " + request.getRequestURI());
+        throw new NoMappingException(request);
     }
 
     private void render(ModelAndView mav, HttpServletRequest request, HttpServletResponse response) throws Exception {
