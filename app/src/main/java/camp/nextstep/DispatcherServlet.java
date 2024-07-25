@@ -3,6 +3,7 @@ package camp.nextstep;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -50,14 +51,23 @@ public class DispatcherServlet extends HttpServlet {
         }
     }
 
-    private void execute(HttpServletRequest request, HttpServletResponse response)
-            throws Exception {
+    private void execute(HttpServletRequest request, HttpServletResponse response) {
 
         Optional<HandlerMapping> handler =
                 handlers.stream().filter(it -> it.supports(request)).findFirst();
 
-        if (handler.isPresent()) {
-            handler.get().adapt(handler.get().getHandler(request), request, response);
-        }
+        handler.ifPresent(handleRequest(request, response));
+    }
+
+    private Consumer<HandlerMapping> handleRequest(
+            HttpServletRequest request, HttpServletResponse response) {
+        return handler -> {
+            try {
+                handler.adapt(handler.getHandler(request), request, response);
+            } catch (Exception e) {
+                log.error("Exception : {}", e.getMessage(), e);
+                throw new RuntimeException(e.getMessage());
+            }
+        };
     }
 }

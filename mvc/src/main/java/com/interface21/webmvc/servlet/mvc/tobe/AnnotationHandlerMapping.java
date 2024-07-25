@@ -47,12 +47,16 @@ public class AnnotationHandlerMapping implements HandlerMapping, HandlerAdapter 
     @Override
     public boolean supports(HttpServletRequest request) {
         return handlerExecutions.containsKey(
-                new HandlerKey(request.getRequestURI(), RequestMethod.from(request.getMethod())));
+                HandlerKey.CREATOR
+                        .apply(request.getRequestURI())
+                        .apply(RequestMethod.from(request.getMethod())));
     }
 
     public Object getHandler(final HttpServletRequest request) {
         return handlerExecutions.get(
-                new HandlerKey(request.getRequestURI(), RequestMethod.from(request.getMethod())));
+                HandlerKey.CREATOR
+                        .apply(request.getRequestURI())
+                        .apply(RequestMethod.from(request.getMethod())));
     }
 
     private Map<HandlerKey, HandlerExecution> createHandlerExecutionMap(
