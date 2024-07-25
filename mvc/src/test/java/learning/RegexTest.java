@@ -69,6 +69,25 @@ public class RegexTest {
         );
     }
 
+    @DisplayName("Matcher.matches()는 모든 문자열이 일치하는 시퀀스를 찾고, start,end,group을 사용할 수 있다.")
+    @Test
+    void matches() {
+        String regex = "My email is (\\w+)@(\\w+\\.\\w+)";
+        String text = "My email is example@example.com";
+
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(text);
+
+        matcher.matches();
+        assertAll(
+                () -> assertThat(matcher.start()).isEqualTo(0),
+                () -> assertThat(matcher.end()).isEqualTo(31),
+                () -> assertThat(matcher.group()).isEqualTo("My email is example@example.com"),
+                () -> assertThat(matcher.group(1)).isEqualTo("example"),
+                () -> assertThat(matcher.group(2)).isEqualTo("example.com")
+        );
+    }
+
     @DisplayName("Matcher.group()은 일치한 문자열 자체를 나타낸다.")
     @Test
     void matcherGroup() {
