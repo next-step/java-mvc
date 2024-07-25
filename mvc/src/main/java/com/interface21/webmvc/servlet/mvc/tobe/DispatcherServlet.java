@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class DispatcherServlet extends HttpServlet {
 
@@ -48,11 +49,11 @@ public class DispatcherServlet extends HttpServlet {
     }
 
     private Object getHandler(HttpServletRequest request) {
-        for (HandlerMapping handlerMapping : handlerMappings) {
-            Object handler = handlerMapping.getHandler(request);
-            if (handler != null) return handler;
-        }
-        return null;
+        return handlerMappings.stream()
+                              .map(handlerMapping -> handlerMapping.getHandler(request))
+                              .filter(Objects::nonNull)
+                              .findFirst()
+                              .orElse(null);
     }
 
     private ModelAndView getHandlerAdapter(Object handler, HttpServletRequest request, HttpServletResponse response) {
