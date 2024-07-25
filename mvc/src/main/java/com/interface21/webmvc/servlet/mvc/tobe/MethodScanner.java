@@ -22,7 +22,9 @@ public final class MethodScanner {
                         entry ->
                                 Map.of(
                                         entry.getValue(),
-                                        List.copyOf(scanMethodsWithAnnotation(entry.getKey(), annotationType))))
+                                        List.copyOf(
+                                                scanMethodsWithAnnotation(
+                                                        entry.getKey(), annotationType))))
                 .reduce(StreamUtils::pullAll)
                 .orElse(Map.of());
     }

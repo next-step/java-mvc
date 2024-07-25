@@ -39,12 +39,8 @@ test {
 
 spotless {
     java {
-        googleJavaFormat()
-
+        googleJavaFormat("1.22.0").aosp()
         removeUnusedImports()
-        indentWithTabs(2)
-        indentWithSpaces(4)
-        trimTrailingWhitespace()
         importOrder('java', 'jakarta', 'org', 'com', 'com.interface21')
     }
 }

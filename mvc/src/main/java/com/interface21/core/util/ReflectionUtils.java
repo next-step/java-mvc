@@ -14,8 +14,8 @@ public abstract class ReflectionUtils {
      * @throws NoSuchMethodException if no such constructor exists
      * @since 5.0
      */
-    public static <T> Constructor<T> accessibleConstructor(Class<T> clazz, Class<?>... parameterTypes)
-            throws NoSuchMethodException {
+    public static <T> Constructor<T> accessibleConstructor(
+            Class<T> clazz, Class<?>... parameterTypes) throws NoSuchMethodException {
 
         Constructor<T> ctor = clazz.getDeclaredConstructor(parameterTypes);
         makeAccessible(ctor);
@@ -24,8 +24,8 @@ public abstract class ReflectionUtils {
 
     /**
      * Make the given constructor accessible, explicitly setting it accessible if necessary. The
-     * {@code setAccessible(true)} method is only called when actually necessary, to avoid unnecessary
-     * conflicts.
+     * {@code setAccessible(true)} method is only called when actually necessary, to avoid
+     * unnecessary conflicts.
      *
      * @param ctor the constructor to make accessible
      * @see Constructor#setAccessible

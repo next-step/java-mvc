@@ -20,6 +20,7 @@ class RequestMethodTest {
     @DisplayName("RequestMethod에 정의되지 않은 문자열로 from 메서드 호출하면 예외 발생한다")
     @Test
     public void fromFailTest() {
-        Assertions.assertThatIllegalArgumentException().isThrownBy(() -> RequestMethod.from("TEST"));
+        Assertions.assertThatIllegalArgumentException()
+                .isThrownBy(() -> RequestMethod.from("TEST"));
     }
 }

@@ -27,6 +27,7 @@ public enum RequestMethod {
 
     public static RequestMethod from(String method) {
         return Optional.ofNullable(MAPPING.get(method.toUpperCase(Locale.ROOT)))
-                .orElseThrow(() -> new IllegalArgumentException("No such RequestMethod: " + method));
+                .orElseThrow(
+                        () -> new IllegalArgumentException("No such RequestMethod: " + method));
     }
 }

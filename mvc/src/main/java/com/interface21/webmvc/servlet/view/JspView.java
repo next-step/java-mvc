@@ -33,8 +33,7 @@ public class JspView implements View {
             return;
         }
 
-        model
-                .keySet()
+        model.keySet()
                 .forEach(
                         key -> {
                             log.debug("attribute name : {}, value : {}", key, model.get(key));

@@ -12,9 +12,7 @@ public final class StreamUtils {
         return a;
     }
 
-    /**
-     * <b> allowed Immutable Collection parameter <b>
-     */
+    /** <b> allowed Immutable Collection parameter <b> */
     public static <K, V> Map<K, V> pullAll(Map<K, V> a, Map<K, V> b) {
         var aMap = new HashMap<>(a);
         aMap.putAll(b);

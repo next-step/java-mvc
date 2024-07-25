@@ -7,7 +7,8 @@ import org.junit.jupiter.api.Test;
 
 class ControllerScannerTest {
 
-    private Object[] basePackages = new Object[] {"com.interface21.webmvc.servlet.mvc.tobe.fixtures"};
+    private Object[] basePackages =
+            new Object[] {"com.interface21.webmvc.servlet.mvc.tobe.fixtures"};
 
     @DisplayName("@Controller가 명시된 클래스를 스캔한다")
     @Test

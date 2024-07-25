@@ -70,6 +70,10 @@ public class AnnotationHandlerMapping implements HandlerMapping, HandlerAdapter 
 
         return Arrays.stream(requestMapping.method())
                 .map(method -> new HandlerKey(requestMapping.value(), method))
-                .map(handlerKey -> Map.entry(handlerKey, new HandlerExecution(entry.getKey(), methodToExecute)));
+                .map(
+                        handlerKey ->
+                                Map.entry(
+                                        handlerKey,
+                                        new HandlerExecution(entry.getKey(), methodToExecute)));
     }
 }

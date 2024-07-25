@@ -18,7 +18,10 @@ class MethodScannerTest {
                         new Object[] {"com.interface21.webmvc.servlet.mvc.tobe.fixtures"});
         var methods =
                 classes.stream()
-                        .map(clazz -> MethodScanner.scanMethodsWithAnnotation(clazz, RequestMapping.class))
+                        .map(
+                                clazz ->
+                                        MethodScanner.scanMethodsWithAnnotation(
+                                                clazz, RequestMapping.class))
                         .toList();
 
         assertThat(methods).hasSize(1);

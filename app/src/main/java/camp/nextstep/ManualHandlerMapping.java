@@ -30,7 +30,11 @@ public class ManualHandlerMapping implements HandlerMapping {
         controllers
                 .keySet()
                 .forEach(
-                        path -> log.info("Path : {}, Controller : {}", path, controllers.get(path).getClass()));
+                        path ->
+                                log.info(
+                                        "Path : {}, Controller : {}",
+                                        path,
+                                        controllers.get(path).getClass()));
     }
 
     @Override
