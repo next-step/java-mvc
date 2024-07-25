@@ -9,9 +9,8 @@ import java.util.Objects;
 public class HandlerMappingRegistry {
 	private final List<HandlerMapping> handlerMappings;
 
-	public HandlerMappingRegistry(HandlerMapping... handlerMappings) {
-		this.handlerMappings = Arrays.stream(handlerMappings)
-				.toList();
+	public HandlerMappingRegistry(HandlerMapping handlerMapping) {
+		this.handlerMappings = Arrays.asList(handlerMapping);
 	}
 
 	public void initialize() {

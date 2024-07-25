@@ -10,9 +10,8 @@ import java.util.List;
 public class HandlerAdapterRegistry {
 	private final List<HandlerAdapter> handlerAdapters;
 
-	public HandlerAdapterRegistry(HandlerAdapter... handlerAdapters) {
-		this.handlerAdapters = Arrays.stream(handlerAdapters)
-				.toList();
+	public HandlerAdapterRegistry(HandlerAdapter handlerAdapter) {
+		this.handlerAdapters = Arrays.asList(handlerAdapter);
 	}
 
 	public ModelAndView handle(Object handler, HttpServletRequest request, HttpServletResponse response) throws Exception {
