@@ -15,6 +15,16 @@ import org.slf4j.LoggerFactory;
 public class LoginController {
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);
 
+    @RequestMapping(value = "/login/view", method = RequestMethod.GET)
+    public ModelAndView show(final HttpServletRequest req, final HttpServletResponse res) {
+        return UserSession.getUserFrom(req.getSession())
+                          .map(user -> {
+                              log.info("logged in {}", user.getAccount());
+                              return ModelAndView.jspView("redirect:/index.jsp");
+                          })
+                          .orElse(ModelAndView.jspView("/login.jsp"));
+    }
+
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ModelAndView login(final HttpServletRequest req, final HttpServletResponse res) {
         if (UserSession.isLoggedIn(req.getSession())) {
@@ -37,5 +47,13 @@ public class LoginController {
             return ModelAndView.jspView("redirect:/index.jsp");
         }
         return ModelAndView.jspView("redirect:/401.jsp");
+    }
+
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public ModelAndView logout(final HttpServletRequest req, final HttpServletResponse res) throws Exception {
+        final var session = req.getSession();
+        session.removeAttribute(UserSession.SESSION_KEY);
+
+        return ModelAndView.jspView("redirect:/");
     }
 }
