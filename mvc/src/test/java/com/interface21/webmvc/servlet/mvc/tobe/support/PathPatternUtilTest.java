@@ -1,8 +1,8 @@
 package com.interface21.webmvc.servlet.mvc.tobe.support;
 
-import org.junit.jupiter.api.Test;
-
 import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.jupiter.api.Test;
 
 class PathPatternUtilTest {
 

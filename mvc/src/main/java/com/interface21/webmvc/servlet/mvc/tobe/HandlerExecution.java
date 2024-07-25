@@ -1,23 +1,25 @@
 package com.interface21.webmvc.servlet.mvc.tobe;
 
-import com.interface21.web.bind.annotation.RequestMethod;
-import com.interface21.webmvc.servlet.ModelAndView;
-import com.interface21.webmvc.servlet.View;
+import java.lang.reflect.Method;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.util.Map;
+import com.interface21.webmvc.servlet.ModelAndView;
 
 public class HandlerExecution {
 
+    private final Object callerClass;
+    private final Method method;
 
-    public ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+    public HandlerExecution(Object clazz, Method method) {
+        this.callerClass = clazz;
+        this.method = method;
+    }
 
-        var modelAndView = new ModelAndView((model, request1, response1) -> {
-            // do nothing
-        });
+    public ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response)
+            throws Exception {
 
-        modelAndView.addObject("id", "gugu");
-        return modelAndView;
+        return (ModelAndView) method.invoke(callerClass, request, response);
     }
 }

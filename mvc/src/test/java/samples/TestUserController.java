@@ -1,12 +1,13 @@
 package samples;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.interface21.web.bind.annotation.PathVariable;
 import com.interface21.web.bind.annotation.RequestMapping;
 import com.interface21.web.bind.annotation.RequestMethod;
 import com.interface21.webmvc.servlet.ModelAndView;
 import com.interface21.webmvc.servlet.view.JsonView;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class TestUserController {
 
@@ -37,7 +38,6 @@ public class TestUserController {
         mav.addObject("testUser", testUser);
         return mav;
     }
-
 
     @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
     public ModelAndView show_pathvariable(@PathVariable long id) {

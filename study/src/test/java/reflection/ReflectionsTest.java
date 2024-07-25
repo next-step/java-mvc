@@ -1,5 +1,6 @@
 package reflection;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
@@ -8,6 +9,11 @@ import org.slf4j.LoggerFactory;
 import reflection.annotation.Controller;
 import reflection.annotation.Repository;
 import reflection.annotation.Service;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class ReflectionsTest {
 
@@ -25,4 +31,20 @@ class ReflectionsTest {
                 .forEach(clazz -> log.info(clazz.getName()));
 
     }
+
+    @Test
+    @DisplayName("Method.invoke() 학습테스트")
+    public void methodInvokeTest() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+
+        // given
+        var car = new Car();
+        var method = car.getClass().getMethod("number", String.class);
+
+        // when
+        var result = method.invoke(car, "1234");
+
+        // then
+        assertThat(result).isEqualTo("Benz:1234");
+    }
+
 }

@@ -16,10 +16,7 @@ public class Application {
     }
 
     private static int defaultPortIfNull(final String[] args) {
-        return Stream.of(args)
-                .findFirst()
-                .map(Integer::parseInt)
-                .orElse(DEFAULT_PORT);
+        return Stream.of(args).findFirst().map(Integer::parseInt).orElse(DEFAULT_PORT);
     }
 
     private static void await() throws IOException {

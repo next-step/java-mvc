@@ -7,18 +7,27 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public enum RequestMethod {
-    GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS, TRACE;
+    GET,
+    HEAD,
+    POST,
+    PUT,
+    PATCH,
+    DELETE,
+    OPTIONS,
+    TRACE;
 
     private static final Map<String, RequestMethod> MAPPING;
 
     static {
-        MAPPING = Arrays.stream(RequestMethod.values())
-                .map(it -> Map.entry(it.name(), it))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        MAPPING =
+                Arrays.stream(RequestMethod.values())
+                        .map(it -> Map.entry(it.name(), it))
+                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     public static RequestMethod from(String method) {
         return Optional.ofNullable(MAPPING.get(method.toUpperCase(Locale.ROOT)))
-                .orElseThrow(() -> new IllegalArgumentException("No such RequestMethod: " + method));
+                .orElseThrow(
+                        () -> new IllegalArgumentException("No such RequestMethod: " + method));
     }
 }
