@@ -56,7 +56,7 @@ public class DispatcherServlet extends HttpServlet {
         Optional<HandlerMapping> handler =
                 handlers.stream().filter(it -> it.supports(request)).findFirst();
 
-        handler.ifPresent(handleRequest(request, response));
+        handler.ifPresentOrElse(it -> handleRequest(request, response), handleException());
     }
 
     private Consumer<HandlerMapping> handleRequest(
@@ -67,6 +67,16 @@ public class DispatcherServlet extends HttpServlet {
             } catch (Exception e) {
                 log.error("Exception : {}", e.getMessage(), e);
                 throw new RuntimeException(e.getMessage());
+            }
+        };
+    }
+
+    private static Runnable handleException() {
+        return () -> {
+            try {
+                throw new ServletException("Not found handler for request");
+            } catch (ServletException e) {
+                throw new RuntimeException(e);
             }
         };
     }
