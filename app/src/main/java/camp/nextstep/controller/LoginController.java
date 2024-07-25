@@ -1,19 +1,23 @@
 package camp.nextstep.controller;
 
-import camp.nextstep.domain.User;
-import camp.nextstep.dao.InMemoryUserDao;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import com.interface21.webmvc.servlet.mvc.asis.Controller;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.interface21.webmvc.servlet.mvc.asis.Controller;
+
+import camp.nextstep.dao.InMemoryUserDao;
+import camp.nextstep.domain.User;
 
 public class LoginController implements Controller {
 
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);
 
     @Override
-    public String execute(final HttpServletRequest req, final HttpServletResponse res) throws Exception {
+    public String execute(final HttpServletRequest req, final HttpServletResponse res)
+            throws Exception {
         if (UserSession.isLoggedIn(req.getSession())) {
             return "redirect:/index.jsp";
         }

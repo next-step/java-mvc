@@ -18,8 +18,6 @@ class DispatcherServletTest {
     @Test
     public void test() throws Exception {
 
-        Assertions.assertThatNoException()
-                        .isThrownBy(() -> sut.init());
+        Assertions.assertThatNoException().isThrownBy(() -> sut.init());
     }
-
 }

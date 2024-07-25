@@ -1,13 +1,15 @@
 package camp.nextstep;
 
 import jakarta.servlet.ServletContext;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.interface21.web.WebApplicationInitializer;
 
 /**
- * Base class for {@link WebApplicationInitializer}
- * implementations that register a {@link DispatcherServlet} in the servlet context.
+ * Base class for {@link WebApplicationInitializer} implementations that register a {@link
+ * DispatcherServlet} in the servlet context.
  */
 public class MyWebApplicationInitializer implements WebApplicationInitializer {
 
@@ -21,8 +23,11 @@ public class MyWebApplicationInitializer implements WebApplicationInitializer {
 
         final var registration = servletContext.addServlet(DEFAULT_SERVLET_NAME, dispatcherServlet);
         if (registration == null) {
-            throw new IllegalStateException("Failed to register servlet with name '" + DEFAULT_SERVLET_NAME + "'. " +
-                    "Check if there is another servlet registered under the same name.");
+            throw new IllegalStateException(
+                    "Failed to register servlet with name '"
+                            + DEFAULT_SERVLET_NAME
+                            + "'. "
+                            + "Check if there is another servlet registered under the same name.");
         }
 
         registration.setLoadOnStartup(1);

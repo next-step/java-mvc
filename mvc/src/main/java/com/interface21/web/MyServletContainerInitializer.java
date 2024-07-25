@@ -1,14 +1,15 @@
 package com.interface21.web;
 
-import com.interface21.core.util.ReflectionUtils;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
 import jakarta.servlet.ServletContainerInitializer;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.HandlesTypes;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import com.interface21.core.util.ReflectionUtils;
 
 @HandlesTypes(WebApplicationInitializer.class)
 public class MyServletContainerInitializer implements ServletContainerInitializer {
@@ -21,8 +22,9 @@ public class MyServletContainerInitializer implements ServletContainerInitialize
         if (webAppInitializerClasses != null) {
             for (Class<?> waiClass : webAppInitializerClasses) {
                 try {
-                    initializers.add((WebApplicationInitializer)
-                            ReflectionUtils.accessibleConstructor(waiClass).newInstance());
+                    initializers.add(
+                            (WebApplicationInitializer)
+                                    ReflectionUtils.accessibleConstructor(waiClass).newInstance());
                 } catch (Throwable ex) {
                     throw new ServletException("Failed to instantiate WebApplicationInitializer class", ex);
                 }

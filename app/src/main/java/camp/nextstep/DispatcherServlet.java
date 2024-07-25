@@ -1,18 +1,19 @@
 package camp.nextstep;
 
-import com.interface21.core.util.ReflectionUtils;
-import com.interface21.webmvc.servlet.mvc.tobe.AnnotationHandlerMapping;
-import com.interface21.webmvc.servlet.mvc.tobe.HandlerMapping;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import com.interface21.webmvc.servlet.mvc.tobe.AnnotationHandlerMapping;
+import com.interface21.webmvc.servlet.mvc.tobe.HandlerMapping;
 
 public class DispatcherServlet extends HttpServlet {
 
@@ -22,8 +23,7 @@ public class DispatcherServlet extends HttpServlet {
 
     private final List<HandlerMapping> handlers = new ArrayList<>();
 
-    public DispatcherServlet() {
-    }
+    public DispatcherServlet() {}
 
     @Override
     public void init() {
@@ -37,7 +37,8 @@ public class DispatcherServlet extends HttpServlet {
     }
 
     @Override
-    protected void service(final HttpServletRequest request, final HttpServletResponse response) throws ServletException {
+    protected void service(final HttpServletRequest request, final HttpServletResponse response)
+            throws ServletException {
         final String requestURI = request.getRequestURI();
         log.debug("Method : {}, Request URI : {}", request.getMethod(), requestURI);
 
@@ -51,9 +52,8 @@ public class DispatcherServlet extends HttpServlet {
 
     private void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        Optional<HandlerMapping> handler = handlers.stream()
-                .filter(it -> it.supports(request))
-                .findFirst();
+        Optional<HandlerMapping> handler =
+                handlers.stream().filter(it -> it.supports(request)).findFirst();
 
         if (handler.isPresent()) {
             handler.get().adapt(handler.get().getHandler(request), request, response);

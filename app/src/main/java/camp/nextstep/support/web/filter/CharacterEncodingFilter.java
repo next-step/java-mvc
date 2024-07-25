@@ -1,9 +1,9 @@
 package camp.nextstep.support.web.filter;
 
+import java.io.IOException;
+
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
-
-import java.io.IOException;
 
 @WebFilter("/*")
 public class CharacterEncodingFilter implements Filter {
@@ -11,11 +11,11 @@ public class CharacterEncodingFilter implements Filter {
     private static final String DEFAULT_ENCODING = "UTF-8";
 
     @Override
-    public void init(final FilterConfig filterConfig) throws ServletException {
-    }
+    public void init(final FilterConfig filterConfig) throws ServletException {}
 
     @Override
-    public void doFilter(final ServletRequest request, final ServletResponse response, FilterChain chain)
+    public void doFilter(
+            final ServletRequest request, final ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         request.setCharacterEncoding(DEFAULT_ENCODING);
         response.setCharacterEncoding(DEFAULT_ENCODING);
@@ -23,6 +23,5 @@ public class CharacterEncodingFilter implements Filter {
     }
 
     @Override
-    public void destroy() {
-    }
+    public void destroy() {}
 }

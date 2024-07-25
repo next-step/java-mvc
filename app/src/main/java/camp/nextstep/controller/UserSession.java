@@ -1,9 +1,10 @@
 package camp.nextstep.controller;
 
-import camp.nextstep.domain.User;
+import java.util.Optional;
+
 import jakarta.servlet.http.HttpSession;
 
-import java.util.Optional;
+import camp.nextstep.domain.User;
 
 public class UserSession {
 

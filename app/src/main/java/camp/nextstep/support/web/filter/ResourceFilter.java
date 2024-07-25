@@ -1,15 +1,16 @@
 package camp.nextstep.support.web.filter;
 
-import jakarta.servlet.*;
-import jakarta.servlet.annotation.WebFilter;
-import jakarta.servlet.http.HttpServletRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import jakarta.servlet.*;
+import jakarta.servlet.annotation.WebFilter;
+import jakarta.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @WebFilter("/*")
 public class ResourceFilter implements Filter {
@@ -19,14 +20,8 @@ public class ResourceFilter implements Filter {
     private static final List<String> resourcePrefixs = new ArrayList<>();
 
     static {
-        resourcePrefixs.addAll(Arrays.asList(
-                "/css",
-                "/js",
-                "/assets",
-                "/fonts",
-                "/images",
-                "/favicon.ico"
-        ));
+        resourcePrefixs.addAll(
+                Arrays.asList("/css", "/js", "/assets", "/fonts", "/images", "/favicon.ico"));
     }
 
     private RequestDispatcher requestDispatcher;
@@ -37,7 +32,8 @@ public class ResourceFilter implements Filter {
     }
 
     @Override
-    public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
+    public void doFilter(
+            final ServletRequest request, final ServletResponse response, final FilterChain chain)
             throws IOException, ServletException {
         final var req = (HttpServletRequest) request;
         final var path = req.getRequestURI().substring(req.getContextPath().length());
@@ -59,6 +55,5 @@ public class ResourceFilter implements Filter {
     }
 
     @Override
-    public void destroy() {
-    }
+    public void destroy() {}
 }
