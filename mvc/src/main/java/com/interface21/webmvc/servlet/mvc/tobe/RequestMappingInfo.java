@@ -8,13 +8,11 @@ import java.util.Objects;
 public final class RequestMappingInfo {
 
     private final String url;
-    private final HandlerKey[] handlerKeys;
+    private final HandlerKeys handlerKeys = new HandlerKeys();
 
-    public RequestMappingInfo(final String url, final RequestMethod... requestMethods) {
+    public RequestMappingInfo(final String url, final RequestMethod[] requestMethods) {
         this.url = url;
-        this.handlerKeys = Arrays.stream(requestMethods)
-                .map(method -> new HandlerKey(url, method))
-                .toArray(HandlerKey[]::new);
+        this.handlerKeys.addMethods(url, requestMethods);
     }
 
     public boolean isMatch(final String url, final RequestMethod method) {
@@ -22,7 +20,7 @@ public final class RequestMappingInfo {
     }
 
     private boolean isMethodMatch(final RequestMethod method) {
-        return Arrays.stream(handlerKeys).anyMatch(key -> Objects.equals(key, new HandlerKey(url, method)));
+        return handlerKeys.hasMatchingMethod(method);
     }
 
 }

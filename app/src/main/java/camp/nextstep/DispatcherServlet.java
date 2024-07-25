@@ -1,5 +1,10 @@
 package camp.nextstep;
 
+import com.interface21.webmvc.servlet.ModelAndView;
+import com.interface21.webmvc.servlet.View;
+import com.interface21.webmvc.servlet.mvc.HandlerAdapter;
+import com.interface21.webmvc.servlet.mvc.tobe.HandlerAdapters;
+import com.interface21.webmvc.servlet.mvc.tobe.HandlerMappings;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,15 +18,30 @@ public class DispatcherServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static final Logger log = LoggerFactory.getLogger(DispatcherServlet.class);
 
-    private ManualHandlerMapping manualHandlerMapping;
+    private final HandlerMappings handlerMappings = new HandlerMappings();
+    private final HandlerAdapters handlerAdapters = new HandlerAdapters();
 
     public DispatcherServlet() {
     }
 
     @Override
     public void init() {
-        this.manualHandlerMapping = new ManualHandlerMapping();
-        this.manualHandlerMapping.initialize();
+        initHandlerMappings();
+        initHandlerAdapters();
+    }
+
+    private void initHandlerMappings() {
+        handlerMappings.initialize();
+
+        final ManualHandlerMapping manualHandlerMapping = new ManualHandlerMapping();
+        manualHandlerMapping.initialize();
+
+        handlerMappings.addHandlerMapping(manualHandlerMapping);
+    }
+
+    private void initHandlerAdapters() {
+        handlerAdapters.initialize();
+        handlerAdapters.addAdapter(new ManualHandlerAdapter());
     }
 
     @Override
@@ -30,22 +50,18 @@ public class DispatcherServlet extends HttpServlet {
         log.debug("Method : {}, Request URI : {}", request.getMethod(), requestURI);
 
         try {
-            final var controller = manualHandlerMapping.getHandler(requestURI);
-            final var viewName = controller.execute(request, response);
-            move(viewName, request, response);
+            final var controller = handlerMappings.getHandler(request);
+            final HandlerAdapter handlerAdapter = handlerAdapters.getHandlerAdapter(controller);
+            final ModelAndView modelAndView = handlerAdapter.handle(request, response, controller);
+            move(modelAndView, request, response);
         } catch (Throwable e) {
             log.error("Exception : {}", e.getMessage(), e);
             throw new ServletException(e.getMessage());
         }
     }
 
-    private void move(final String viewName, final HttpServletRequest request, final HttpServletResponse response) throws Exception {
-        if (viewName.startsWith(JspView.REDIRECT_PREFIX)) {
-            response.sendRedirect(viewName.substring(JspView.REDIRECT_PREFIX.length()));
-            return;
-        }
-
-        final var requestDispatcher = request.getRequestDispatcher(viewName);
-        requestDispatcher.forward(request, response);
+    private void move(final ModelAndView mv, final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+        final View view = mv.getView();
+        view.render(mv.getModel(), request, response);
     }
 }

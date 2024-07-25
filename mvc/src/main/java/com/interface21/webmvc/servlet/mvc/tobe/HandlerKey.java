@@ -14,6 +14,10 @@ public class HandlerKey {
         this.requestMethod = requestMethod;
     }
 
+    public boolean isMatchMethod(final RequestMethod method) {
+        return this.requestMethod == method;
+    }
+
     @Override
     public String toString() {
         return "HandlerKey{" +
