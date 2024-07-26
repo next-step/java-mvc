@@ -27,11 +27,22 @@ public class AnnotationHandlerMapping implements HandlerMapping {
 
         ControllerScanner controllerScanner = ControllerScanner.from(basePackages);
         Map<Class<?>, Object> controllersMap = controllerScanner.scan();
+        ArgumentResolvers argumentResolvers = initializeArgumentResolvers();
 
         for (Class<?> controllerClass : controllersMap.keySet()) {
-            HandlerExecutions handlerExecutions = HandlerExecutions.of(controllerClass, controllersMap.get(controllerClass));
+            HandlerExecutions handlerExecutions = HandlerExecutions.of(controllerClass, controllersMap.get(controllerClass), argumentResolvers);
             registerHandlerExecutions(controllerClass, handlerExecutions);
         }
+    }
+
+    private ArgumentResolvers initializeArgumentResolvers() {
+        ArgumentResolvers argumentResolvers = new ArgumentResolvers();
+        argumentResolvers.add(new ModelAttributeArgumentResolver());
+        argumentResolvers.add(new NoAnnotationArgumentResolver());
+        argumentResolvers.add(new PathVariableArgumentResolver());
+        argumentResolvers.add(new RequestBodyArgumentResolver());
+        argumentResolvers.add(new RequestParamArgumentResolver());
+        return argumentResolvers;
     }
 
     private void registerHandlerExecutions(Class<?> controllerClass, HandlerExecutions handlerExecutions) {

@@ -19,7 +19,7 @@ class HandlerExecutionsTest {
         Class<ControllerForThisTest> controllerClass = ControllerForThisTest.class;
         ControllerForThisTest controllerInstance = new ControllerForThisTest();
 
-        HandlerExecutions handlerExecutions = HandlerExecutions.of(controllerClass, controllerInstance);
+        HandlerExecutions handlerExecutions = HandlerExecutions.of(controllerClass, controllerInstance, new ArgumentResolvers());
 
         assertThat(handlerExecutions).hasSize(1);
     }
