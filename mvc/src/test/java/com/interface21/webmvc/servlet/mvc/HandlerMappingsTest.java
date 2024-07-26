@@ -15,7 +15,7 @@ class HandlerMappingsTest {
     @DisplayName("요청에 해당하는 Handler를 찾아서 반환한다.")
     @Test
     void test() {
-        HandlerMappings handlerMappings = HandlerMappings.create();
+        HandlerMappings handlerMappings = new HandlerMappings();
         handlerMappings.add(new AnnotationHandlerMapping("samples.success"));
         handlerMappings.initialize();
 
@@ -31,7 +31,7 @@ class HandlerMappingsTest {
     @DisplayName("요청에 해당하는 Handler가 없을 경우 예외를 발생시킨다.")
     @Test
     void test2() {
-        HandlerMappings handlerMappings = HandlerMappings.create();
+        HandlerMappings handlerMappings = new HandlerMappings();
         handlerMappings.add(new AnnotationHandlerMapping("samples.success"));
         handlerMappings.initialize();
 

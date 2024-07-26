@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import com.interface21.webmvc.servlet.mvc.handler.ArgumentResolvers;
 import com.interface21.webmvc.servlet.mvc.handler.HandlerExecution;
 import com.interface21.webmvc.servlet.mvc.handler.RequestMappingHandlerAdapter;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,13 +18,13 @@ class HandlerAdaptersTest {
     @DisplayName("지원하는 HandlerAdapter가 있을 경우 찾아서 반환 해준다.")
     @Test
     void test() throws NoSuchMethodException {
-        HandlerAdapters handlerAdapters = HandlerAdapters.create();
+        HandlerAdapters handlerAdapters = new HandlerAdapters();
         handlerAdapters.add(new RequestMappingHandlerAdapter());
 
         TestController testController = new TestController();
         Class<TestController> testControllerClass = TestController.class;
         Method method = testControllerClass.getMethod("findUserId", HttpServletRequest.class, HttpServletResponse.class);
-        HandlerExecution handlerExecution = new HandlerExecution(testController, method);
+        HandlerExecution handlerExecution = new HandlerExecution(testController, method, new ArgumentResolvers());
 
         HandlerAdapter handlerAdapter = handlerAdapters.findBy(handlerExecution);
         assertAll(
@@ -35,7 +36,7 @@ class HandlerAdaptersTest {
     @DisplayName("지원하는 HandlerAdapter가 없을 경우 예외를 발생시킨다.")
     @Test
     void test2() {
-        HandlerAdapters handlerAdapters = HandlerAdapters.create();
+        HandlerAdapters handlerAdapters = new HandlerAdapters();
 
         assertThatThrownBy(() -> handlerAdapters.findBy("thisIsHandler"))
                 .isInstanceOf(HandlerAdapterNotFoundException.class);

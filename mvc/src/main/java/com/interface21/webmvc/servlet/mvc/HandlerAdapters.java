@@ -6,12 +6,8 @@ import java.util.List;
 public class HandlerAdapters {
     private final List<HandlerAdapter> values;
 
-    private HandlerAdapters() {
+    public HandlerAdapters() {
         this.values = new ArrayList<>();
-    }
-
-    public static HandlerAdapters create() {
-        return new HandlerAdapters();
     }
 
     public void add(HandlerAdapter handlerAdapter) {

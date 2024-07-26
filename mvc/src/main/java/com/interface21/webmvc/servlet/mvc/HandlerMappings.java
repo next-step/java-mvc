@@ -8,12 +8,8 @@ import java.util.Objects;
 public class HandlerMappings {
     private final List<HandlerMapping> values;
 
-    private HandlerMappings(List<HandlerMapping> values) {
-        this.values = values;
-    }
-
-    public static HandlerMappings create() {
-        return new HandlerMappings(new ArrayList<>());
+    public HandlerMappings() {
+        this.values = new ArrayList<>();
     }
 
     public void add(HandlerMapping handlerMapping) {

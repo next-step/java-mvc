@@ -29,13 +29,13 @@ public class DispatcherServlet extends HttpServlet {
     }
 
     private void initializeHandlerMappings() {
-        handlerMappings = HandlerMappings.create();
+        handlerMappings = new HandlerMappings();
         handlerMappings.add(new AnnotationHandlerMapping("camp.nextstep"));
         handlerMappings.initialize();
     }
 
     private void initializeHandlerAdapters() {
-        handlerAdapters = HandlerAdapters.create();
+        handlerAdapters = new HandlerAdapters();
         handlerAdapters.add(new RequestMappingHandlerAdapter());
     }
 
