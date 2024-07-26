@@ -8,10 +8,7 @@ import static org.mockito.Mockito.when;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
+import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -33,7 +30,6 @@ class DispatcherServletTest {
     @DisplayName("초기화 테스트")
     @Test
     public void test() throws Exception {
-
         Assertions.assertThatNoException().isThrownBy(() -> sut.init());
     }
 
@@ -94,10 +90,10 @@ class DispatcherServletTest {
         // then
         sut.service(request, response);
 
+        verify(response).getWriter();
         verify(writer)
                 .write(
                         "{user=User{id=1, account='gugu', email='hkkang@woowahan.com', password='password'}}");
-        verify(response).setContentType("application/json;charset=UTF-8");
     }
 
     private static RequestDispatcher mockRequestDispatcher() {

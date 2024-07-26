@@ -6,29 +6,37 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.interface21.webmvc.servlet.mvc.asis.Controller;
+import com.interface21.context.stereotype.Controller;
+import com.interface21.web.bind.annotation.RequestMapping;
+import com.interface21.web.bind.annotation.RequestMethod;
+import com.interface21.webmvc.servlet.ModelAndView;
+import com.interface21.webmvc.servlet.view.JsonView;
+import com.interface21.webmvc.servlet.view.JspView;
 
 import camp.nextstep.dao.InMemoryUserDao;
 import camp.nextstep.domain.User;
 
-public class LoginController implements Controller {
+@Controller
+public class LoginController {
 
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);
 
-    @Override
-    public String execute(final HttpServletRequest req, final HttpServletResponse res)
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public ModelAndView execute(final HttpServletRequest req, final HttpServletResponse res)
             throws Exception {
         if (UserSession.isLoggedIn(req.getSession())) {
-            return "redirect:/index.jsp";
+            return new ModelAndView(new JspView("redirect:/index.jsp"));
         }
 
         final var user = InMemoryUserDao.findByAccount(req.getParameter("account"));
         if (user == null) {
-            return "redirect:/401.jsp";
+            return new ModelAndView(new JspView("redirect:/401.jsp"));
         }
 
         log.info("User : {}", user);
-        return login(req, user.get());
+        var modelAndView = new ModelAndView(new JsonView());
+        modelAndView.addObject("user", user.get());
+        return modelAndView;
     }
 
     private String login(final HttpServletRequest request, final User user) {
