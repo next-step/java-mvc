@@ -7,14 +7,24 @@ import com.interface21.webmvc.servlet.mvc.support.QueryStringParser;
 import com.interface21.webmvc.servlet.mvc.support.TypeConversionUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Arrays;
 import java.util.Map;
 
 public class ModelAttributeArgumentResolver implements ArgumentResolver {
+    private final HttpRequestBodyParser httpRequestBodyParser;
+    private final QueryStringParser queryStringParser;
+
+    public ModelAttributeArgumentResolver() {
+        this.httpRequestBodyParser = new HttpRequestBodyParser();
+        this.queryStringParser = new QueryStringParser();
+    }
+
     @Override
     public boolean supports(Parameter parameter) {
         return parameter.isAnnotationPresent(ModelAttribute.class);
@@ -22,46 +32,53 @@ public class ModelAttributeArgumentResolver implements ArgumentResolver {
 
     @Override
     public Object resolve(Parameter parameter, Method method, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String value;
-        if (request.getMethod().equals(RequestMethod.POST.name())) {
-            HttpRequestBodyParser httpRequestBodyParser = new HttpRequestBodyParser();
-            value = httpRequestBodyParser.parse(request);
-        } else {
-            value = request.getQueryString();
-        }
-        QueryStringParser queryStringParser = new QueryStringParser();
-        Map<String, String> parsedQueryString = queryStringParser.parse(value);
+        String queryString = getQueryString(request);
+        Map<String, String> parsedQueryString = queryStringParser.parse(queryString);
 
-        Class<?> type = parameter.getType();
-        Constructor<?>[] declaredConstructors = type.getDeclaredConstructors();
-        Constructor<?> declaredConstructor = declaredConstructors[0];
-        Parameter[] constructorParameters = declaredConstructor.getParameters();
-        Object[] objects = Arrays.stream(constructorParameters)
-                .map(param -> {
-                    Class<?> type1 = param.getType();
-                    if (type1.isPrimitive() && type1.equals(boolean.class)) {
-                        return false;
-                    }
-                    if (type1.isPrimitive()) {
-                        return 0;
-                    }
-                    return null;
-                })
+        Class<?> parameterType = parameter.getType();
+        Object parameterTypeInstance = createParameterTypeInstance(parameterType);
+        setUpInstanceFieldValue(parsedQueryString, parameterType, parameterTypeInstance);
+        return parameterTypeInstance;
+    }
+
+    private String getQueryString(HttpServletRequest request) throws IOException {
+        if (request.getMethod().equals(RequestMethod.POST.name())) {
+            return httpRequestBodyParser.parse(request);
+        }
+        return request.getQueryString();
+    }
+
+    private Object createParameterTypeInstance(Class<?> parameterType) throws InstantiationException, IllegalAccessException, InvocationTargetException {
+        Constructor<?> declaredConstructor = parameterType.getDeclaredConstructors()[0];
+        Object[] objects = Arrays.stream(declaredConstructor.getParameters())
+                .map(this::setUpDefaultValue)
                 .toArray();
-        Object instance = declaredConstructor.newInstance(objects);
+        return declaredConstructor.newInstance(objects);
+    }
+
+    private Object setUpDefaultValue(Parameter param) {
+        Class<?> type1 = param.getType();
+        if (type1.isPrimitive() && type1.equals(boolean.class)) {
+            return false;
+        }
+        if (type1.isPrimitive()) {
+            return 0;
+        }
+        return null;
+    }
+
+    private void setUpInstanceFieldValue(Map<String, String> parsedQueryString, Class<?> parameterType, Object instance) {
         parsedQueryString.keySet()
-                .forEach(key -> {
+                .forEach(queryStringKey -> {
                     try {
-                        Field field = type.getDeclaredField(key);
+                        Field field = parameterType.getDeclaredField(queryStringKey);
                         field.setAccessible(true);
-                        field.set(instance, TypeConversionUtil.convertStringToTargetType(parsedQueryString.get(key), field.getType()));
+                        field.set(instance, TypeConversionUtil.convertStringToTargetType(parsedQueryString.get(queryStringKey), field.getType()));
                     } catch (NoSuchFieldException e) {
-                        throw new RuntimeException("%s에 해당하는 객체 필드명이 없습니다.".formatted(key), e);
+                        throw new IllegalArgumentException("%s에 해당하는 객체 필드명이 없습니다. QueryString의 key와 객체 필드명은 일치해야 합니다.".formatted(queryStringKey), e);
                     } catch (IllegalAccessException e) {
                         throw new RuntimeException(e);
                     }
                 });
-
-        return instance;
     }
 }

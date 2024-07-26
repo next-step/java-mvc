@@ -22,18 +22,20 @@ public class RequestParamArgumentResolver implements ArgumentResolver {
         Map<String, String> parsedQueryString = queryStringParser.parse(queryString);
 
         RequestParam requestParam = parameter.getAnnotation(RequestParam.class);
-        String name;
-        if (requestParam.name().isBlank()) {
-            name = parameter.getName();
-        } else {
-            name = requestParam.name();
-        }
+        String name = getName(parameter, requestParam);
         String value = parsedQueryString.get(name);
 
         if (requestParam.required() && value == null) {
-            throw new IllegalArgumentException("필수 값 누락");
+            throw new IllegalArgumentException("필수 값이 누락되었습니다. name=" + name);
         }
 
         return TypeConversionUtil.convertStringToTargetType(value, parameter.getType());
+    }
+
+    private String getName(Parameter parameter, RequestParam requestParam) {
+        if (requestParam.name().isBlank()) {
+            return parameter.getName();
+        }
+        return requestParam.name();
     }
 }

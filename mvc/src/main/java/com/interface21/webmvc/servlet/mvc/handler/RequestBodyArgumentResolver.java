@@ -11,9 +11,11 @@ import java.lang.reflect.Parameter;
 
 public class RequestBodyArgumentResolver implements ArgumentResolver {
     private final HttpRequestBodyParser httpRequestBodyParser;
+    private final ObjectMapper objectMapper;
 
     public RequestBodyArgumentResolver() {
         this.httpRequestBodyParser = new HttpRequestBodyParser();
+        this.objectMapper = new ObjectMapper();
     }
 
     @Override
@@ -25,12 +27,12 @@ public class RequestBodyArgumentResolver implements ArgumentResolver {
     public Object resolve(Parameter parameter, Method method, HttpServletRequest request, HttpServletResponse response) throws Exception {
         String contentType = request.getHeader("Content-Type");
         if (!contentType.equals(MediaType.APPLICATION_JSON_VALUE)) {
-            throw new IllegalArgumentException("Content-Type 헤더가 JSON이 아님");
+            throw new IllegalArgumentException("Content-Type이 application/json이어야 합니다. contentType=" + contentType);
         }
 
         String requestBody = httpRequestBodyParser.parse(request);
-        ObjectMapper objectMapper = new ObjectMapper();
         Class<?> type = parameter.getType();
+
         Object body = objectMapper.readValue(requestBody, type);
         return type.cast(body);
     }

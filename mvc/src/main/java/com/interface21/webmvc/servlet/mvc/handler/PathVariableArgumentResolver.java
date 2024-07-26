@@ -22,14 +22,16 @@ public class PathVariableArgumentResolver implements ArgumentResolver {
         String uriPattern = requestMapping.value();
         String requestURI = request.getRequestURI();
 
-        PathVariable pathVariable = parameter.getAnnotation(PathVariable.class);
-        String name;
-        if (pathVariable.name().isBlank()) {
-            name = parameter.getName();
-        } else {
-            name = pathVariable.name();
-        }
-        String uriValue = PathPatternUtil.getUriValue(uriPattern, requestURI, name);
+        String pathVariableName = getPathVariableName(parameter);
+        String uriValue = PathPatternUtil.getUriValue(uriPattern, requestURI, pathVariableName);
         return TypeConversionUtil.convertStringToTargetType(uriValue, parameter.getType());
+    }
+
+    private String getPathVariableName(Parameter parameter) {
+        PathVariable pathVariable = parameter.getAnnotation(PathVariable.class);
+        if (pathVariable.name().isBlank()) {
+            return parameter.getName();
+        }
+        return pathVariable.name();
     }
 }
