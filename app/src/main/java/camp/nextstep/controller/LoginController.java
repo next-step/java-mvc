@@ -28,7 +28,7 @@ public class LoginController implements Controller {
         }
 
         log.info("User : {}", user);
-        return login(req, user);
+        return login(req, user.get());
     }
 
     private String login(final HttpServletRequest request, final User user) {
