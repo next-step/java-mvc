@@ -11,8 +11,12 @@ import java.util.List;
 public class HandlerAdaptor {
     private List<HandlerMapping> handlerMappings;
 
-    public HandlerAdaptor(List<HandlerMapping> handlerMappings) {
+    public HandlerAdaptor(
+            List<HandlerMapping> handlerMappings
+    ) {
         this.handlerMappings = handlerMappings;
+        handlerMappings.stream()
+                .forEach(HandlerMapping::initialize);
     }
 
     public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
