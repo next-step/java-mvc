@@ -27,15 +27,16 @@ public interface HandlerAdapter {
             HandlerExecution handler, HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         final var modelAndView = handler.handle(request, response);
-        var jspView = modelAndView.getView();
-        jspView.render(Map.of("id", "gugu"), request, response);
+        var view = modelAndView.getView();
+        Map<String, Object> model = modelAndView.getModel();
+        view.render(model, request, response);
     }
 
     private static void render(
             Controller handler, HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         final var viewName = handler.execute(request, response);
-        var jspView = new JspView(viewName);
-        jspView.render(Map.of("id", "id"), request, response);
+        var view = new JspView(viewName);
+        view.render(Map.of("id", "id"), request, response);
     }
 }

@@ -56,7 +56,13 @@ public class DispatcherServlet extends HttpServlet {
         Optional<HandlerMapping> handler =
                 handlers.stream().filter(it -> it.supports(request)).findFirst();
 
-        handler.ifPresentOrElse(it -> handleRequest(request, response), handleException());
+        handler.ifPresentOrElse(
+                it -> {
+                    Consumer<HandlerMapping> handlerMappingConsumer =
+                            handleRequest(request, response);
+                    handlerMappingConsumer.accept(it);
+                },
+                handleException());
     }
 
     private Consumer<HandlerMapping> handleRequest(

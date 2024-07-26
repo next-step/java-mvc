@@ -73,5 +73,5 @@
      - [x] JsonView는 직렬화에 실패하면 SerializationException 예외를 던진다
      - [x] model에 데이터가 1개면 값을 그대로 반환한다
      - [x] 2개 이상이면 Map 형태 그대로 JSON으로 변환해서 반환한다.
-1. - [ ] UserController가 정상 동작한다
+1. - [X] UserController가 정상 동작한다
      - [ ] JSON으로 응답할 때 ContentType은 MediaType.APPLICATION_JSON_UTF8_VALUE으로 반환해야 한다.
