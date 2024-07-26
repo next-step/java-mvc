@@ -176,6 +176,7 @@ class AnnotationHandlerMappingTest {
         final var response = mock(HttpServletResponse.class);
 
         when(request.getRequestURI()).thenReturn("/users-model");
+        when(request.getHeader("Content-Type")).thenReturn(MediaType.FORM_URL_ENCODED);
         when(request.getMethod()).thenReturn("POST");
 
         String body = "userId=gugu&password=123&age=19";

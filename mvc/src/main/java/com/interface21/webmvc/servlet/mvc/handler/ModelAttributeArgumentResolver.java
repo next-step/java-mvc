@@ -2,6 +2,7 @@ package com.interface21.webmvc.servlet.mvc.handler;
 
 import com.interface21.web.bind.annotation.ModelAttribute;
 import com.interface21.web.bind.annotation.RequestMethod;
+import com.interface21.web.http.MediaType;
 import com.interface21.webmvc.servlet.mvc.support.HttpRequestBodyParser;
 import com.interface21.webmvc.servlet.mvc.support.QueryStringParser;
 import com.interface21.webmvc.servlet.mvc.support.TypeConversionUtil;
@@ -42,7 +43,7 @@ public class ModelAttributeArgumentResolver implements ArgumentResolver {
     }
 
     private String getQueryString(HttpServletRequest request) throws IOException {
-        if (request.getMethod().equals(RequestMethod.POST.name())) {
+        if (request.getMethod().equals(RequestMethod.POST.name()) && request.getHeader("Content-Type").equals(MediaType.FORM_URL_ENCODED)) {
             return httpRequestBodyParser.parse(request);
         }
         return request.getQueryString();
