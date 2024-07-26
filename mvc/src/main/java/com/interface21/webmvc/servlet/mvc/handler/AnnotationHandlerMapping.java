@@ -55,6 +55,17 @@ public class AnnotationHandlerMapping implements HandlerMapping {
      */
     @Override
     public Object getHandler(final HttpServletRequest request) {
-        return handlerExecutionsMap.get(new HandlerKey(request.getRequestURI(), RequestMethod.valueOf(request.getMethod())));
+        HandlerKey newHandlerKey = new HandlerKey(request.getRequestURI(), RequestMethod.valueOf(request.getMethod()));
+        HandlerExecution handlerExecution = handlerExecutionsMap.get(newHandlerKey);
+        if (handlerExecution != null) {
+            return handlerExecution;
+        }
+
+        return handlerExecutionsMap.keySet()
+                .stream()
+                .filter(handlerKey -> handlerKey.checkUrlPattern(newHandlerKey))
+                .findAny()
+                .map(handlerExecutionsMap::get)
+                .orElse(null);
     }
 }
