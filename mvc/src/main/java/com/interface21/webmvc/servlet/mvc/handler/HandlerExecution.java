@@ -5,13 +5,12 @@ import com.interface21.web.bind.annotation.ModelAttribute;
 import com.interface21.web.bind.annotation.PathVariable;
 import com.interface21.web.bind.annotation.RequestBody;
 import com.interface21.web.bind.annotation.RequestMapping;
+import com.interface21.web.bind.annotation.RequestMethod;
 import com.interface21.web.bind.annotation.RequestParam;
 import com.interface21.web.http.MediaType;
 import com.interface21.webmvc.servlet.mvc.ModelAndView;
 import com.interface21.webmvc.servlet.mvc.support.PathPatternUtil;
 import com.interface21.webmvc.servlet.mvc.support.QueryStringParser;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
@@ -53,9 +52,7 @@ public class HandlerExecution {
                     name = pathVariable.name();
                 }
                 String uriValue = PathPatternUtil.getUriValue(uriPattern, requestURI, name);
-
-                Class<?> type = parameter.getType();
-                arguments.add(type.cast(uriValue));
+                arguments.add(convertStringToParameterType(uriValue, parameter.getType()));
 
             } else if (parameter.isAnnotationPresent(RequestParam.class)) {
                 String queryString = request.getQueryString();
@@ -75,8 +72,7 @@ public class HandlerExecution {
                     throw new IllegalArgumentException("필수 값 누락");
                 }
 
-                Class<?> type = parameter.getType();
-                arguments.add(type.cast(value));
+                arguments.add(convertStringToParameterType(value, parameter.getType()));
             } else if (parameter.isAnnotationPresent(RequestBody.class)) {
                 String contentType = request.getHeader("Content-Type");
                 if (!contentType.equals(MediaType.APPLICATION_JSON_UTF8_VALUE)) {
@@ -87,45 +83,55 @@ public class HandlerExecution {
                 Class<?> type = parameter.getType();
                 Object body = objectMapper.readValue(requestBody, type);
                 arguments.add(type.cast(body));
+
             } else if (parameter.isAnnotationPresent(ModelAttribute.class)) {
-                // ModelAttribute는 key=value&key2=value 와 같은 스트링을 "객체"로 변환할 때 사용한다
-
-                // 쿼리 스트링인 경우
-                String queryString = request.getQueryString();
-
-                // x-www-form-urlencoded 인 경우 바디에서 파싱 -> ContentType 헤더가 x-www-form-urlencoded일 때만 쓴다
-                String body = parseRequestBody(request);
-
+                String value;
+                if (request.getMethod().equals(RequestMethod.POST.name())) {
+                    value = parseRequestBody(request);
+                } else {
+                    value = request.getQueryString();
+                }
                 QueryStringParser queryStringParser = new QueryStringParser();
-                Map<String, String> parsedQueryString = queryStringParser.parse(queryString);  //todo : or body
+                Map<String, String> parsedQueryString = queryStringParser.parse(value);
 
-                // todo : parsedQueryString을 이용해서 key에 해당하는 필드에 value를 넣어주어야 한다.
                 Class<?> type = parameter.getType();
-                Constructor<?> declaredConstructor = type.getDeclaredConstructor();
-                Object instance = declaredConstructor.newInstance();
-
-                // todo : field에 값 주입하는거 학습 테스트 작성
-                Field field = type.getDeclaredField("key");
-                field.set(instance, parsedQueryString.get("key"));
-
-                Arrays.stream(type.getDeclaredFields())
-                        .forEach(f -> {
-                            f.setAccessible(true);
-                            String name = f.getName();
+                Constructor<?>[] declaredConstructors = type.getDeclaredConstructors();
+                Constructor<?> declaredConstructor = declaredConstructors[0];
+                Parameter[] constructorParameters = declaredConstructor.getParameters();
+                Object[] objects = Arrays.stream(constructorParameters)
+                        .map(param -> {
+                            Class<?> type1 = param.getType();
+                            if (type1.isPrimitive() && type1.equals(boolean.class)) {
+                                return false;
+                            }
+                            if (type1.isPrimitive()) {
+                                return 0;
+                            }
+                            return null;
+                        })
+                        .toArray();
+                Object instance = declaredConstructor.newInstance(objects);
+                parsedQueryString.keySet()
+                        .forEach(key -> {
                             try {
-                                f.set(instance, parsedQueryString.get(name));
+                                Field field = type.getDeclaredField(key);
+                                field.setAccessible(true);
+                                field.set(instance, convertStringToParameterType(parsedQueryString.get(key), field.getType()));
+                            } catch (NoSuchFieldException e) {
+                                throw new RuntimeException("%s에 해당하는 객체 필드명이 없습니다.".formatted(key), e);
                             } catch (IllegalAccessException e) {
                                 throw new RuntimeException(e);
                             }
-                        });  // 또는 parsedQueryString.keySet()을 순회하면서 getDeclaredField(key)를 사용
+                        });
 
+                arguments.add(instance);
             } else {
                 Class<?> type = parameter.getType();
-                if (type == ServletRequest.class) {
+                if (type == HttpServletRequest.class) {
                     arguments.add(request);
                 }
 
-                if (type == ServletResponse.class) {
+                if (type == HttpServletResponse.class) {
                     arguments.add(response);
                 }
                 // 나머지는 지원하지 않는다. 또는 기본적으로 지원하는걸 지원한다?
@@ -145,6 +151,29 @@ public class HandlerExecution {
             }
         }
         return sb.toString();
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> T convertStringToParameterType(String value, Class<?> parameterType) {
+        if (parameterType == Integer.class || parameterType == int.class) {
+            return (T) Integer.valueOf(value);
+        } else if (parameterType == Double.class || parameterType == double.class) {
+            return (T) Double.valueOf(value);
+        } else if (parameterType == Boolean.class || parameterType == boolean.class) {
+            return (T) Boolean.valueOf(value);
+        } else if (parameterType == Long.class || parameterType == long.class) {
+            return (T) Long.valueOf(value);
+        } else if (parameterType == Float.class || parameterType == float.class) {
+            return (T) Float.valueOf(value);
+        } else if (parameterType == Short.class || parameterType == short.class) {
+            return (T) Short.valueOf(value);
+        } else if (parameterType == Byte.class || parameterType == byte.class) {
+            return (T) Byte.valueOf(value);
+        } else if (parameterType == String.class) {
+            return (T) value;
+        } else {
+            throw new IllegalArgumentException("Unsupported target type: " + parameterType.getName());
+        }
     }
 
     public <T extends Annotation> T extractAnnotation(Class<T> annotationType) {
