@@ -8,16 +8,12 @@ public class HandlerMappingRegistry {
 
     private final List<HandlerMapping> handlerMappings;
 
-    public HandlerMappingRegistry() {
-        this(List.of());
+    public HandlerMappingRegistry(HandlerMapping... handlerMappings) {
+        this.handlerMappings = List.of(handlerMappings);
     }
 
-    public HandlerMappingRegistry(List<HandlerMapping> handlerMappings) {
-        this.handlerMappings = handlerMappings;
-    }
-
-    public void addHandlerMapping(HandlerMapping handlerMapping) {
-        handlerMappings.add(handlerMapping);
+    public void initialize() {
+        handlerMappings.forEach(HandlerMapping::initialize);
     }
 
     public Object getHandler(HttpServletRequest request) {
