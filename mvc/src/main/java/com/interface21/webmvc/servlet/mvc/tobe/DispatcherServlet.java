@@ -3,6 +3,7 @@ package com.interface21.webmvc.servlet.mvc.tobe;
 import com.interface21.webmvc.servlet.ModelAndView;
 import com.interface21.webmvc.servlet.View;
 import com.interface21.webmvc.servlet.mvc.tobe.exception.HandlingExecutionException;
+import com.interface21.webmvc.servlet.mvc.tobe.exception.NotFoundException;
 import com.interface21.webmvc.servlet.mvc.tobe.exception.ViewMissingException;
 import com.interface21.webmvc.servlet.mvc.tobe.viewresolver.JsonViewResolver;
 import com.interface21.webmvc.servlet.mvc.tobe.viewresolver.JspViewResolver;
@@ -54,28 +55,11 @@ public class DispatcherServlet extends HttpServlet {
     @Override
     protected void service(final HttpServletRequest request,
                            final HttpServletResponse response) throws ServletException {
-        final String requestURI = request.getRequestURI();
-        log.debug("Method : {}, Request URI : {}", request.getMethod(), requestURI);
-
         Object handler = getHandler(request);
 
-        ModelAndView modelAndView = getHandlerAdapter(handler, request, response);
+        ModelAndView modelAndView = process(handler, request, response);
 
-        try {
-            if (modelAndView == null) {
-                renderNotFound(request, response);
-                return;
-            }
-
-            View view = resolveView(modelAndView);
-            if (view == null) {
-                throw new ViewMissingException();
-            }
-
-            view.render(modelAndView.getModel(), request, response);
-        } catch (Exception e) {
-            throw new ServletException("응답을 그리던 중에 예외가 발생했습니다.", e);
-        }
+        render(request, response, modelAndView);
     }
 
     private Object getHandler(HttpServletRequest request) {
@@ -86,9 +70,7 @@ public class DispatcherServlet extends HttpServlet {
                               .orElse(null);
     }
 
-    private ModelAndView getHandlerAdapter(Object handler,
-                                           HttpServletRequest request,
-                                           HttpServletResponse response) {
+    private ModelAndView process(Object handler, HttpServletRequest request, HttpServletResponse response) {
         try {
             if (handler instanceof HandlerExecution handlerExecution) {
                 return handlerExecution.handle(request, response);
@@ -99,11 +81,26 @@ public class DispatcherServlet extends HttpServlet {
         }
     }
 
+    private void render(HttpServletRequest request,
+                        HttpServletResponse response,
+                        ModelAndView modelAndView) throws ServletException {
+        try {
+            if (modelAndView == null) {
+                renderNotFound(request, response);
+                throw new NotFoundException(request);
+            }
+
+            View view = resolveView(modelAndView);
+            view.render(modelAndView.getModel(), request, response);
+        } catch (Exception e) {
+            throw new ServletException("응답을 그리던 중에 예외가 발생했습니다.", e);
+        }
+    }
+
     private void renderNotFound(HttpServletRequest request, HttpServletResponse response) throws Exception {
         response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 
         View view = resolveView(NOT_FOUND_VIEW_NAME);
-
         view.render(Collections.emptyMap(), request, response);
     }
 
@@ -113,11 +110,11 @@ public class DispatcherServlet extends HttpServlet {
         }
 
         String viewName = modelAndView.getViewName();
-        if (viewName == null) {
-            return null;
+        if (viewName != null) {
+            return resolveView(viewName);
         }
 
-        return resolveView(viewName);
+        throw new ViewMissingException();
     }
 
     private View resolveView(String viewName) {
