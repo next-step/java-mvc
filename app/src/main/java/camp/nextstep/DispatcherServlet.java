@@ -14,13 +14,12 @@ public class DispatcherServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(DispatcherServlet.class);
 
     private final HandlerMappingRegistry handlerMappingRegistry;
-    private final HandlerAdapterRegistry handlerAdapterRegistry;
+    private final HandlerAdapter handlerAdapter;
 
     public DispatcherServlet(Object... basePackage) {
         handlerMappingRegistry =
                 new HandlerMappingRegistry(new ManualHandlerMapping(), new AnnotationHandlerMapping(basePackage));
-        handlerAdapterRegistry =
-                new HandlerAdapterRegistry(new ControllerAdapter(), new HandlerExecutionAdapter());
+        handlerAdapter = new RequestHandlerAdapter();
     }
 
     @Override
@@ -35,7 +34,6 @@ public class DispatcherServlet extends HttpServlet {
 
         try {
             final var handler = handlerMappingRegistry.getHandlerMapping(request);
-            final var handlerAdapter = handlerAdapterRegistry.getHandlerAdapter(handler);
             handlerAdapter.handle(request, response, handler);
         } catch (Exception e) {
             throw new ServletException(e.getMessage());
