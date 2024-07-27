@@ -35,7 +35,7 @@ public class AnnotationHandlerMapping implements HandlerMapping {
     @Override
     public void initialize() {
         log.info("Initialized AnnotationHandlerMapping!");
-        Map<Class<?>, Object> controllers = controllerScanner.getControllers();
+        Map<Class<?>, Object> controllers = controllerScanner.scan();
         for (Object controller : controllers.values()) {
             registerHandlerMappings(controller);
         }

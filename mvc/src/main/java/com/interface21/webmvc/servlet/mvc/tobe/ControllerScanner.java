@@ -13,7 +13,7 @@ public class ControllerScanner {
         this.reflections = new Reflections(basePackage);
     }
 
-    public Map<Class<?>, Object> getControllers() {
+    public Map<Class<?>, Object> scan() {
         return reflections.getTypesAnnotatedWith(Controller.class)
                           .stream()
                           .collect(Collectors.toMap(clazz -> clazz, this::instantiate));
