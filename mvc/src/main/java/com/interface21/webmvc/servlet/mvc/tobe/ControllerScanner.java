@@ -3,6 +3,8 @@ package com.interface21.webmvc.servlet.mvc.tobe;
 import com.interface21.context.stereotype.Controller;
 import org.reflections.Reflections;
 
+import java.util.stream.Collectors;
+
 public final class ControllerScanner implements Scanner {
     private static final ControllerScanner instance;
 
@@ -19,7 +21,11 @@ public final class ControllerScanner implements Scanner {
 
     @Override
     public Controllers scan(Object... basePackage) {
-        Reflections reflections = new Reflections(basePackage);
-        return new Controllers(reflections.getTypesAnnotatedWith(Controller.class));
+        final var reflections = new Reflections(basePackage);
+        final var controllerClasses = reflections.getTypesAnnotatedWith(Controller.class).stream()
+                .map(AnnotationControllerClass::new)
+                .collect(Collectors.toSet());
+
+        return new Controllers(controllerClasses);
     }
 }

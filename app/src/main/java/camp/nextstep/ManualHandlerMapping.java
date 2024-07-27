@@ -35,6 +35,6 @@ public class ManualHandlerMapping implements HandlerMapping {
     @Override
     public Optional<Object> getHandler(final HttpServletRequest request) {
         log.debug("Request Mapping Uri : {}", request.getRequestURI());
-        return Optional.of(controllers.get(request.getRequestURI()));
+        return Optional.ofNullable(controllers.get(request.getRequestURI()));
     }
 }

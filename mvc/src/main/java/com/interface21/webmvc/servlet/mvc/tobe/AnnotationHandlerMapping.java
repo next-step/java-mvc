@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -33,7 +32,7 @@ public class AnnotationHandlerMapping implements HandlerMapping{
         controllers.values().forEach(this::mappingHandler);
     }
 
-    private void addHandlerExecution(Method method, Object controllerInstance) {
+    private void addHandlerExecution(final Method method, final Object controllerInstance) {
         final var requestMapping = method.getAnnotation(RequestMapping.class);
         final var handlerExecution = new HandlerExecution(controllerInstance, method);
         final var httpPath = requestMapping.value();
@@ -47,24 +46,15 @@ public class AnnotationHandlerMapping implements HandlerMapping{
                 });
     }
 
-    private void mappingHandler(Class<?> clazz) {
-        try {
-            final var controllerInstance = clazz.getDeclaredConstructor().newInstance();
-            final var methods = clazz.getDeclaredMethods();
-
-            Arrays.stream(methods)
-                    .filter(method -> method.isAnnotationPresent(RequestMapping.class))
-                    .forEach(method -> addHandlerExecution(method, controllerInstance));
-
-        } catch (NoSuchMethodException | InvocationTargetException | InstantiationException |
-                 IllegalAccessException ignored) {
-        }
+    private void mappingHandler(AnnotationControllerClass controllerClass) {
+        Arrays.stream(controllerClass.getRequestMappingMethod())
+                .forEach(method -> addHandlerExecution(method, controllerClass.getNewInstance()));
     }
 
     @Override
     public Optional<Object> getHandler(final HttpServletRequest request) {
         final var handlerKey = new HandlerKey(request.getRequestURI(), RequestMethod.valueOf(request.getMethod()));
 
-        return Optional.of(handlerExecutions.get(handlerKey));
+        return Optional.ofNullable(handlerExecutions.get(handlerKey));
     }
 }
