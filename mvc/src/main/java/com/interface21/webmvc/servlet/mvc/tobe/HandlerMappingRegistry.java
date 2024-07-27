@@ -20,6 +20,6 @@ public class HandlerMappingRegistry {
         return handlerMappings.stream()
                 .filter(handlerMapping -> handlerMapping.getHandler(request).isPresent())
                 .findAny()
-                .orElseThrow(() -> new IllegalArgumentException("Unsupported request: " + request.getRequestURI()));
+                .orElseThrow(() -> new UnSupportedHandlerException("Unsupported request: " + request.getRequestURI()));
     }
 }
