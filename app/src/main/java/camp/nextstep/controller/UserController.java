@@ -22,7 +22,7 @@ public class UserController {
 		final String account = request.getParameter("account");
 		log.debug("user id : {}", account);
 
-		final ModelAndView modelAndView = ModelAndView.ofJsonView();
+		final ModelAndView modelAndView = ModelAndView.ofJson();
 		final User user = InMemoryUserDao.findByAccount(account);
 
 		modelAndView.addObject("user", user);

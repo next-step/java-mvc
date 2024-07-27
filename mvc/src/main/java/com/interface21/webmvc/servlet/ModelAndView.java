@@ -19,12 +19,12 @@ public class ModelAndView {
         this.model = new HashMap<>();
     }
 
-    public static ModelAndView ofJspView(final String path) {
-        return new ModelAndView(new JspView(path));
+    public static ModelAndView of(final String path) {
+        return new ModelAndView(ViewResolver.resolveViewName(path));
     }
 
-    public static ModelAndView ofJsonView() {
-        return new ModelAndView(new JsonView());
+    public static ModelAndView ofJson() {
+        return new ModelAndView(ViewResolver.resolveJsonView());
     }
 
     public ModelAndView addObject(final String attributeName, final Object attributeValue) {

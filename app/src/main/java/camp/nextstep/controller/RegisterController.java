@@ -20,11 +20,11 @@ public class RegisterController {
                 req.getParameter("email"));
         InMemoryUserDao.save(user);
 
-        return ModelAndView.ofJspView("redirect:/index.jsp");
+        return ModelAndView.of("redirect:/index.jsp");
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public ModelAndView viewRegister(final HttpServletRequest req, final HttpServletResponse res) throws Exception {
-        return ModelAndView.ofJspView("/register.jsp");
+        return ModelAndView.of("/register.jsp");
     }
 }
