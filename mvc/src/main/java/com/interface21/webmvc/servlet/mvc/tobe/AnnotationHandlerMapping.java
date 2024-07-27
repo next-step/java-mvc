@@ -11,8 +11,9 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
-public class AnnotationHandlerMapping {
+public class AnnotationHandlerMapping implements HandlerMapping{
 
     private static final Logger log = LoggerFactory.getLogger(AnnotationHandlerMapping.class);
 
@@ -25,6 +26,7 @@ public class AnnotationHandlerMapping {
         this.handlerExecutions = new HashMap<>();
     }
 
+    @Override
     public void initialize() {
         log.info("Initialized AnnotationHandlerMapping!");
         Controllers controllers = controllerScanner.scan(basePackage);
@@ -35,6 +37,8 @@ public class AnnotationHandlerMapping {
         final var requestMapping = method.getAnnotation(RequestMapping.class);
         final var handlerExecution = new HandlerExecution(controllerInstance, method);
         final var httpPath = requestMapping.value();
+
+        log.info("Path : {}, Controller : {}", httpPath, controllerInstance.getClass());
 
         Arrays.stream(requestMapping.method())
                 .forEach(requestMethod -> {
@@ -57,9 +61,10 @@ public class AnnotationHandlerMapping {
         }
     }
 
-    public Object getHandler(final HttpServletRequest request) {
+    @Override
+    public Optional<Object> getHandler(final HttpServletRequest request) {
         final var handlerKey = new HandlerKey(request.getRequestURI(), RequestMethod.valueOf(request.getMethod()));
 
-        return handlerExecutions.get(handlerKey);
+        return Optional.of(handlerExecutions.get(handlerKey));
     }
 }

@@ -2,8 +2,10 @@ package com.interface21.webmvc.servlet.mvc.tobe;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+import java.util.Optional;
+
 public interface HandlerMapping {
-    Object getHandler(HttpServletRequest request);
+    Optional<Object> getHandler(HttpServletRequest request);
 
     void initialize();
 }
