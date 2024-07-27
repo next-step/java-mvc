@@ -19,21 +19,21 @@ public class LoginController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ModelAndView doLogin(final HttpServletRequest req, final HttpServletResponse res) throws Exception {
         if (UserSession.isLoggedIn(req.getSession())) {
-            return ModelAndView.of("redirect:/index.jsp");
+            return ModelAndView.ofView("redirect:/index.jsp");
         }
 
         final var user = InMemoryUserDao.findByAccount(req.getParameter("account"));
         if (user == null) {
-            return ModelAndView.of("redirect:/401.jsp");
+            return ModelAndView.ofView("redirect:/401.jsp");
         }
 
         log.info("User : {}", user);
-        return ModelAndView.of(login(req, user));
+        return ModelAndView.ofView(login(req, user));
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public ModelAndView viewLogin(final HttpServletRequest req, final HttpServletResponse res) throws Exception {
-        return ModelAndView.of(getPath(req));
+        return ModelAndView.ofView(getPath(req));
     }
 
     private static String getPath(HttpServletRequest req) {

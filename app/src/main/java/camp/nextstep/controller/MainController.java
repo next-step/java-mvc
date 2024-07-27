@@ -11,6 +11,6 @@ import jakarta.servlet.http.HttpServletResponse;
 public class MainController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView main(final HttpServletRequest req, final HttpServletResponse res) throws Exception {
-        return ModelAndView.of("redirect:/index.jsp");
+        return ModelAndView.ofView("redirect:/index.jsp");
     }
 }
