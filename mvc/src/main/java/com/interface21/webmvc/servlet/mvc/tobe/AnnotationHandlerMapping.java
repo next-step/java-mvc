@@ -1,21 +1,17 @@
 package com.interface21.webmvc.servlet.mvc.tobe;
 
-import com.interface21.context.stereotype.Controller;
 import com.interface21.web.bind.annotation.RequestMapping;
 import com.interface21.web.bind.annotation.RequestMethod;
+import com.interface21.webmvc.servlet.mvc.tobe.handler.ControllerScanner;
 import jakarta.servlet.http.HttpServletRequest;
-import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
-public class AnnotationHandlerMapping {
+public class AnnotationHandlerMapping implements HandlerMapping {
 
     private static final Logger log = LoggerFactory.getLogger(AnnotationHandlerMapping.class);
 
@@ -30,51 +26,43 @@ public class AnnotationHandlerMapping {
     public void initialize() {
         for (Object object : basePackage) {
             String packageStr = (String) object;
-            Set<Class<?>> set = new Reflections(packageStr)
-                    .getTypesAnnotatedWith(Controller.class);
-            putRequestMappingMethodFromClassSet(set);
+            ControllerScanner controllerScanner = new ControllerScanner(packageStr);
+            Map<Class<?>, Object> map = controllerScanner.getControllers();
+            addHandlerExecutions(map);
         }
         log.info("Initialized AnnotationHandlerMapping!");
     }
 
-    private void putRequestMappingMethodFromClassSet(Set<Class<?>> set) {
-        for (Class<?> classObj : set) {
-            putRequestMappingMethodFromClass(classObj);
-        }
-    }
-
-    private void putRequestMappingMethodFromClass(Class<?> classObj) {
-        for (final Method method : classObj.getDeclaredMethods()) {
-            putRequestMappingMethod(method, classObj);
-        }
-    }
-
-    private void putRequestMappingMethod(Method method, Class<?> classObj) {
-        if (method.isAnnotationPresent(RequestMapping.class)) {
-            method.setAccessible(true);
-            RequestMapping annotation = method.getAnnotation(RequestMapping.class);
-            for (RequestMethod requestMethod : annotation.method()) {
-                HandlerKey handlerKey = new HandlerKey(annotation.value(), requestMethod);
-                Constructor<?> ctor = null;
-                HandlerExecution handlerExecution = null;
-                try {
-                    ctor = classObj.getConstructor();
-                    handlerExecution = new HandlerExecution(
-                            method,
-                            ctor.newInstance()
-                    );
-                } catch (NoSuchMethodException e) {
-                    e.printStackTrace();
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
+    private void addHandlerExecutions(
+            Map<Class<?>, Object> map
+    ) {
+        map.forEach(
+                (classObj, controller) -> {
+                    putRequestMappingMethodFromClass(classObj, controller);
                 }
+        );
+    }
 
-                handlerExecutions.put(handlerKey, handlerExecution);
+
+    private void putRequestMappingMethodFromClass(Class<?> classObj, Object controller) {
+        for (final Method method : classObj.getDeclaredMethods()) {
+            if (method.isAnnotationPresent(RequestMapping.class)) {
+                putRequestMappingMethod(method, controller);
             }
+        }
+    }
+
+    private void putRequestMappingMethod(Method method, Object controller) {
+        method.setAccessible(true);
+        RequestMapping annotation = method.getAnnotation(RequestMapping.class);
+        for (RequestMethod requestMethod : annotation.method()) {
+            HandlerKey handlerKey = new HandlerKey(annotation.value(), requestMethod);
+            HandlerExecution handlerExecution = new HandlerExecution(
+                    method,
+                    controller
+            );
+
+            handlerExecutions.put(handlerKey, handlerExecution);
         }
     }
 
