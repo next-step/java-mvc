@@ -51,3 +51,15 @@
 - [x] HandlerAdapter 인터페이스를 추가한다.
 - [x] ManualHandlerAdapter, AnnotationHandlerAdpate 를 구현체로 수정한다.
 - [x] DispatcherServlet 생성할 때 주입한다.
+
+### AS-IS
+- [x] ManualHandlerMapping 을 이용해 Controller 를 찾는다.
+- [x] DispatcherServlet 에서 Controller를 통해 viewName을 찾는다.
+- [x] DispatcherServlet 에서 viewName을 통해 페이지를 조회한다.
+
+### TO-BE
+- [x] HandlerMappingRegistry 에서 HandlerMapping 을 찾는다.
+- [x] 각각의 HandlerMapping 을 초기화하면서 Controller의 path 를 등록한다.
+- [x] HandlerAdapterRegistry 에서 instance 타입에 맞는 HandlerAdapter 를 찾는다.
+- [x] HandlerAdapter 를 통해 ModelAndView 를 반환한다.
+- [x] ModelAndView 에서 viewName 을 통해 View 를 찾는다.

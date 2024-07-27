@@ -11,10 +11,6 @@ public class HandlerAdapterRegistry {
         this.handlerAdapters = List.of(handlerAdapters);
     }
 
-    public void addHandlerAdapter(HandlerAdapter handlerAdapter) {
-        handlerAdapters.add(handlerAdapter);
-    }
-
     public HandlerAdapter getHandlerAdapter(Object handlerMapping) {
         return handlerAdapters.stream()
                               .filter(handlerAdapter -> handlerAdapter.accept(handlerMapping))
