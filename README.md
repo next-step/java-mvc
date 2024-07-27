@@ -63,3 +63,4 @@
 - [x] HandlerAdapterRegistry 에서 instance 타입에 맞는 HandlerAdapter 를 찾는다.
 - [x] HandlerAdapter 를 통해 ModelAndView 를 반환한다.
 - [x] ModelAndView 에서 viewName 을 통해 View 를 찾는다.
+- [x] Register, Login, Logout Controller 를 애노테이션 기반의 컨트롤러로 변경한다.
