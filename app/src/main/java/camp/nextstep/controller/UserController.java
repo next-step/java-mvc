@@ -21,11 +21,10 @@ public class UserController {
         final String account = request.getParameter("account");
         log.debug("user id: {}", account);
 
-        final ModelAndView modelAndView = ModelAndView.jsonView();
         final User user = InMemoryUserDao.findByAccount(account);
         assert user != null;
 
-        modelAndView.addObject("user", user);
-        return modelAndView;
+        return new ModelAndView("jsonView")
+                .addObject("user", user);
     }
 }

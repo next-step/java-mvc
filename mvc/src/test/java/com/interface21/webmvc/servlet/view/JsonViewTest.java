@@ -1,8 +1,13 @@
 package com.interface21.webmvc.servlet.view;
 
 import com.interface21.webmvc.servlet.ModelAndView;
+import com.interface21.webmvc.servlet.View;
 import com.interface21.webmvc.servlet.mvc.tobe.AnnotationHandlerMapping;
 import com.interface21.webmvc.servlet.mvc.tobe.HandlerExecution;
+import com.interface21.webmvc.servlet.mvc.tobe.ViewResolver;
+import com.interface21.webmvc.servlet.mvc.tobe.viewresolver.JsonViewResolver;
+import com.interface21.webmvc.servlet.mvc.tobe.viewresolver.JspViewResolver;
+import com.interface21.webmvc.servlet.mvc.tobe.viewresolver.RedirectViewResolver;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,18 +16,27 @@ import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.DelegatingServletOutputStream;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 class JsonViewTest {
+    private final List<ViewResolver> viewResolvers = new ArrayList<>();
     private AnnotationHandlerMapping handlerMapping;
 
     @BeforeEach
     void setUp() {
         handlerMapping = new AnnotationHandlerMapping("samples");
         handlerMapping.initialize();
+
+        viewResolvers.clear();
+        viewResolvers.add(new RedirectViewResolver());
+        viewResolvers.add(new JspViewResolver());
+        viewResolvers.add(new JsonViewResolver());
     }
 
     @Test
@@ -46,7 +60,18 @@ class JsonViewTest {
         final var handlerExecution = (HandlerExecution) handlerMapping.getHandler(request);
         final ModelAndView modelAndView = handlerExecution.handle(request, response);
         final Map<String, Object> model = modelAndView.getModel();
-        modelAndView.getView().render(model, request, response);
+        final View view = resolveView(modelAndView);
+        view.render(model, request, response);
+    }
+
+    private View resolveView(ModelAndView modelAndView) {
+        String viewName = modelAndView.getViewName();
+
+        return viewResolvers.stream()
+                            .map(viewResolver -> viewResolver.resolveView(viewName))
+                            .filter(Objects::nonNull)
+                            .findFirst()
+                            .orElse(null);
     }
 
     @Test

@@ -20,20 +20,20 @@ public class LoginController {
         return UserSession.getUserFrom(req.getSession())
                           .map(user -> {
                               log.info("logged in {}", user.getAccount());
-                              return ModelAndView.jspView("redirect:/index.jsp");
+                              return new ModelAndView("redirect:/index.jsp");
                           })
-                          .orElse(ModelAndView.jspView("/login.jsp"));
+                          .orElse(new ModelAndView("/login.jsp"));
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ModelAndView login(final HttpServletRequest req, final HttpServletResponse res) {
         if (UserSession.isLoggedIn(req.getSession())) {
-            return ModelAndView.jspView("redirect:/index.jsp");
+            return new ModelAndView("redirect:/index.jsp");
         }
 
         final var user = InMemoryUserDao.findByAccount(req.getParameter("account"));
         if (user == null) {
-            return ModelAndView.jspView("redirect:/401.jsp");
+            return new ModelAndView("redirect:/401.jsp");
         }
 
         log.info("User : {}", user);
@@ -44,9 +44,9 @@ public class LoginController {
         if (user.checkPassword(request.getParameter("password"))) {
             final var session = request.getSession();
             session.setAttribute(UserSession.SESSION_KEY, user);
-            return ModelAndView.jspView("redirect:/index.jsp");
+            return new ModelAndView("redirect:/index.jsp");
         }
-        return ModelAndView.jspView("redirect:/401.jsp");
+        return new ModelAndView("redirect:/401.jsp");
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
@@ -54,6 +54,6 @@ public class LoginController {
         final var session = req.getSession();
         session.removeAttribute(UserSession.SESSION_KEY);
 
-        return ModelAndView.jspView("redirect:/");
+        return new ModelAndView("redirect:/");
     }
 }

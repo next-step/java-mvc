@@ -6,9 +6,6 @@ import com.interface21.context.stereotype.Controller;
 import com.interface21.web.bind.annotation.RequestMapping;
 import com.interface21.web.bind.annotation.RequestMethod;
 import com.interface21.webmvc.servlet.ModelAndView;
-import com.interface21.webmvc.servlet.View;
-import com.interface21.webmvc.servlet.view.JspView;
-import com.interface21.webmvc.servlet.view.ViewUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -16,9 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class RegisterController {
     @RequestMapping(value = "/register/view", method = RequestMethod.GET)
     public ModelAndView show(final HttpServletRequest req, final HttpServletResponse res) {
-        View view = ViewUtil.createViewByViewName("/register.jsp");
-
-        return new ModelAndView(view);
+        return new ModelAndView("/register.jsp");
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
@@ -29,6 +24,6 @@ public class RegisterController {
                 req.getParameter("email"));
         InMemoryUserDao.save(user);
 
-        return new ModelAndView(new JspView("redirect:/index.jsp"));
+        return new ModelAndView("redirect:/index.jsp");
     }
 }

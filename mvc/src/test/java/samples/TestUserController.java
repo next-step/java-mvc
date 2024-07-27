@@ -16,35 +16,34 @@ public class TestUserController {
     @RequestMapping(value = "/users", method = RequestMethod.POST)
     public ModelAndView create_string(String userId, String password) {
         log.debug("userId: {}, password: {}", userId, password);
-        ModelAndView mav = ModelAndView.jsonView();
-        mav.addObject("userId", userId);
-        mav.addObject("password", password);
-        return mav;
+
+        return new ModelAndView("jsonView")
+                .addObject("userId", userId)
+                .addObject("password", password);
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.POST)
     public ModelAndView create_int_long(long id, int age) {
         log.debug("id: {}, age: {}", id, age);
-        ModelAndView mav = ModelAndView.jsonView();
-        mav.addObject("id", id);
-        mav.addObject("age", age);
-        return mav;
+
+        return new ModelAndView("jsonView")
+                .addObject("id", id)
+                .addObject("age", age);
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.POST)
     public ModelAndView create_javabean(TestUser testUser) {
         log.debug("testUser: {}", testUser);
-        ModelAndView mav = ModelAndView.jsonView();
-        mav.addObject("testUser", testUser);
-        return mav;
-    }
 
+        return new ModelAndView("jsonView")
+                .addObject("testUser", testUser);
+    }
 
     @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
     public ModelAndView show_pathvariable(@PathVariable long id) {
         log.debug("userId: {}", id);
-        ModelAndView mav = ModelAndView.jsonView();
-        mav.addObject("id", id);
-        return mav;
+
+        return new ModelAndView("jsonView")
+                .addObject("id", id);
     }
 }
