@@ -26,7 +26,7 @@ public class RequestParamArgumentResolver implements ArgumentResolver {
         String value = parsedQueryString.get(name);
 
         if (requestParam.required() && value == null) {
-            throw new IllegalArgumentException("필수 값이 누락되었습니다. name=" + name);
+            throw new IllegalArgumentException("필수 값이 누락되었습니다. key=" + name);
         }
 
         return TypeConversionUtil.convertStringToTargetType(value, parameter.getType());
