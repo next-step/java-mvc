@@ -22,4 +22,11 @@ public class HandlerExecution {
         }
         return new ModelAndView(new JspView((String) result));
     }
+
+    public void handle(Throwable ex, HttpServletRequest request, HttpServletResponse response) {
+        try {
+            method.invoke(controllerInstance, ex, request, response);
+        } catch (Exception ignored) {
+        }
+    }
 }
