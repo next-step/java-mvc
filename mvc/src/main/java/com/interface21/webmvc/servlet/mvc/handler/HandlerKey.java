@@ -35,7 +35,8 @@ public class HandlerKey {
         return Objects.hash(url, requestMethod);
     }
 
-    public boolean checkUrlPattern(HandlerKey that) {
-        return PathPatternUtil.isUrlMatch(url, that.url);
+    public boolean checkUrlPatternAndMethod(HandlerKey that) {
+        return PathPatternUtil.isUrlMatch(url, that.url)
+                && requestMethod == that.requestMethod;
     }
 }

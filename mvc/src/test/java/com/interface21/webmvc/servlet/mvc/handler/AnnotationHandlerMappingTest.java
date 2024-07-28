@@ -236,4 +236,48 @@ class AnnotationHandlerMappingTest {
                 () -> assertThat(modelAndView.getObject("id")).isEqualTo(1L)
         );
     }
+
+    @DisplayName("요청에 해당하는 핸들러가 있을 경우 이를 반환한다.")
+    @Test
+    void getHandler() throws Exception {
+        final var request = mock(HttpServletRequest.class);
+        final var response = mock(HttpServletResponse.class);
+
+        when(request.getRequestURI()).thenReturn("/get-test");
+        when(request.getAttribute("id")).thenReturn("id");
+        when(request.getMethod()).thenReturn("GET");
+
+        final var handlerExecution = (HandlerExecution) handlerMapping.getHandler(request);
+        final var modelAndView = handlerExecution.handle(request, response);
+
+        assertThat(modelAndView.getObject("id")).isEqualTo("id");
+    }
+
+    @DisplayName("Url이 완벽하게 일치하지 않고 패턴만 일치해도 핸들러를 찾는다.")
+    @Test
+    void getHandlerWithUrlPatternMatched() throws Exception {
+        final var request = mock(HttpServletRequest.class);
+        final var response = mock(HttpServletResponse.class);
+
+        when(request.getRequestURI()).thenReturn("/users/1");
+        when(request.getMethod()).thenReturn("GET");
+
+        final var handlerExecution = (HandlerExecution) handlerMapping.getHandler(request);
+        final var modelAndView = handlerExecution.handle(request, response);
+
+        assertThat(modelAndView.getObject("id")).isEqualTo(1L);
+    }
+
+    @DisplayName("요청에 해당하는 핸들러가 없을 경우 null 반환한다.")
+    @Test
+    void getHandlerNull() {
+        final var request = mock(HttpServletRequest.class);
+
+        when(request.getRequestURI()).thenReturn("/no");
+        when(request.getMethod()).thenReturn("GET");
+
+        final var handlerExecution = (HandlerExecution) handlerMapping.getHandler(request);
+
+        assertThat(handlerExecution).isNull();
+    }
 }
