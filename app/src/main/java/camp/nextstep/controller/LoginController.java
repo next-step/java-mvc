@@ -8,8 +8,11 @@ import com.interface21.web.bind.annotation.RequestMethod;
 import com.interface21.webmvc.servlet.ModelAndView;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Objects;
 
 @Controller
 public class LoginController {
@@ -17,7 +20,8 @@ public class LoginController {
 
     @RequestMapping(value = "/login/view", method = RequestMethod.GET)
     public ModelAndView show(final HttpServletRequest req, final HttpServletResponse res) {
-        return UserSession.getUserFrom(req.getSession())
+        HttpSession session = Objects.requireNonNull(req.getSession());
+        return UserSession.getUserFrom(session)
                           .map(user -> {
                               log.info("logged in {}", user.getAccount());
                               return new ModelAndView("redirect:/index.jsp");
@@ -27,7 +31,8 @@ public class LoginController {
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ModelAndView login(final HttpServletRequest req, final HttpServletResponse res) {
-        if (UserSession.isLoggedIn(req.getSession())) {
+        HttpSession session = Objects.requireNonNull(req.getSession());
+        if (UserSession.isLoggedIn(session)) {
             return new ModelAndView("redirect:/index.jsp");
         }
 
@@ -42,7 +47,7 @@ public class LoginController {
 
     private ModelAndView login(final HttpServletRequest request, final User user) {
         if (user.checkPassword(request.getParameter("password"))) {
-            final var session = request.getSession();
+            final var session = Objects.requireNonNull(request.getSession());
             session.setAttribute(UserSession.SESSION_KEY, user);
             return new ModelAndView("redirect:/index.jsp");
         }
@@ -51,7 +56,7 @@ public class LoginController {
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public ModelAndView logout(final HttpServletRequest req, final HttpServletResponse res) throws Exception {
-        final var session = req.getSession();
+        final var session = Objects.requireNonNull(req.getSession());
         session.removeAttribute(UserSession.SESSION_KEY);
 
         return new ModelAndView("redirect:/");
