@@ -16,4 +16,8 @@ public class RequestUtils {
     public static HttpResponse<String> send(final String path) {
         return HttpUtils.sendGet(PORT, path);
     }
+
+    public static HttpResponse<String> sendPost(final String path) {
+        return HttpUtils.sendPost(PORT, path);
+    }
 }
