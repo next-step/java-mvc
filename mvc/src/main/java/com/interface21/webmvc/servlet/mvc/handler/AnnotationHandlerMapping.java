@@ -24,15 +24,8 @@ public class AnnotationHandlerMapping implements HandlerMapping {
     @Override
     public void initialize() {
         log.info("Initialized AnnotationHandlerMapping!");
-
-        ControllerScanner controllerScanner = ControllerScanner.from(basePackages);
-        Map<Class<?>, Object> controllersMap = controllerScanner.scan();
         ArgumentResolvers argumentResolvers = initializeArgumentResolvers();
-
-        for (Class<?> controllerClass : controllersMap.keySet()) {
-            HandlerExecutions handlerExecutions = HandlerExecutions.of(controllerClass, controllersMap.get(controllerClass), argumentResolvers);
-            registerHandlerExecutions(controllerClass, handlerExecutions);
-        }
+        initializeHandlerExecutionsMap(argumentResolvers);
     }
 
     private ArgumentResolvers initializeArgumentResolvers() {
@@ -43,6 +36,16 @@ public class AnnotationHandlerMapping implements HandlerMapping {
         argumentResolvers.add(new RequestBodyArgumentResolver());
         argumentResolvers.add(new RequestParamArgumentResolver());
         return argumentResolvers;
+    }
+
+    private void initializeHandlerExecutionsMap(ArgumentResolvers argumentResolvers) {
+        ControllerScanner controllerScanner = ControllerScanner.from(basePackages);
+        Map<Class<?>, Object> controllersMap = controllerScanner.scan();
+
+        for (Class<?> controllerClass : controllersMap.keySet()) {
+            HandlerExecutions handlerExecutions = HandlerExecutions.of(controllerClass, controllersMap.get(controllerClass), argumentResolvers);
+            registerHandlerExecutions(controllerClass, handlerExecutions);
+        }
     }
 
     private void registerHandlerExecutions(Class<?> controllerClass, HandlerExecutions handlerExecutions) {
