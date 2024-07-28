@@ -7,6 +7,7 @@ import org.reflections.Reflections;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +31,7 @@ public class ControllerScanner {
     private List<Class<?>> getControllerAnnotatedClasses() {
         return reflections.getTypesAnnotatedWith(Controller.class)
                           .stream()
-                          .filter(this::isClass)
+                          .filter(this::isConcreteClass)
                           .toList();
     }
 
@@ -54,7 +55,7 @@ public class ControllerScanner {
         }
     }
 
-    private boolean isClass(Class<?> it) {
-        return it.getSuperclass() == Object.class;
+    private boolean isConcreteClass(Class<?> it) {
+        return it.getSuperclass() == Object.class && !Modifier.isAbstract(it.getModifiers());
     }
 }

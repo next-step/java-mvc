@@ -3,5 +3,5 @@ package samples;
 import com.interface21.context.stereotype.Controller;
 
 @Controller
-public enum AnotherEnum {
+public interface TestInterface {
 }
