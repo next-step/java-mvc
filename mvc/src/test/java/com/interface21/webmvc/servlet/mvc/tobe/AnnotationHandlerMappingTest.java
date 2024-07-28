@@ -22,11 +22,11 @@ class AnnotationHandlerMappingTest {
     @Test
     void get() throws Exception {
         final var request = mock(HttpServletRequest.class);
-        final var response = mock(HttpServletResponse.class);
-
         when(request.getAttribute("id")).thenReturn("gugu");
         when(request.getRequestURI()).thenReturn("/get-test");
         when(request.getMethod()).thenReturn("GET");
+
+        final var response = mock(HttpServletResponse.class);
 
         final var handlerExecution = (HandlerExecution) handlerMapping.getHandler(request);
         final var modelAndView = handlerExecution.handle(request, response);
@@ -37,15 +37,34 @@ class AnnotationHandlerMappingTest {
     @Test
     void post() throws Exception {
         final var request = mock(HttpServletRequest.class);
-        final var response = mock(HttpServletResponse.class);
-
         when(request.getAttribute("id")).thenReturn("gugu");
         when(request.getRequestURI()).thenReturn("/post-test");
         when(request.getMethod()).thenReturn("POST");
+
+        final var response = mock(HttpServletResponse.class);
 
         final var handlerExecution = (HandlerExecution) handlerMapping.getHandler(request);
         final var modelAndView = handlerExecution.handle(request, response);
 
         assertThat(modelAndView.getObject("id")).isEqualTo("gugu");
+    }
+
+    @Test
+    void testRecordIsNotScanned()  {
+        final var request = mock(HttpServletRequest.class);
+        when(request.getRequestURI()).thenReturn("/record/get");
+        when(request.getMethod()).thenReturn("GET");
+
+        final var handlerExecution = (HandlerExecution) handlerMapping.getHandler(request);
+        assertThat(handlerExecution).isNull();
+    }
+    @Test
+    void testAbstractClassIsNotScanned()  {
+        final var request = mock(HttpServletRequest.class);
+        when(request.getRequestURI()).thenReturn("/abstract-clas/get");
+        when(request.getMethod()).thenReturn("GET");
+
+        final var handlerExecution = (HandlerExecution) handlerMapping.getHandler(request);
+        assertThat(handlerExecution).isNull();
     }
 }

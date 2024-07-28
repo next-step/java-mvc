@@ -4,7 +4,7 @@
     <module name="java-mvc.app.main" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="camp.nextstep.*" />
+        <option name="PATTERN" value="com.interface21.webmvc.servlet.mvc.tobe.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

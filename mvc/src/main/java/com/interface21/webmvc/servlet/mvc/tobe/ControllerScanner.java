@@ -7,9 +7,10 @@ import org.reflections.Reflections;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class ControllerScanner {
     private final Reflections reflections;
@@ -19,18 +20,19 @@ public class ControllerScanner {
     }
 
     public Map<Class<?>, Object> getControllers() {
-        var controllerTypes = reflections.getTypesAnnotatedWith(Controller.class);
-
-        return instantiateControllers(controllerTypes);
-    }
-
-    private Map<Class<?>, Object> instantiateControllers(Set<Class<?>> controllerTypes) {
         Map<Class<?>, Object> map = new HashMap<>();
 
-        for (Class<?> controller : controllerTypes) {
+        for (Class<?> controller : getControllerAnnotatedClasses()) {
             map.put(controller, initiateObject(controller));
         }
         return map;
+    }
+
+    private List<Class<?>> getControllerAnnotatedClasses() {
+        return reflections.getTypesAnnotatedWith(Controller.class)
+                          .stream()
+                          .filter(this::isConcreteClass)
+                          .toList();
     }
 
     private Object initiateObject(Class<?> controllerType) {
@@ -51,5 +53,9 @@ public class ControllerScanner {
         } catch (InvocationTargetException e) {
             throw new ControllerScanningException("생성자 실행 중 예외가 발생했습니다.", e);
         }
+    }
+
+    private boolean isConcreteClass(Class<?> it) {
+        return it.getSuperclass() == Object.class && !Modifier.isAbstract(it.getModifiers());
     }
 }
