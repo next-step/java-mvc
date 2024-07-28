@@ -1,4 +1,4 @@
-package com.interface21.webmvc.servlet.mvc.tobe;
+package com.interface21.webmvc.servlet;
 
 import com.interface21.web.bind.annotation.RequestMethod;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,8 +15,12 @@ public class HandlerKey {
         this.requestMethod = requestMethod;
     }
 
-    public HandlerKey(final HttpServletRequest request) {
-        this(request.getRequestURI(), RequestMethod.valueOf(request.getMethod()));
+    public boolean matchUrl(final HttpServletRequest request) {
+        return request.getRequestURI().equals(url);
+    }
+
+    public boolean matchMethod(final HttpServletRequest request) {
+        return RequestMethod.valueOf(request.getMethod()).equals(requestMethod);
     }
 
     @Override

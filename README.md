@@ -19,3 +19,21 @@
 ## 학습 테스트
 1. [Reflection API](study/src/test/java/reflection)
 2. [Servlet](study/src/test/java/servlet)
+
+
+### [STEP2]  Legacy MVC와 @MVC 통합하기
+#### 목표: HandlerMapping과 HandlerAdapter를 만드는 과정
+- HandlerExecution는 request를 handle하여 modelAndView 응답을 만들고,
+- HandlerMapping에서는 handler 목록을 만들어주고,
+- Handlers에서는 handler 목록을 관리하고,
+- HandlerRegistry에서는 mapping을 통해 handlers를 만들어주고,
+- HandlerAdapter에선 전달받은 handler를 handle시키고 response를 상황에 맞게 처리(render 등)한다.
+#### TODO
+- [x] AnnotationHandlerMapping initialize 리팩토링
+  - [X] ControllerScanner 에게 컨트롤러를 찾아서 인스턴스 생성하는 역할을 맡긴다.
+  - [X] 스캔한 컨트롤러 정보를 바탕으로 Map<HandlerKey, HandlerExecution> handlerExecutions을 생성한다.
+- [X] DispatcherServlet 에서  ManualHandlerMapping, AnnotationHandlerMapping을 모두 초기화
+  - [X] HandlerMapping 인터페이스 추가
+  - [X] HandlerAdapter 인터페이스 추가
+
+

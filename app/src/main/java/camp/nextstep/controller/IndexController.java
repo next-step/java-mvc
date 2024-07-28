@@ -6,12 +6,15 @@ import com.interface21.web.bind.annotation.RequestMethod;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@Controller
-public class RegisterViewController {
+import java.util.Objects;
 
-    @RequestMapping(value = "/register/view", method = RequestMethod.GET)
-    public String registerView(final HttpServletRequest req, final HttpServletResponse res) throws Exception {
-        return "/register.jsp";
+
+@Controller
+public class IndexController {
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String index(final HttpServletRequest request, final HttpServletResponse response) {
+        return "/index.jsp";
     }
 
 }
