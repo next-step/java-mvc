@@ -1,31 +1,28 @@
 package com.interface21.webmvc.servlet;
 
+import com.interface21.context.stereotype.Controller;
 import com.interface21.web.bind.annotation.RequestMapping;
 import com.interface21.web.bind.annotation.RequestMethod;
-import jakarta.servlet.http.HttpServletRequest;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
-public class AnnotationHandlerMapping implements HandlerMapping {
+public class AnnotationHandlerMapping implements HandlerMapping<HttpRequestHandlers> {
 
-    private final ControllerScanner scanner;
-    private final Map<HandlerKey, HandlerExecution> handlerExecutions;
+    private final Object[] basePackage;
 
     public AnnotationHandlerMapping(final Object... basePackage) {
-        this.scanner = new ControllerScanner(basePackage);
-        this.handlerExecutions = new HashMap<>();
+        this.basePackage = basePackage;
     }
 
     @Override
-    public void initialize() {
-        scanner.getControllers().forEach((controller, instance) ->
-                Arrays.stream(controller.getMethods()).forEach(method -> mappingHandler(instance, method)));
+    public void initialize(final HttpRequestHandlers httpRequestHandlers) {
+        var components = ComponentScanner.scan(Controller.class, basePackage);
+        components.forEach(component ->
+                Arrays.stream(component.methods).forEach(method -> mappingHandler(httpRequestHandlers, component.instance, method)));
     }
 
-    private void mappingHandler(final Object controllerInstance, final Method method) {
+    private void mappingHandler(final HttpRequestHandlers handlers, final Object controllerInstance, final Method method) {
         var handler = method.getAnnotation(RequestMapping.class);
         if (handler == null) {
             return;
@@ -33,12 +30,7 @@ public class AnnotationHandlerMapping implements HandlerMapping {
         for (RequestMethod requestMethod : handler.method()) {
             var key = new HandlerKey(handler.value(), requestMethod);
             var execution = new HandlerExecution(controllerInstance, method);
-            handlerExecutions.put(key, execution);
+            handlers.add(key, execution);
         }
-    }
-
-    @Override
-    public HandlerExecution getHandler(final HttpServletRequest request) {
-        return handlerExecutions.get(new HandlerKey(request));
     }
 }

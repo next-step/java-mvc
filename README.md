@@ -24,7 +24,9 @@
 ### [STEP2]  Legacy MVC와 @MVC 통합하기
 #### 목표: HandlerMapping과 HandlerAdapter를 만드는 과정
 - HandlerExecution는 request를 handle하여 modelAndView 응답을 만들고,
-- HandlerMapping에서는 handler 목록을 관리하고,
+- HandlerMapping에서는 handler 목록을 만들어주고,
+- Handlers에서는 handler 목록을 관리하고,
+- HandlerRegistry에서는 mapping을 통해 handlers를 만들어주고,
 - HandlerAdapter에선 전달받은 handler를 handle시키고 response를 상황에 맞게 처리(render 등)한다.
 #### TODO
 - [x] AnnotationHandlerMapping initialize 리팩토링
