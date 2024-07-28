@@ -24,6 +24,7 @@ public class PathVariableArgumentResolver implements ArgumentResolver {
 
         String pathVariableName = getPathVariableName(parameter);
         String uriValue = PathPatternUtil.getUriValue(uriPattern, requestURI, pathVariableName);
+        validateUriValue(uriValue, uriPattern, pathVariableName);
         return TypeConversionUtil.convertStringToTargetType(uriValue, parameter.getType());
     }
 
@@ -33,5 +34,11 @@ public class PathVariableArgumentResolver implements ArgumentResolver {
             return parameter.getName();
         }
         return pathVariable.name();
+    }
+
+    private void validateUriValue(String uriValue, String uriPattern, String pathVariableName) {
+        if (uriValue == null) {
+            throw new IllegalArgumentException("URI 패턴의 이름에 일치하는 파라미터가 없습니다. uriPattern=%s, parameterName=%s".formatted(uriPattern, pathVariableName));
+        }
     }
 }
