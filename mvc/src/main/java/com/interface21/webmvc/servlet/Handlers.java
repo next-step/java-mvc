@@ -1,7 +1,5 @@
 package com.interface21.webmvc.servlet;
 
-import jakarta.servlet.http.HttpServletRequest;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,9 +14,4 @@ public abstract class Handlers<T> {
     public HandlerExecution getHandler(final T key) {
         return handlers.get(key);
     }
-
-    public HandlerExecution getHandler(final HttpServletRequest request) {
-        return null;
-    }
-
 }
