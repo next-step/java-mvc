@@ -11,7 +11,7 @@ import java.io.File;
 
 public class TomcatStarter {
 
-    private static final String WEBAPP_DIR_LOCATION = "study/src/main/webapp/";
+    private static final String WEBAPP_DIR_LOCATION = "study/src/main/resources";
 
     private final Tomcat tomcat;
 
@@ -27,27 +27,17 @@ public class TomcatStarter {
         final var context = (StandardContext) tomcat.addWebapp("", docBase);
         skipJarScan(context);
         skipClearReferences(context);
-    }
 
-    public void start() {
-        try {
-            tomcat.start();
-        } catch (LifecycleException e) {
-            throw new RuntimeException(e);
-        }
-    }
+        context.addServletContainerInitializer((c, servletContext) -> {
+            // 자동으로 서블릿과 필터를 스캔하여 등록
+            servletContext.addServlet("sharedCounterServlet", SharedCounterServlet.class).addMapping("/shared-counter");
+            servletContext.addServlet("localCounterServlet", LocalCounterServlet.class).addMapping("/local-counter");
+            servletContext.addServlet("koreanServlet", KoreanServlet.class).addMapping("/korean");
 
-    public void await() {
-        tomcat.getServer().await();
-    }
-
-    public void stop() {
-        try {
-            tomcat.stop();
-            tomcat.destroy();
-        } catch (LifecycleException e) {
-            throw new RuntimeException(e);
-        }
+            // 필터 예시 - 필요에 따라 필터를 추가
+            servletContext.addFilter("characterEncodingFilter", CharacterEncodingFilter.class)
+                          .addMappingForUrlPatterns(null, false, "/*");
+        }, null);
     }
 
     private Connector createConnector() {
@@ -86,5 +76,26 @@ public class TomcatStarter {
         context.setClearReferencesObjectStreamClassCaches(false);
         context.setClearReferencesRmiTargets(false);
         context.setClearReferencesThreadLocals(false);
+    }
+
+    public void start() {
+        try {
+            tomcat.start();
+        } catch (LifecycleException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void await() {
+        tomcat.getServer().await();
+    }
+
+    public void stop() {
+        try {
+            tomcat.stop();
+            tomcat.destroy();
+        } catch (LifecycleException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
