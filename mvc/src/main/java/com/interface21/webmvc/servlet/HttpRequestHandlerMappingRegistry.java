@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HandlerMappingRegistry {
+public class HttpRequestHandlerMappingRegistry {
     private final List<HandlerMapping<HttpRequestHandlers>> handlerMappings = new ArrayList<>();
     private final HttpRequestHandlers handlers = new HttpRequestHandlers();
 

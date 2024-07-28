@@ -13,19 +13,19 @@ public class DispatcherServlet extends HttpServlet {
     private static final String BASE_PACKAGE = "camp.nextstep";
     private static final Logger log = LoggerFactory.getLogger(DispatcherServlet.class);
 
-    private final HandlerMappingRegistry handlerMappings = new HandlerMappingRegistry();
+    private final HttpRequestHandlerMappingRegistry requestHandlers = new HttpRequestHandlerMappingRegistry();
     private final ExceptionHandlerRegistry exceptionHandlers = new ExceptionHandlerRegistry();
     private final HandlerAdapterRegistry handlerAdapters = new HandlerAdapterRegistry();
 
     public DispatcherServlet() {
-        handlerMappings.addHandlerMapping(new ControllerHandlerMapping(BASE_PACKAGE));
+        requestHandlers.addHandlerMapping(new ControllerHandlerMapping(BASE_PACKAGE));
         exceptionHandlers.addHandlerMapping(new ControllerAdviceHandlerMapping(BASE_PACKAGE));
         handlerAdapters.addAdapter(new RequestHandlerAdapter());
     }
 
     @Override
     public void init() {
-        handlerMappings.initialize();
+        requestHandlers.initialize();
         exceptionHandlers.initialize();
     }
 
@@ -35,7 +35,7 @@ public class DispatcherServlet extends HttpServlet {
         log.debug("Method : {}, Request URI : {}", request.getMethod(), requestURI);
 
         try {
-            final var controller = handlerMappings.getHandler(request);
+            final var controller = requestHandlers.getHandler(request);
             handlerAdapters.handle(request, response, controller);
         } catch (Throwable e) {
             handleException(e, request, response);
