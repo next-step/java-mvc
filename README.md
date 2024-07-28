@@ -42,45 +42,42 @@
 
 ## 기능 요구 사항
 
-### 🚀 3단계 - JSON View 구현하기
+### 🚀 4단계 - Controller 메서드 인자 매핑
 
-#### 기능 요구 사항
 
-1. JsonView 클래스를 구현한다.
+#### 기능 요구사항
+모든 Controller 메서드의 인자가 HttpServletRequest request, HttpServletResponse response라서 사용자가 전달하는 값을 매번 HttpServletRequest request에서 가져와 형 변환을 해야하는 불편함이 있다.
 
-   `webmvc.org.springframework.web.servlet.view` 패키지에서 JsonView 클래스를 찾을 수 있다.
-   HTML 이외에 JSON으로 응답할 수 있도록 JsonView 클래스를 구현해보자.
+Controller 메서드의 인자 타입에 따라 HttpServletRequest에서 값을 꺼내와 자동으로 형 변환을 한 후 매핑하는 등의 작업을 자동 처리하도록 만들자.
+또한 URL을 통해서도 동적으로 값을 전달하는 방법이 있으면 좋겠다. 예를 들어 다음과 같이 개발하는 것이 가능하면 좋겠다.
 
-2. Legacy MVC 제거하기
-
-   app 모듈에 있는 모든 컨트롤러를 어노테이션 기반 MVC로 변경한다.
-   그리고 asis 패키지에 있는 레거시 코드를 삭제해도 서비스가 정상 동작하도록 리팩터링하자.
-   Legacy MVC를 제거하고 나서 DispatcherServlet도 app 패키지가 아닌 mvc 패키지로 옮겨보자.
-
-#### 힌트
-아래 컨트롤러를 추가해서 정상 동작하는지 테스트한다.
 ```java
-@Controller
-public class UserController {
+public class TestUserController {
+    private static final Logger logger = LoggerFactory.getLogger(TestUsersController.class);
 
-    private static final Logger log = LoggerFactory.getLogger(UserController.class);
+    @RequestMapping(value = "/users", method = RequestMethod.POST)
+    public ModelAndView create_string(String userId, String password) {
+        logger.debug("userId: {}, password: {}", userId, password);
+        return null;
+    }
 
-    @RequestMapping(value = "/api/user", method = RequestMethod.GET)
-    public ModelAndView show(HttpServletRequest request, HttpServletResponse response) {
-        final String account = request.getParameter("account");
-        log.debug("user id : {}", account);
+    @RequestMapping(value = "/users", method = RequestMethod.POST)
+    public ModelAndView create_int_long(long id, int age) {
+        logger.debug("id: {}, age: {}", id, age);
+        return null;
+    }
 
-        final ModelAndView modelAndView = new ModelAndView(new JsonView());
-        final User user = InMemoryUserRepository.findByAccount(account)
-                .orElseThrow();
+    @RequestMapping(value = "/users", method = RequestMethod.POST)
+    public ModelAndView create_javabean(TestUser testUser) {
+        logger.debug("testUser: {}", testUser);
+        return null;
+    }
 
-        modelAndView.addObject("user", user);
-        return modelAndView;
+
+    @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
+    public ModelAndView show_pathvariable(@PathVariable long id) {
+        logger.debug("userId: {}", id);
+        return null;
     }
 }
 ```
-
-* JSON을 자바 객체로 변환할 때 Jackson 라이브러리를 사용한다.
-* Jackson 라이브러리 공식 문서를 읽어보고 사용법을 익힌다.
-* JSON으로 응답할 때 ContentType은 MediaType.APPLICATION_JSON_UTF8_VALUE으로 반환해야 한다.
-* model에 데이터가 1개면 값을 그대로 반환하고 2개 이상이면 Map 형태 그대로 JSON으로 변환해서 반환한다.
