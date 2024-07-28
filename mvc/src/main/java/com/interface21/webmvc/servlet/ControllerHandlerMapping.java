@@ -7,11 +7,11 @@ import com.interface21.web.bind.annotation.RequestMethod;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
-public class AnnotationHandlerMapping implements HandlerMapping<HttpRequestHandlers> {
+public class ControllerHandlerMapping implements HandlerMapping<HttpRequestHandlers> {
 
     private final Object[] basePackage;
 
-    public AnnotationHandlerMapping(final Object... basePackage) {
+    public ControllerHandlerMapping(final Object... basePackage) {
         this.basePackage = basePackage;
     }
 

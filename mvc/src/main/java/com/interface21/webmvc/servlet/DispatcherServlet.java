@@ -17,7 +17,7 @@ public class DispatcherServlet extends HttpServlet {
     private final HandlerAdapterRegistry handlerAdapters = new HandlerAdapterRegistry();
 
     public DispatcherServlet() {
-        handlerMappings.addHandlerMapping(new AnnotationHandlerMapping(BASE_PACKAGE));
+        handlerMappings.addHandlerMapping(new ControllerHandlerMapping(BASE_PACKAGE));
         handlerAdapters.addAdapter(new RequestHandlerAdapter());
     }
 
