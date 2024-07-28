@@ -3,8 +3,6 @@ package camp.nextstep.controller;
 import com.interface21.context.stereotype.Controller;
 import com.interface21.web.bind.annotation.RequestMapping;
 import com.interface21.web.bind.annotation.RequestMethod;
-import com.interface21.webmvc.servlet.ModelAndView;
-import com.interface21.webmvc.servlet.view.JspView;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -12,7 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class RegisterViewController {
 
     @RequestMapping(value = "/register/view", method = RequestMethod.GET)
-    public ModelAndView registerView(final HttpServletRequest req, final HttpServletResponse res) throws Exception {
-        return ModelAndView.jspView("/register.jsp");
+    public String registerView(final HttpServletRequest req, final HttpServletResponse res) throws Exception {
+        return "/register";
     }
 }

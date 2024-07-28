@@ -1,7 +1,5 @@
 package com.interface21.webmvc.servlet;
 
-import com.interface21.webmvc.servlet.view.JsonView;
-import com.interface21.webmvc.servlet.view.JspView;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,15 +13,7 @@ public class ModelAndView {
         this.view = view;
         this.model = new HashMap<>();
     }
-
-    public static ModelAndView jspView(String viewName) {
-        return new ModelAndView(new JspView(viewName));
-    }
-
-    public static ModelAndView jsonView() {
-        return new ModelAndView(new JsonView());
-    }
-
+    
     public ModelAndView addObject(final String attributeName, final Object attributeValue) {
         model.put(attributeName, attributeValue);
         return this;

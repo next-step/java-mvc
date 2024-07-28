@@ -5,6 +5,7 @@ import com.interface21.web.bind.annotation.PathVariable;
 import com.interface21.web.bind.annotation.RequestMapping;
 import com.interface21.web.bind.annotation.RequestMethod;
 import com.interface21.webmvc.servlet.ModelAndView;
+import com.interface21.webmvc.servlet.view.JspView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +17,7 @@ public class TestController {
     @RequestMapping(value = "/get-test", method = RequestMethod.GET)
     public ModelAndView findUserId(String userId) {
         log.info("test controller get method");
-        final var modelAndView = ModelAndView.jspView("/get-test.jsp");
+        final var modelAndView = new ModelAndView(new JspView("/get-test.jsp"));
         modelAndView.addObject("userId", userId);
         return modelAndView;
     }
@@ -24,7 +25,7 @@ public class TestController {
     @RequestMapping(value = "/get-test/{userId}", method = RequestMethod.GET)
     public ModelAndView findUserIdWithPath(@PathVariable(value = "userId") String userId) {
         log.info("test controller get method with path");
-        final var modelAndView = ModelAndView.jspView("/get-test.jsp");
+        final var modelAndView = new ModelAndView(new JspView("/get-test.jsp"));
         modelAndView.addObject("userId", userId);
         return modelAndView;
     }
@@ -32,7 +33,7 @@ public class TestController {
     @RequestMapping(value = "/post-test", method = RequestMethod.POST)
     public ModelAndView save(TestUser testUser) {
         log.info("test controller post method");
-        final var modelAndView = ModelAndView.jspView("post-test.jsp");
+        final var modelAndView = new ModelAndView(new JspView("post-test.jsp"));
         modelAndView.addObject("userId", testUser.getUserId());
         modelAndView.addObject("password", testUser.getPassword());
         modelAndView.addObject("age", testUser.getAge());

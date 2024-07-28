@@ -1,6 +1,5 @@
 package com.interface21.webmvc.servlet.mvc.tobe;
 
-import com.interface21.webmvc.servlet.ModelAndView;
 import com.interface21.webmvc.servlet.mvc.tobe.method.ArgumentResolvers;
 import com.interface21.webmvc.servlet.mvc.tobe.method.MethodParameter;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,8 +20,8 @@ public class HandlerExecution {
         this.argumentResolvers = ArgumentResolvers.getInstance();
     }
 
-    public ModelAndView handle(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        return (ModelAndView) method.invoke(controller, resolveArguments(request, response));
+    public Object handle(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        return method.invoke(controller, resolveArguments(request, response));
     }
 
     public Method getMethod() {
