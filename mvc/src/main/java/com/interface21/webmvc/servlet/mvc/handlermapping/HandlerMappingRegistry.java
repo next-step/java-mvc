@@ -1,6 +1,5 @@
-package camp.nextstep;
+package com.interface21.webmvc.servlet.mvc.handlermapping;
 
-import com.interface21.webmvc.servlet.mvc.tobe.HandlerMapping;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Objects;
