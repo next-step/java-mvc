@@ -1,4 +1,4 @@
-package com.interface21.webmvc.servlet.mvc.tobe.support;
+package com.interface21.webmvc.servlet.mvc.support;
 
 import java.util.Map;
 

@@ -64,3 +64,18 @@
 - [x] HandlerAdapter 를 통해 ModelAndView 를 반환한다.
 - [x] ModelAndView 에서 viewName 을 통해 View 를 찾는다.
 - [x] Register, Login, Logout Controller 를 애노테이션 기반의 컨트롤러로 변경한다.
+
+# 🚀 3단계 - JsonView 구현하기
+
+## 요구사항
+
+### 1. JsonView 클래스를 구현한다.
+- [x] HTML 이외에 JSON 형식으로 응답할 수 있는 JsonView 를 구현한다.
+- [x] Object가 1개일 경우 값을 그대로 반환한다.
+- [x] Object가 2개 이상일 경우 Map 형태로 반환한다.
+
+### 2. Legacy MVC 제거하기
+- [x] app 모듈에 있는 모든 컨트롤러를 애노테이션 기반 MVC로 변경한다.
+- [x] asis 패키지의 레거시 코드를 삭제한다.
+- [x] DispatcherServlet에서 레거시 코드를 삭제한다.
+- [x] DispatcherServlet을 mvc 패키지로 이동한다.

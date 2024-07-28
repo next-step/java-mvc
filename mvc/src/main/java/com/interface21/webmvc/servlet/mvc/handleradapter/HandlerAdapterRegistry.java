@@ -1,6 +1,5 @@
-package camp.nextstep;
+package com.interface21.webmvc.servlet.mvc.handleradapter;
 
-import com.interface21.webmvc.servlet.mvc.tobe.HandlerAdapter;
 import java.util.List;
 
 public class HandlerAdapterRegistry {

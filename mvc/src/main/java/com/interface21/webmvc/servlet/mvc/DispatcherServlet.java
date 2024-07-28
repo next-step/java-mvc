@@ -1,9 +1,11 @@
-package camp.nextstep;
+package com.interface21.webmvc.servlet.mvc;
 
 import com.interface21.webmvc.servlet.ModelAndView;
-import com.interface21.webmvc.servlet.mvc.tobe.AnnotationHandlerAdapter;
-import com.interface21.webmvc.servlet.mvc.tobe.AnnotationHandlerMapping;
-import com.interface21.webmvc.servlet.mvc.tobe.HandlerAdapter;
+import com.interface21.webmvc.servlet.mvc.handleradapter.AnnotationHandlerAdapter;
+import com.interface21.webmvc.servlet.mvc.handleradapter.HandlerAdapter;
+import com.interface21.webmvc.servlet.mvc.handleradapter.HandlerAdapterRegistry;
+import com.interface21.webmvc.servlet.mvc.handlermapping.AnnotationHandlerMapping;
+import com.interface21.webmvc.servlet.mvc.handlermapping.HandlerMappingRegistry;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,13 +22,11 @@ public class DispatcherServlet extends HttpServlet {
     private final HandlerAdapterRegistry handlerAdapterRegistry;
 
     public DispatcherServlet() {
-        ManualHandlerMapping manualHandlerMapping = new ManualHandlerMapping();
         AnnotationHandlerMapping annotationHandlerMapping = new AnnotationHandlerMapping();
-        this.handlerMappingRegistry = new HandlerMappingRegistry(manualHandlerMapping, annotationHandlerMapping);
+        this.handlerMappingRegistry = new HandlerMappingRegistry(annotationHandlerMapping);
 
-        ManualHandlerAdapter manualHandlerAdapter = new ManualHandlerAdapter();
         AnnotationHandlerAdapter annotationHandlerAdapter = new AnnotationHandlerAdapter();
-        this.handlerAdapterRegistry = new HandlerAdapterRegistry(manualHandlerAdapter, annotationHandlerAdapter);
+        this.handlerAdapterRegistry = new HandlerAdapterRegistry(annotationHandlerAdapter);
     }
 
     @Override
