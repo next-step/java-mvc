@@ -19,7 +19,9 @@ class HandlerMappingRegistryTest {
         when(request.getMethod()).thenReturn("GET");
 
         HandlerMappingRegistry handlerMappingRegistry = new HandlerMappingRegistry();
-        handlerMappingRegistry.addHandlerMapping(new AnnotationHandlerMapping("samples"));
+        AnnotationHandlerMapping annotationHandlerMapping = new AnnotationHandlerMapping("samples");
+        annotationHandlerMapping.initialize();
+        handlerMappingRegistry.addHandlerMapping(annotationHandlerMapping);
 
         // when
         Object handler = handlerMappingRegistry.getHandler(request);

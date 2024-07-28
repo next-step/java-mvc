@@ -1,13 +1,11 @@
 package com.interface21.webmvc.servlet.mvc.tobe;
 
-import static com.interface21.web.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -28,14 +26,28 @@ class AnnotationHandlerMappingTest {
         final var request = mock(HttpServletRequest.class);
         final var response = mock(HttpServletResponse.class);
 
-        when(request.getAttribute("id")).thenReturn("gugu");
+        when(request.getParameter("userId")).thenReturn("gugu");
         when(request.getRequestURI()).thenReturn("/get-test");
         when(request.getMethod()).thenReturn("GET");
 
         final var handlerExecution = (HandlerExecution) handlerMapping.getHandler(request);
         final var modelAndView = handlerExecution.handle(request, response);
 
-        assertThat(modelAndView.getObject("id")).isEqualTo("gugu");
+        assertThat(modelAndView.getObject("userId")).isEqualTo("gugu");
+    }
+    @DisplayName("GET /get-test/1 요청을 처리한다.")
+    @Test
+    void getPathVariable() throws Exception {
+        final var request = mock(HttpServletRequest.class);
+        final var response = mock(HttpServletResponse.class);
+
+        when(request.getRequestURI()).thenReturn("/get-test/1");
+        when(request.getMethod()).thenReturn("GET");
+
+        final var handlerExecution = (HandlerExecution) handlerMapping.getHandler(request);
+        final var modelAndView = handlerExecution.handle(request, response);
+
+        assertThat(modelAndView.getObject("userId")).isEqualTo(1);
     }
 
     @Test
@@ -44,13 +56,17 @@ class AnnotationHandlerMappingTest {
         final var request = mock(HttpServletRequest.class);
         final var response = mock(HttpServletResponse.class);
 
-        when(request.getAttribute("id")).thenReturn("gugu");
+        when(request.getParameter("userId")).thenReturn("gugu");
+        when(request.getParameter("password")).thenReturn("password");
+        when(request.getParameter("age")).thenReturn("20");
         when(request.getRequestURI()).thenReturn("/post-test");
         when(request.getMethod()).thenReturn("POST");
 
         final var handlerExecution = (HandlerExecution) handlerMapping.getHandler(request);
         final var modelAndView = handlerExecution.handle(request, response);
 
-        assertThat(modelAndView.getObject("id")).isEqualTo("gugu");
+        assertThat(modelAndView.getObject("userId")).isEqualTo("gugu");
+        assertThat(modelAndView.getObject("password")).isEqualTo("password");
+        assertThat(modelAndView.getObject("age")).isEqualTo(20);
     }
 }
