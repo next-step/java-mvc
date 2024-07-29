@@ -53,6 +53,5 @@ public class TestController {
     - [x] AnnotationHandlerMappingTest 통과
 
 - ### 2. JspView 클래스를 구현한다.
-    - [ ] JspView 클래스 구현한다
-    - [ ] service 메서드에서 뷰에 대한 처리를 하는 부분을 JspView 로 옮긴다.
-    - [ ] AnnotationHandlerMappingTest 클래스의 실패하는 테스트를 통과하도록 구현한다.
+    - [x] JspView 클래스 구현한다
+    - [x] service 메서드에서 뷰에 대한 처리를 하는 부분을 JspView 로 옮긴다.
