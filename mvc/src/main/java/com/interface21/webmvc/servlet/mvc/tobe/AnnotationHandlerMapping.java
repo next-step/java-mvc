@@ -29,7 +29,7 @@ public class AnnotationHandlerMapping {
             Object controllerInstance = createControllerInstance(controllerClass);
             mapHandlers(controllerClass, controllerInstance);
         }
-        log.info("AnnotationHandlerMapping initialized {} 개", handlerExecutions.size());
+        log.info("AnnotationHandlerMapping initialized {}", handlerExecutions.size());
     }
 
     public Object getHandler(HttpServletRequest request) {
@@ -46,7 +46,7 @@ public class AnnotationHandlerMapping {
         try {
             return controllerClass.getDeclaredConstructor().newInstance();
         } catch (ReflectiveOperationException e) {
-            throw new RuntimeException("인스턴스 생성에 실패했습니다.", e);
+            throw new RuntimeException("Failed to load instance", e);
         }
     }
 
