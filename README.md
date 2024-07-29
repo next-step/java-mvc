@@ -50,7 +50,7 @@ public class TestController {
 ```
 
 - ###  1. @MVC Framework 테스트 통과하기
-    - [ ] AnnotationHandlerMappingTest 통과
+    - [x] AnnotationHandlerMappingTest 통과
 
 - ### 2. JspView 클래스를 구현한다.
     - [ ] JspView 클래스 구현한다
