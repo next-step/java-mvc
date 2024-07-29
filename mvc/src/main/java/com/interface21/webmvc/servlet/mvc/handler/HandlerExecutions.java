@@ -14,10 +14,10 @@ public class HandlerExecutions implements Iterable<HandlerExecution> {
         this.handlerExecutions = handlerExecutions;
     }
 
-    public static HandlerExecutions of(Class<?> controllerClass, Object controllerInstance) {
+    public static HandlerExecutions of(Class<?> controllerClass, Object controllerInstance, ArgumentResolvers argumentResolvers) {
         Set<Method> methodsWithRequestMapping = ReflectionUtils.getAllMethods(controllerClass, ReflectionUtils.withAnnotation(RequestMapping.class));
         List<HandlerExecution> handlerExecutions = methodsWithRequestMapping.stream()
-                .map(method -> new HandlerExecution(controllerInstance, method))
+                .map(method -> new HandlerExecution(controllerInstance, method, argumentResolvers))
                 .toList();
 
         return new HandlerExecutions(handlerExecutions);

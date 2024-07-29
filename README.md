@@ -121,3 +121,48 @@ public class RegisterController {
   - [x] JSON으로 응답할 때 ContentType은 `MediaType.APPLICATION_JSON_UTF8_VALUE`로 변환한다
   - [x] model에 데이터가 1개면 값을 그대로 반환한다 
   - [x] model에 데이터가 2개 이상이면 Map 형태 그대로 JSON으로 변환 후 반환한다 
+
+
+## 🚀 4단계 - Controller 메서드 인자 매핑
+### HttpServletRequest, HttpServletResponse 외의 파라미터들도 입력 받을 수 있게 하자
+```java
+public class TestUserController {
+    private static final Logger logger = LoggerFactory.getLogger(TestUsersController.class);
+
+    @RequestMapping(value = "/users", method = RequestMethod.POST)
+    public ModelAndView create_string(String userId, String password) {
+        logger.debug("userId: {}, password: {}", userId, password);
+        return null;
+    }
+
+    @RequestMapping(value = "/users", method = RequestMethod.POST)
+    public ModelAndView create_int_long(long id, int age) {
+        logger.debug("id: {}, age: {}", id, age);
+        return null;
+    }
+
+    @RequestMapping(value = "/users", method = RequestMethod.POST)
+    public ModelAndView create_javabean(TestUser testUser) {
+        logger.debug("testUser: {}", testUser);
+        return null;
+    }
+
+
+    @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
+    public ModelAndView show_pathvariable(@PathVariable long id) {
+        logger.debug("userId: {}", id);
+        return null;
+    }
+}
+
+```
+- 예를 들어 위와 같은 입력에 대해 동작하게 구성해야 한다.
+
+### 요구사항 
+- [x] 파라미터의 이름이 QueryString의 key에, 파라미터의 값이 QueryString의 value에 매핑될 수 있다. 
+  - [x] 각 파라미터의 타입에 맞게 파싱되어야 한다.
+  - [x] @RequestParam 애노테이션을 이용한다 
+- [x] GET 요청 시 QueryString이, POST 요청(application/x-www-form-urlencoded) 시 요청 바디의 QueryString을 이용해 객체로 변환한다. 
+- [x] application/json + POST 요청은 요청 바디의 JSON을 이용해 객체로 변환한다. 
+- [x] /users/{id} 와 /users/1을 비교해서 1이라는 값을 파라미터에 매핑할 수 있다.   
+- [x] /users/{id} 와 같은 url 패턴을 가진 HandlerExecution이 /users/1 과 같은 요청 url에도 적용될 수 있다.  

@@ -2,6 +2,7 @@ package com.interface21.webmvc.servlet.mvc.handler;
 
 import com.interface21.web.bind.annotation.RequestMethod;
 
+import com.interface21.webmvc.servlet.mvc.support.PathPatternUtil;
 import java.util.Objects;
 
 public class HandlerKey {
@@ -32,5 +33,10 @@ public class HandlerKey {
     @Override
     public int hashCode() {
         return Objects.hash(url, requestMethod);
+    }
+
+    public boolean checkUrlPatternAndMethod(HandlerKey that) {
+        return PathPatternUtil.isUrlMatch(url, that.url)
+                && requestMethod == that.requestMethod;
     }
 }

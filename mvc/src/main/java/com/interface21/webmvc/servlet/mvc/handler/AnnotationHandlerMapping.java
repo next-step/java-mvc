@@ -24,12 +24,26 @@ public class AnnotationHandlerMapping implements HandlerMapping {
     @Override
     public void initialize() {
         log.info("Initialized AnnotationHandlerMapping!");
+        ArgumentResolvers argumentResolvers = initializeArgumentResolvers();
+        initializeHandlerExecutionsMap(argumentResolvers);
+    }
 
+    private ArgumentResolvers initializeArgumentResolvers() {
+        ArgumentResolvers argumentResolvers = new ArgumentResolvers();
+        argumentResolvers.add(new ModelAttributeArgumentResolver());
+        argumentResolvers.add(new NoAnnotationArgumentResolver());
+        argumentResolvers.add(new PathVariableArgumentResolver());
+        argumentResolvers.add(new RequestBodyArgumentResolver());
+        argumentResolvers.add(new RequestParamArgumentResolver());
+        return argumentResolvers;
+    }
+
+    private void initializeHandlerExecutionsMap(ArgumentResolvers argumentResolvers) {
         ControllerScanner controllerScanner = ControllerScanner.from(basePackages);
         Map<Class<?>, Object> controllersMap = controllerScanner.scan();
 
         for (Class<?> controllerClass : controllersMap.keySet()) {
-            HandlerExecutions handlerExecutions = HandlerExecutions.of(controllerClass, controllersMap.get(controllerClass));
+            HandlerExecutions handlerExecutions = HandlerExecutions.of(controllerClass, controllersMap.get(controllerClass), argumentResolvers);
             registerHandlerExecutions(controllerClass, handlerExecutions);
         }
     }
@@ -55,6 +69,12 @@ public class AnnotationHandlerMapping implements HandlerMapping {
      */
     @Override
     public Object getHandler(final HttpServletRequest request) {
-        return handlerExecutionsMap.get(new HandlerKey(request.getRequestURI(), RequestMethod.valueOf(request.getMethod())));
+        HandlerKey newHandlerKey = new HandlerKey(request.getRequestURI(), RequestMethod.valueOf(request.getMethod()));
+        return handlerExecutionsMap.keySet()
+                .stream()
+                .filter(handlerKey -> handlerKey.checkUrlPatternAndMethod(newHandlerKey))
+                .findAny()
+                .map(handlerExecutionsMap::get)
+                .orElse(null);
     }
 }
