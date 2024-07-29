@@ -1,11 +1,11 @@
 package com.interface21.webmvc.servlet.mvc;
 
 import com.interface21.webmvc.servlet.ModelAndView;
-import com.interface21.webmvc.servlet.mvc.handleradapter.AnnotationHandlerAdapter;
-import com.interface21.webmvc.servlet.mvc.handleradapter.HandlerAdapter;
-import com.interface21.webmvc.servlet.mvc.handleradapter.HandlerAdapterRegistry;
-import com.interface21.webmvc.servlet.mvc.handlermapping.AnnotationHandlerMapping;
-import com.interface21.webmvc.servlet.mvc.handlermapping.HandlerMappingRegistry;
+import com.interface21.webmvc.servlet.mvc.handler.AnnotationHandlerAdapter;
+import com.interface21.webmvc.servlet.mvc.handler.HandlerAdapter;
+import com.interface21.webmvc.servlet.mvc.handler.HandlerAdapterRegistry;
+import com.interface21.webmvc.servlet.mvc.handler.AnnotationHandlerMapping;
+import com.interface21.webmvc.servlet.mvc.handler.HandlerMappingRegistry;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
