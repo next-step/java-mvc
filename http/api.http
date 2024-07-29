@@ -1,0 +1,29 @@
+
+
+### GET index page
+GET http://localhost:8080/
+
+
+### 로그인
+GET http://localhost:8080/login/view
+
+###
+POST http://localhost:8080/login
+Content-Type: application/x-www-form-urlencoded
+
+account = gugu &
+password = password
+
+
+
+
+### 회원가입
+GET http://localhost:8080/register/view
+
+###
+POST http://localhost:8080/register
+Content-Type: application/x-www-form-urlencoded
+
+account = hi &
+password = password &
+email = email@gmail.com

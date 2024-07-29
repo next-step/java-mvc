@@ -17,10 +17,23 @@ public final class MethodScanner {
 
     public static <T extends Annotation> List<InstanceMethods> mappingInstanceAndMethods(
             List<Object> instances, Class<T> annotationType) {
-        return instances.stream().map(it -> InstanceMethods.of(it, annotationType)).toList();
+        return instances.stream().map(it -> mappingInstanceAndMethod(it, annotationType)).toList();
+    }
+
+    public static <T extends Annotation> InstanceMethods mappingInstanceAndMethod(
+            Object instance, Class<T> annotationType) {
+        return InstanceMethods.of(instance, annotationType);
     }
 
     public static <T extends Annotation> T scanAnnotation(Method method, Class<T> annotation) {
         return method.getAnnotation(annotation);
+    }
+
+    public static Method scanMethod(Class<?> clazz, String methodName, Class<?>... args) {
+        try {
+            return clazz.getMethod(methodName, args);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

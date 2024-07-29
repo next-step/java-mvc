@@ -2,6 +2,7 @@ package com.interface21.webmvc.servlet.mvc.tobe;
 
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -27,21 +28,7 @@ public class AnnotationHandlerMapping implements HandlerMapping, HandlerAdapter 
     }
 
     public void initialize() {
-        log.info("Initialized AnnotationHandlerMapping!");
-        var classes = ControllerScanner.scanControllers(basePackage);
-        var classInstances = ControllerScanner.newInstances(classes);
-        var mapping = MethodScanner.mappingInstanceAndMethods(classInstances, RequestMapping.class);
-
-        this.handlerExecutions = createHandlerExecutionMap(mapping);
-
-        this.handlerExecutions
-                .keySet()
-                .forEach(
-                        path ->
-                                log.info(
-                                        "Path : {}, HandlerExecution : {}",
-                                        path,
-                                        handlerExecutions.get(path).getClass()));
+        logging(loadHandlerMappings());
     }
 
     @Override
@@ -57,6 +44,19 @@ public class AnnotationHandlerMapping implements HandlerMapping, HandlerAdapter 
                 HandlerKey.CREATOR
                         .apply(request.getRequestURI())
                         .apply(RequestMethod.from(request.getMethod())));
+    }
+
+    private Function<Map<HandlerKey, HandlerExecution>, Map<HandlerKey, HandlerExecution>>
+            loadHandlerMappings() {
+        return (handlers) -> {
+            var classes = ControllerScanner.scanControllers(basePackage);
+            var classInstances = ControllerScanner.newInstances(classes);
+            var mapping =
+                    MethodScanner.mappingInstanceAndMethods(classInstances, RequestMapping.class);
+
+            this.handlerExecutions = createHandlerExecutionMap(mapping);
+            return this.handlerExecutions;
+        };
     }
 
     private Map<HandlerKey, HandlerExecution> createHandlerExecutionMap(
@@ -78,5 +78,24 @@ public class AnnotationHandlerMapping implements HandlerMapping, HandlerAdapter 
                         requestMapping.value(), Arrays.asList(requestMapping.method()))
                 .map(HandlerKey::of)
                 .map(handlerKey -> Map.entry(handlerKey, new HandlerExecution(instance, method)));
+    }
+
+    private void logging(
+            Function<Map<HandlerKey, HandlerExecution>, Map<HandlerKey, HandlerExecution>>
+                    loadHandler) {
+        loadHandler
+                .andThen(
+                        handlers -> {
+                            log.info("Initialized AnnotationHandlerMapping");
+                            handlers.keySet()
+                                    .forEach(
+                                            path ->
+                                                    log.info(
+                                                            "Path : {}, HandlerExecution : {}",
+                                                            path,
+                                                            handlers.get(path).getClass()));
+                            return handlers;
+                        })
+                .apply(this.handlerExecutions);
     }
 }

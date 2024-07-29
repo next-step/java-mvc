@@ -51,9 +51,31 @@
     - [X] `HandlerExecution`을 생성한다
     - [X] `HandlerExecution`는 실행할 메서드의 인스턴스와 실행할 메서드를 인스턴스 변수로 갖는다.
     - [X] `Map<HandlerKey, HandlerExecution> handlerExecutions`을 생성한다.  
-    - [ ] `HandlerKey`에 매핑된 인스턴스의 메서드를 실행한다
+    - [X] `HandlerKey`에 매핑된 인스턴스의 메서드를 실행한다
 3. `HandlerMapping`
    - [X] URL에 맵핑된 인스턴스를 조회하는 기능을 명세한 인터페이스다
    - [X] DispatcherServlet에서 HandlerMapping 구현체를 생성한다
 4. `HandlerAdapter`  
    - [X] `HandlerMapping` 를 통해 찾은 인스턴스의 메서드를 호출하고 결과를 반환하는 기능이 명세된 인터페이스다 
+
+
+### 3단계
+기능 요구 사항
+```markdown
+1. JSON으로 응답할 수 있도록 JsonView 클래스를 구현해보자.
+2. asis 패키지에 있는 레거시 코드를 삭제해도 서비스가 정상 동작하도록 리팩터링하자.
+   - Legacy MVC를 제거하고 나서 DispatcherServlet도 app 패키지가 아닌 mvc 패키지로 옮겨보자.
+```
+
+1. - [x] JsonView를 구현한다 
+     - [x] JsonView는 Map을 직렬화한다
+     - [x] JsonView는 POJO를 직렬화한다
+     - [x] JsonView는 직렬화에 실패하면 SerializationException 예외를 던진다
+     - [x] model에 데이터가 1개면 값을 그대로 반환한다
+     - [x] 2개 이상이면 Map 형태 그대로 JSON으로 변환해서 반환한다.
+1. - [X] UserController가 정상 동작한다
+     - [ ] JSON으로 응답할 때 Cont1entType은 MediaType.APPLICATION_JSON_UTF8_VALUE으로 반환해야 한다.
+3. - [ ] Legacy MVC 제거하기 
+     - [X] app 모듈에 있는 모든 컨트롤러를 어노테이션 기반 MVC로 변경한다.
+     - [X] asis 패키지에 있는 레거시 코드를 삭제해도 서비스가 정상 동작하도록 리팩터링.
+     - [X] Legacy MVC를 제거하고 나서 DispatcherServlet도 app 패키지가 아닌 mvc 패키지로 옮긴다.
