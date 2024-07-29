@@ -1,4 +1,4 @@
-package camp.nextstep;
+package com.interface21.webmvc.servlet.mvc.tobe;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;

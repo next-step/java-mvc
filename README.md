@@ -78,4 +78,4 @@
 3. - [ ] Legacy MVC 제거하기 
      - [X] app 모듈에 있는 모든 컨트롤러를 어노테이션 기반 MVC로 변경한다.
      - [X] asis 패키지에 있는 레거시 코드를 삭제해도 서비스가 정상 동작하도록 리팩터링.
-     - [ ] Legacy MVC를 제거하고 나서 DispatcherServlet도 app 패키지가 아닌 mvc 패키지로 옮긴다.
+     - [X] Legacy MVC를 제거하고 나서 DispatcherServlet도 app 패키지가 아닌 mvc 패키지로 옮긴다.

@@ -1,4 +1,4 @@
-package camp.nextstep;
+package com.interface21.webmvc.servlet.mvc.tobe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +13,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.interface21.webmvc.servlet.mvc.tobe.AnnotationHandlerMapping;
-import com.interface21.webmvc.servlet.mvc.tobe.HandlerMapping;
-
 public class DispatcherServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -28,12 +25,8 @@ public class DispatcherServlet extends HttpServlet {
 
     @Override
     public void init() {
-        var manualHandlerMapping = new ManualHandlerMapping();
-        manualHandlerMapping.initialize();
         var annotationHandlerMapping = new AnnotationHandlerMapping(DEFAULT_BASE_PACKAGE);
         annotationHandlerMapping.initialize();
-
-        this.handlers.add(manualHandlerMapping);
         this.handlers.add(annotationHandlerMapping);
     }
 
