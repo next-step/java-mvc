@@ -1,17 +1,14 @@
-package camp.nextstep;
+package com.interface21.webmvc.servlet.mvc.tobe;
 
 import com.interface21.webmvc.servlet.ModelAndView;
 import com.interface21.webmvc.servlet.View;
 import com.interface21.webmvc.servlet.mvc.HandlerAdapter;
-import com.interface21.webmvc.servlet.mvc.tobe.HandlerAdapters;
-import com.interface21.webmvc.servlet.mvc.tobe.HandlerMappings;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.interface21.webmvc.servlet.view.JspView;
 
 public class DispatcherServlet extends HttpServlet {
 
@@ -32,16 +29,10 @@ public class DispatcherServlet extends HttpServlet {
 
     private void initHandlerMappings() {
         handlerMappings.initialize();
-
-        final ManualHandlerMapping manualHandlerMapping = new ManualHandlerMapping();
-        manualHandlerMapping.initialize();
-
-        handlerMappings.addHandlerMapping(manualHandlerMapping);
     }
 
     private void initHandlerAdapters() {
         handlerAdapters.initialize();
-        handlerAdapters.addAdapter(new ManualHandlerAdapter());
     }
 
     @Override
