@@ -27,3 +27,12 @@
 ## 2단계 미션 요구사항
 - [x] 1.AnnotationHandlerMapping 클래스 구현
 - [x] 2.DispatcherServlet 클래스 구현
+
+## 4단계 미션 요구사항
+### 요구사항 - Controller 메서드의 인자 타입에 따라 자동으로 형 변환을 한 후 매핑하는 등의 작업을 자동 처리
+- Controller 의 메서드의 파라미터의 타입에 따라 자동으로 형변환 후 맵핑처리
+   - String, 이나 primitiveType, wrapperType 과 같은 기본적인 타입 맵핑 처리
+   - 객체타입은 객체를 Reflection 으로 생성해 맵핑해준다.
+      - 기본 class 는 기본생성자 이용
+      - record class 는 canonical 생성자 이용
+   - PathVariable 은 `@RequestMapping.value` 의 url 중 특정 pattern 을 토대로 맵핑해 넣어준다
