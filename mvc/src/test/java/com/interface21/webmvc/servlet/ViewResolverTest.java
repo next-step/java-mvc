@@ -14,7 +14,7 @@ class ViewResolverTest {
         //given
         String viewName = "index.jsp";
         //when
-        View view = ViewResolver.resolveViewName(viewName);
+        View view = new JspViewResolver().resolveViewName(viewName);
         //then
         assertThat(view).isInstanceOf(JspView.class);
     }
@@ -23,7 +23,7 @@ class ViewResolverTest {
     @Test
     public void resolveJsonView() {
         //when
-        View view = ViewResolver.resolveJsonView();
+        View view = JsonResolver.resolveJsonView();
         //then
         assertThat(view).isInstanceOf(JsonView.class);
     }
@@ -34,7 +34,7 @@ class ViewResolverTest {
         //given
         String viewName = null;
         //when
-        View view = ViewResolver.resolveViewName(viewName);
+        View view = new JspViewResolver().resolveViewName(viewName);
         //then
         assertThat(view).isInstanceOf(JspView.class);
     }

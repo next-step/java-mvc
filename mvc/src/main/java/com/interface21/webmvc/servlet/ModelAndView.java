@@ -1,5 +1,7 @@
 package com.interface21.webmvc.servlet;
 
+import com.interface21.webmvc.servlet.view.JsonView;
+import com.interface21.webmvc.servlet.view.JspView;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -18,11 +20,11 @@ public class ModelAndView {
     }
 
     public static ModelAndView ofView(final String path) {
-        return new ModelAndView(ViewResolver.resolveViewName(path));
+        return new ModelAndView(new JspViewResolver().resolveViewName(path));
     }
 
     public static ModelAndView ofJson() {
-        return new ModelAndView(ViewResolver.resolveJsonView());
+        return new ModelAndView(JsonResolver.resolveJsonView());
     }
 
     public ModelAndView addObject(final String attributeName, final Object attributeValue) {
