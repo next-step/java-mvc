@@ -2,6 +2,7 @@ package com.interface21.webmvc.servlet.mvc.tobe;
 
 import com.interface21.web.bind.annotation.RequestMapping;
 import com.interface21.web.bind.annotation.RequestMethod;
+import com.interface21.webmvc.servlet.mvc.tobe.config.ValueConfig;
 import com.interface21.webmvc.servlet.mvc.tobe.handler.ControllerScanner;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -17,16 +18,23 @@ public class AnnotationHandlerMapping implements HandlerMapping {
 
     private final Object[] basePackage;
     private final Map<HandlerKey, HandlerExecution> handlerExecutions;
+    private final ValueConfig valueConfig;
 
-    public AnnotationHandlerMapping(final Object... basePackage) {
+    public AnnotationHandlerMapping(
+            ValueConfig valueConfig,
+            final Object... basePackage
+    ) {
         this.basePackage = basePackage;
         this.handlerExecutions = new HashMap<>();
+        this.valueConfig = valueConfig;
     }
 
     public void initialize() {
+        valueConfig.init();
+
         for (Object object : basePackage) {
             String packageStr = (String) object;
-            ControllerScanner controllerScanner = new ControllerScanner(packageStr);
+            ControllerScanner controllerScanner = new ControllerScanner(packageStr, valueConfig.getValueMap());
             Map<Class<?>, Object> map = controllerScanner.getControllers();
             addHandlerExecutions(map);
         }
