@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 @TomcatServerTest
 class AnnotationLoginControllerTest {
+
     @DisplayName("로그인 뷰 요청을 하면 login.jsp 를 반환 한다")
     @Test
     public void loginView() throws Exception {

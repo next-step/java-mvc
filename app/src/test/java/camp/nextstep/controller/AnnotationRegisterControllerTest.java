@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 @TomcatServerTest
 class AnnotationRegisterControllerTest {
+
     @DisplayName("post 메서드로 /register 요청을 하면 회원가입 후 index.jsp 로 리다이렉트 한다")
     @Test
     public void postRegister() throws Exception {

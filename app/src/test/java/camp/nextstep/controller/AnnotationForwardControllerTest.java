@@ -11,6 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @TomcatServerTest
 class AnnotationForwardControllerTest {
+
   @DisplayName("루트 경로로 요청을 하면 index.jsp 를 반환 한다")
   @Test
   public void rootForward() throws Exception {
