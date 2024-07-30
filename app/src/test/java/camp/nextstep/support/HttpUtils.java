@@ -31,6 +31,10 @@ public abstract class HttpUtils {
         return send(request);
     }
 
+    public static HttpResponse<String> get(final String path, final Map<String, Object> params) {
+        return get(path + "?" + FormUtils.getFormString(params));
+    }
+
     private static HttpRequest.Builder build(final String path) {
         return HttpRequest.newBuilder()
                 .uri(URI.create("http://localhost:8080" + path))
