@@ -15,11 +15,9 @@ public class MyWebApplicationInitializer implements WebApplicationInitializer {
 
     private static final String DEFAULT_SERVLET_NAME = "dispatcher";
 
-    private static final String BASE_PACKAGE = "camp.nextstep";
-
     @Override
     public void onStartup(final ServletContext servletContext) {
-        final var dispatcherServlet = new DispatcherServlet(BASE_PACKAGE);
+        final var dispatcherServlet = new DispatcherServlet();
 
         final var registration = servletContext.addServlet(DEFAULT_SERVLET_NAME, dispatcherServlet);
         if (registration == null) {
