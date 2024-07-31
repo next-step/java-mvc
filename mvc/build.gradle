@@ -10,6 +10,14 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
+compileJava {
+    options.compilerArgs << '-parameters'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs << '-parameters'
+}
+
 repositories {
     mavenCentral()
 }
