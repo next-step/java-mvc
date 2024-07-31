@@ -12,7 +12,8 @@ public class ServletModelAttributeMethodProcessor implements HandlerMethodArgume
 
     @Override
     public boolean supportsParameter(final MethodParameter parameter) {
-        return Object.class.isAssignableFrom(parameter.getType());
+        return (!parameter.getType().equals(String.class) &&
+                Object.class.isAssignableFrom(parameter.getType()));
     }
 
     @Override

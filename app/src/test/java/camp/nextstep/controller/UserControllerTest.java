@@ -26,7 +26,7 @@ class UserControllerTest {
     @DisplayName("파라미터로 받은 account 로 user 를 조회할 수 없으면 에러 메시지를 반환 한다")
     @Test
     public void userApiNotFound() throws Exception {
-        final Map<String, Object> params = Map.of("account", "djawnstj");
+        final Map<String, Object> params = Map.of("account", "gugu123");
 
         final HttpResponse<String> response = HttpUtils.get("/api/user", params);
 
