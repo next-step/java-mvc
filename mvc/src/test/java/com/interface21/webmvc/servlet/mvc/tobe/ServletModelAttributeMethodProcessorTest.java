@@ -20,7 +20,7 @@ class ServletModelAttributeMethodProcessorTest {
     @Test
     public void support() throws Exception {
         // given
-        final Parameter parameter = mock(Parameter.class);
+        final MethodParameter parameter = mock(MethodParameter.class);
 
         when(parameter.getType()).thenReturn((Class) Object.class);
 
@@ -35,7 +35,7 @@ class ServletModelAttributeMethodProcessorTest {
     @Test
     public void notSupport() throws Exception {
         // given
-        final Parameter parameter = mock(Parameter.class);
+        final MethodParameter parameter = mock(MethodParameter.class);
 
         when(parameter.getType()).thenReturn((Class) int.class);
 
@@ -50,7 +50,7 @@ class ServletModelAttributeMethodProcessorTest {
     @Test
     public void resolveParameter() throws Exception {
         // given
-        final Parameter parameter = mock(Parameter.class);
+        final MethodParameter parameter = mock(MethodParameter.class);
         final MockHttpServletRequest request = new MockHttpServletRequest();
         final MockHttpServletResponse response = new MockHttpServletResponse();
 

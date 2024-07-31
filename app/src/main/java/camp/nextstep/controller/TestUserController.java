@@ -48,10 +48,13 @@ public class TestUserController {
         return mv;
     }
 
-
-    @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/resolvers/path/{id}", method = RequestMethod.GET)
     public ModelAndView show_pathvariable(@PathVariable long id) {
         logger.debug("userId: {}", id);
-        return null;
+
+        final ModelAndView mv = new ModelAndView(new JsonView());
+        mv.addObject("id", id);
+
+        return mv;
     }
 }

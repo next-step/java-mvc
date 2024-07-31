@@ -11,12 +11,12 @@ public class ServletModelAttributeMethodProcessor implements HandlerMethodArgume
     private final ParameterBinders parameterBinders = new ParameterBinders();
 
     @Override
-    public boolean supportsParameter(final Parameter parameter) {
+    public boolean supportsParameter(final MethodParameter parameter) {
         return Object.class.isAssignableFrom(parameter.getType());
     }
 
     @Override
-    public Object resolveArgument(final Parameter parameter, final ServletWebRequest webRequest) throws Exception {
+    public Object resolveArgument(final MethodParameter parameter, final ServletWebRequest webRequest) throws Exception {
         final Class<?> clazz = parameter.getType();
         final ServletRequest request = webRequest.getRequest();
 

@@ -5,8 +5,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.util.Arrays;
+import java.util.List;
 
 public class HandlerExecution {
 
@@ -21,12 +21,13 @@ public class HandlerExecution {
     }
 
     public ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response) throws Exception {
-        final Object[] arguments = createArguments(method.getParameters(), request, response);
+        final List<MethodParameter> parameters = Arrays.stream(method.getParameters()).map(parameter -> new MethodParameter(method, parameter)).toList();
+        final Object[] arguments = createArguments(parameters, request, response);
         return (ModelAndView) method.invoke(bean, arguments);
     }
 
-    private Object[] createArguments(final Parameter[] parameters, final HttpServletRequest request, final HttpServletResponse response) {
-        return Arrays.stream(parameters)
+    private Object[] createArguments(final List<MethodParameter> parameters, final HttpServletRequest request, final HttpServletResponse response) {
+        return parameters.stream()
                 .filter(resolvers::supportsParameter)
                 .map(parameter -> resolvers.resolveArgument(parameter, new ServletWebRequest(request, response)))
                 .toArray();

@@ -1,13 +1,11 @@
 package com.interface21.webmvc.servlet.mvc.tobe;
 
-import com.interface21.webmvc.servlet.ModelAndView;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
+import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,7 +21,7 @@ class RequestParamMethodArgumentResolverTest {
         final RequestParamMethodArgumentResolver resolver = new RequestParamMethodArgumentResolver(true);
 
         // when
-        final boolean actual = resolver.supportsParameter(mock(Parameter.class));
+        final boolean actual = resolver.supportsParameter(mock(MethodParameter.class));
 
         // then
         assertThat(actual).isTrue();
@@ -36,7 +34,7 @@ class RequestParamMethodArgumentResolverTest {
         final RequestParamMethodArgumentResolver resolver = new RequestParamMethodArgumentResolver(false);
 
         // when
-        final boolean actual = resolver.supportsParameter(mock(Parameter.class));
+        final boolean actual = resolver.supportsParameter(mock(MethodParameter.class));
 
         // then
         assertThat(actual).isFalse();
@@ -48,7 +46,8 @@ class RequestParamMethodArgumentResolverTest {
         // given
         final RequestParamMethodArgumentResolver resolver = new RequestParamMethodArgumentResolver(false);
 
-        final Parameter parameter = mock(Parameter.class);
+        final Parameter parameterInternal = mock(Parameter.class);
+        final MethodParameter parameter = new MethodParameter(mock(Method.class), parameterInternal);
         final MockHttpServletRequest request = new MockHttpServletRequest();
         final MockHttpServletResponse response = new MockHttpServletResponse();
         final ServletWebRequest webRequest = new ServletWebRequest(request, response);
@@ -57,8 +56,8 @@ class RequestParamMethodArgumentResolverTest {
         final String parameterValue = "kim";
         request.addParameter(parameterKey, parameterValue);
 
-        when(parameter.getName()).thenReturn(parameterKey);
-        when(parameter.getType()).thenReturn((Class) String.class);
+        when(parameterInternal.getName()).thenReturn(parameterKey);
+        when(parameterInternal.getType()).thenReturn((Class) String.class);
 
         // when
         final Object actual = resolver.resolveArgument(parameter, webRequest);

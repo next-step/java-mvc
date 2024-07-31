@@ -1,11 +1,7 @@
 package com.interface21.webmvc.servlet.mvc.tobe;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.lang.reflect.Parameter;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -23,7 +19,7 @@ class HandlerMethodArgumentResolverCompositeTest {
         composite.addResolver(new RequestParamMethodArgumentResolver(true));
 
         // when
-        final boolean actual = composite.supportsParameter(mock(Parameter.class));
+        final boolean actual = composite.supportsParameter(mock(MethodParameter.class));
 
         // then
         assertThat(actual).isTrue();
@@ -36,7 +32,7 @@ class HandlerMethodArgumentResolverCompositeTest {
         final HandlerMethodArgumentResolverComposite composite = new HandlerMethodArgumentResolverComposite();
 
         // when
-        final boolean actual = composite.supportsParameter(mock(Parameter.class));
+        final boolean actual = composite.supportsParameter(mock(MethodParameter.class));
 
         // then
         assertThat(actual).isFalse();
@@ -54,7 +50,7 @@ class HandlerMethodArgumentResolverCompositeTest {
         when(resolver.resolveArgument(any(), any())).thenReturn("result");
 
         // when
-        final Object actual = composite.resolveArgument(mock(Parameter.class), mock(ServletWebRequest.class));
+        final Object actual = composite.resolveArgument(mock(MethodParameter.class), mock(ServletWebRequest.class));
 
         // then
         assertThat(actual).isNotNull();
@@ -67,7 +63,7 @@ class HandlerMethodArgumentResolverCompositeTest {
         final HandlerMethodArgumentResolverComposite composite = new HandlerMethodArgumentResolverComposite();
         final HandlerMethodArgumentResolver resolver = mock(HandlerMethodArgumentResolver.class);
         composite.addResolver(resolver);
-        final Parameter parameter = mock(Parameter.class);
+        final MethodParameter parameter = mock(MethodParameter.class);
 
         when(resolver.supportsParameter(any())).thenReturn(false);
         when(parameter.getName()).thenReturn("String");

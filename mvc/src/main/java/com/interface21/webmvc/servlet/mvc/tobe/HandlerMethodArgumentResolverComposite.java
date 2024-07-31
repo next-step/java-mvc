@@ -1,6 +1,5 @@
 package com.interface21.webmvc.servlet.mvc.tobe;
 
-import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,13 +12,13 @@ public class HandlerMethodArgumentResolverComposite implements HandlerMethodArgu
     }
 
     @Override
-    public boolean supportsParameter(final Parameter parameter) {
+    public boolean supportsParameter(final MethodParameter parameter) {
         return resolvers.stream()
                 .anyMatch(resolver -> resolver.supportsParameter(parameter));
     }
 
     @Override
-    public Object resolveArgument(final Parameter parameter, final ServletWebRequest webRequest) {
+    public Object resolveArgument(final MethodParameter parameter, final ServletWebRequest webRequest) {
         return resolvers.stream()
                 .filter(resolver -> resolver.supportsParameter(parameter))
                 .findFirst()
@@ -27,7 +26,7 @@ public class HandlerMethodArgumentResolverComposite implements HandlerMethodArgu
                 .orElseThrow(() -> new ArgumentNotResolvedException("Unable to resolve Argument = [" + parameter.getName() + "]"));
     }
 
-    private Object resolveArgumentInternal(final HandlerMethodArgumentResolver resolver, final Parameter parameter, final ServletWebRequest webRequest) throws ArgumentNotResolvedException {
+    private Object resolveArgumentInternal(final HandlerMethodArgumentResolver resolver, final MethodParameter parameter, final ServletWebRequest webRequest) throws ArgumentNotResolvedException {
         try {
             return resolver.resolveArgument(parameter, webRequest);
         } catch (Exception e) {
