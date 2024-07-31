@@ -48,3 +48,11 @@
         - [X] DispatcherServlet의 getHandler 메서드에서 ManualHandlerMapping, AnnotationHandlerMapping을 모두 조회
         - [X] HandlerAdapter 인터페이스 추가
 
+## Mission 3
+
+- [ ] JsonView 클래스를 구현하기
+    - [ ] HTML 이외에 JSON으로 응답할 수 있도록 JsonView 클래스를 구현
+- [ ] Legacy MVC 제거하기
+    - [ ] app 모듈에 있는 모든 컨트롤러를 어노테이션 기반 MVC로 변경
+    - [ ] asis 패키지에 있는 레거시 코드를 삭제해도 서비스가 정상 동작하도록 리팩터링
+    - [ ] DispatcherServlet도 app 패키지가 아닌 mvc 패키지로 이동
