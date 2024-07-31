@@ -1,6 +1,9 @@
 package camp.nextstep;
 
-import com.interface21.webmvc.servlet.mvc.tobe.*;
+import com.interface21.webmvc.servlet.mvc.tobe.AnnotationHandlerMapping;
+import com.interface21.webmvc.servlet.mvc.tobe.HandlerAdapterRegistry;
+import com.interface21.webmvc.servlet.mvc.tobe.HandlerExecutionAdapter;
+import com.interface21.webmvc.servlet.mvc.tobe.HandlerMappingRegistry;
 
 public class MvcConfig {
 
@@ -19,11 +22,11 @@ public class MvcConfig {
     }
 
     private HandlerMappingRegistry initHandlerMappingRegistry() {
-        return new HandlerMappingRegistry(new ManualHandlerMapping(), new AnnotationHandlerMapping(BASE_PACKAGE));
+        return new HandlerMappingRegistry(new AnnotationHandlerMapping(BASE_PACKAGE));
     }
 
     private HandlerAdapterRegistry initHandlerAdapterRegistry() {
-        return new HandlerAdapterRegistry(new ManualHandlerAdapter(), new HandlerExecutionAdapter());
+        return new HandlerAdapterRegistry(new HandlerExecutionAdapter());
     }
 
     public HandlerMappingRegistry handlerMappingRegistry() {
