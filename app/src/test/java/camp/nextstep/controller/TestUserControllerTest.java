@@ -28,4 +28,12 @@ class TestUserControllerTest {
 
         assertThat(actual.body()).contains("\"id\":1000", "\"age\":28");
     }
+
+    @DisplayName("객체 파라미터를 매핑해서 받는다")
+    @Test
+    public void create_javabean() throws Exception {
+        final HttpResponse<String> actual = HttpUtils.post("/resolvers/object", Map.of("userId", "gugu", "password", "password", "age", 28));
+
+        assertThat(actual.body()).contains("\"userId\":\"gugu\"", "\"password\":\"password\"", "\"age\":28");
+    }
 }

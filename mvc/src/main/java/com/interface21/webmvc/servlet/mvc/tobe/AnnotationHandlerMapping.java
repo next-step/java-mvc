@@ -27,6 +27,7 @@ public class AnnotationHandlerMapping implements HandlerMapping {
         mappingRegistry.registerControllers(controllerScanner.getControllerBeans());
         mappingRegistry.addArgumentResolver(new ServletHandlerMethodArgumentResolver());
         mappingRegistry.addArgumentResolver(new RequestParamMethodArgumentResolver(false));
+        mappingRegistry.addArgumentResolver(new ServletModelAttributeMethodProcessor());
         mappingRegistry.addArgumentResolver(new RequestParamMethodArgumentResolver(true));
     }
 

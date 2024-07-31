@@ -36,10 +36,16 @@ public class TestUserController {
         return mv;
     }
 
-    @RequestMapping(value = "/users", method = RequestMethod.POST)
+    @RequestMapping(value = "/resolvers/object", method = RequestMethod.POST)
     public ModelAndView create_javabean(TestUSer testUser) {
         logger.debug("testUser: {}", testUser);
-        return null;
+
+        final ModelAndView mv = new ModelAndView(new JsonView());
+        mv.addObject("userId", testUser.getUserId());
+        mv.addObject("password", testUser.getPassword());
+        mv.addObject("age", testUser.getAge());
+
+        return mv;
     }
 
 
