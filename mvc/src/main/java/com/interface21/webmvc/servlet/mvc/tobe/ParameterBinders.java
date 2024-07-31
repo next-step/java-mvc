@@ -4,7 +4,11 @@ import java.lang.reflect.Parameter;
 import java.util.List;
 
 public class ParameterBinders {
-    private final List<ParameterBinder> parameterBinders = List.of(new StringParameterBinder());
+    private final List<ParameterBinder> parameterBinders = List.of(
+            new StringParameterBinder(),
+            new IntegerParameterBinder(),
+            new LongParameterBinder()
+    );
 
     public ParameterBinder getBinder(final Parameter parameter) {
         return parameterBinders.stream().filter(binder -> binder.supports(parameter))

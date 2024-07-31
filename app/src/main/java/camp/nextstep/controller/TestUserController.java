@@ -25,10 +25,15 @@ public class TestUserController {
         return mv;
     }
 
-    @RequestMapping(value = "/users", method = RequestMethod.POST)
+    @RequestMapping(value = "/resolvers/primitive/number", method = RequestMethod.POST)
     public ModelAndView create_int_long(long id, int age) {
         logger.debug("id: {}, age: {}", id, age);
-        return null;
+
+        final ModelAndView mv = new ModelAndView(new JsonView());
+        mv.addObject("id", id);
+        mv.addObject("age", age);
+
+        return mv;
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.POST)

@@ -20,4 +20,12 @@ class TestUserControllerTest {
 
         assertThat(actual.body()).contains("\"userId\":\"gugu\"", "\"password\":\"password\"");
     }
+
+    @DisplayName("long, int 타입의 파라미터를 매핑해서 받는다")
+    @Test
+    public void create_int_long() throws Exception {
+        final HttpResponse<String> actual = HttpUtils.post("/resolvers/primitive/number", Map.of("id", 1000, "age", 28));
+
+        assertThat(actual.body()).contains("\"id\":1000", "\"age\":28");
+    }
 }
