@@ -1,5 +1,7 @@
 package com.interface21.webmvc.servlet.mvc.tobe;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -34,7 +36,7 @@ class HandlerAdapterRegistryTest {
     }
 
     private static class TestClass {
-        public void method() {
+        public void method(HttpServletRequest request, HttpServletResponse response) {
 
         }
     }
