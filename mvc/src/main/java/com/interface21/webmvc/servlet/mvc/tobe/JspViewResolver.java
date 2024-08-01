@@ -5,9 +5,15 @@ import com.interface21.webmvc.servlet.view.JspView;
 
 public class JspViewResolver implements ViewResolver {
 
-    @Override
-    public View resolveViewName(String viewName) throws Exception {
+    private static final String DEFAULT_SUFFIX = ".jsp";
 
-        return new JspView(viewName + ".jsp");
+    @Override
+    public View resolveViewName(String viewName) {
+        return new JspView(viewName);
+    }
+
+    @Override
+    public boolean supports(String viewName) {
+        return viewName.endsWith(DEFAULT_SUFFIX);
     }
 }
