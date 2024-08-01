@@ -8,8 +8,6 @@ import java.lang.reflect.Parameter;
 
 public class PathVariableMethodArgumentResolver implements HandlerMethodArgumentResolver {
 
-    private final ParameterBinders binders = new ParameterBinders();
-
     @Override
     public boolean supportsParameter(final MethodParameter parameter) {
         return parameter.isAnnotationPresent(PathVariable.class);
@@ -30,7 +28,7 @@ public class PathVariableMethodArgumentResolver implements HandlerMethodArgument
         final String arg = PathPatternUtil.getUriValue(parameter.getRequestMappingAnnotation().value(), requestUrl, resolvedName);
 
         final Parameter internalParameter = parameter.getInternalParameter();
-        final ParameterBinder binder = binders.getBinder(internalParameter);
+        final ParameterBinder binder = new ParameterBinders().getBinder(internalParameter);
 
         return binder.bind(arg, internalParameter);
     }

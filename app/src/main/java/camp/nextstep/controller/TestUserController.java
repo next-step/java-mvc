@@ -15,7 +15,7 @@ public class TestUserController {
     private static final Logger logger = LoggerFactory.getLogger(TestUserController.class);
 
     @RequestMapping(value = "/resolvers/string", method = RequestMethod.POST)
-    public ModelAndView create_string(String userId, String password) {
+    public ModelAndView createString(String userId, String password) {
         logger.debug("userId: {}, password: {}", userId, password);
 
         final ModelAndView mv = new ModelAndView(new JsonView());
@@ -26,7 +26,7 @@ public class TestUserController {
     }
 
     @RequestMapping(value = "/resolvers/primitive/number", method = RequestMethod.POST)
-    public ModelAndView create_int_long(long id, int age) {
+    public ModelAndView createIntLong(long id, int age) {
         logger.debug("id: {}, age: {}", id, age);
 
         final ModelAndView mv = new ModelAndView(new JsonView());
@@ -37,7 +37,7 @@ public class TestUserController {
     }
 
     @RequestMapping(value = "/resolvers/object", method = RequestMethod.POST)
-    public ModelAndView create_javabean(TestUSer testUser) {
+    public ModelAndView createJavabean(TestUSer testUser) {
         logger.debug("testUser: {}", testUser);
 
         final ModelAndView mv = new ModelAndView(new JsonView());
@@ -49,7 +49,7 @@ public class TestUserController {
     }
 
     @RequestMapping(value = "/resolvers/path/{id}", method = RequestMethod.GET)
-    public ModelAndView show_pathvariable(@PathVariable long id) {
+    public ModelAndView showPathVariable(@PathVariable long id) {
         logger.debug("userId: {}", id);
 
         final ModelAndView mv = new ModelAndView(new JsonView());
