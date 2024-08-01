@@ -2,10 +2,12 @@ package com.interface21.webmvc.servlet.mvc.tobe;
 
 import com.interface21.web.bind.annotation.RequestMapping;
 import com.interface21.web.bind.annotation.RequestMethod;
+import com.interface21.webmvc.servlet.mvc.tobe.method.ArgumentResolvers;
 import jakarta.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
@@ -19,10 +21,12 @@ public class AnnotationHandlerMapping implements HandlerMapping {
 
     private final Object[] basePackage;
     private final Map<HandlerKey, HandlerExecution> handlerExecutions;
+    private final ArgumentResolvers argumentResolvers = ArgumentResolvers.getInstance();
 
     public AnnotationHandlerMapping(final Object... basePackage) {
         this.basePackage = basePackage;
         this.handlerExecutions = new HashMap<>();
+        initialize();
     }
 
     @Override
@@ -34,7 +38,13 @@ public class AnnotationHandlerMapping implements HandlerMapping {
 
     @Override
     public Object getHandler(final HttpServletRequest request) {
-        return handlerExecutions.get(new HandlerKey(request.getRequestURI(), RequestMethod.valueOf(request.getMethod())));
+        final HandlerKey handlerKey = new HandlerKey(request.getRequestURI(), RequestMethod.valueOf(request.getMethod()));
+        return handlerExecutions.entrySet()
+            .stream()
+            .filter(entry -> entry.getKey().matches(handlerKey))
+            .findAny()
+            .map(Map.Entry::getValue)
+            .orElse(null);
     }
 
     private void processController(Class<?> controller, ControllerInstance instance) {
@@ -58,7 +68,7 @@ public class AnnotationHandlerMapping implements HandlerMapping {
     }
 
     private HandlerExecution makeHandlerExecution(ControllerInstance instance, Method method) {
-        return new HandlerExecution(instance.getController(), method);
+        return new HandlerExecution(instance.getController(), method, List.of(new ArgumentBindInterceptor()));
     }
 
     private Map<HandlerKey, HandlerExecution> makeHandlerKeys(final HandlerExecution handlerExecution) {
