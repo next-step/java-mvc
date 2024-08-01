@@ -9,10 +9,16 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 class MappingRegistry {
+
     private final Map<RequestMappingInfo, HandlerExecution> handlerExecutions = new HashMap<>();
+    private final HandlerMethodArgumentResolverComposite argumentResolver = new HandlerMethodArgumentResolverComposite();
 
     public void registerControllers(final List<Object> controllers) {
         controllers.forEach(this::detectHandlerMethods);
+    }
+
+    public void addArgumentResolver(final HandlerMethodArgumentResolver argumentResolver) {
+        this.argumentResolver.addResolver(argumentResolver);
     }
 
     private void detectHandlerMethods(final Object handler) {
@@ -56,7 +62,7 @@ class MappingRegistry {
     }
 
     private void register(final RequestMappingInfo mapping, final Object handler, final Method method) {
-        handlerExecutions.put(mapping, new HandlerExecution(handler, method));
+        handlerExecutions.put(mapping, new HandlerExecution(handler, method, argumentResolver));
     }
 
     public HandlerExecution getMethod(final String url, final RequestMethod requestMethod) {

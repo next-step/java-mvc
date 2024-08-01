@@ -1,6 +1,7 @@
 package com.interface21.webmvc.servlet.mvc.tobe;
 
 import com.interface21.web.bind.annotation.RequestMethod;
+import com.interface21.webmvc.servlet.mvc.tobe.support.PathPatternUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +26,11 @@ public class AnnotationHandlerMapping implements HandlerMapping {
         final ControllerScanner controllerScanner = new ControllerScanner(basePackage);
 
         mappingRegistry.registerControllers(controllerScanner.getControllerBeans());
+        mappingRegistry.addArgumentResolver(new ServletHandlerMethodArgumentResolver());
+        mappingRegistry.addArgumentResolver(new RequestParamMethodArgumentResolver(false));
+        mappingRegistry.addArgumentResolver(new PathVariableMethodArgumentResolver());
+        mappingRegistry.addArgumentResolver(new ServletModelAttributeMethodProcessor());
+        mappingRegistry.addArgumentResolver(new RequestParamMethodArgumentResolver(true));
     }
 
     @Override

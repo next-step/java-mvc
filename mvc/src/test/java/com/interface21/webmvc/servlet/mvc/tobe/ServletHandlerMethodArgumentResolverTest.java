@@ -5,8 +5,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Parameter;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.mock;
@@ -19,8 +17,8 @@ class ServletHandlerMethodArgumentResolverTest {
     @Test
     public void supportParameter() throws Exception {
         // given
-        final Parameter request = mock(Parameter.class);
-        final Parameter response = mock(Parameter.class);
+        final MethodParameter request = mock(MethodParameter.class);
+        final MethodParameter response = mock(MethodParameter.class);
 
         when(request.getType()).thenReturn((Class) HttpServletRequest.class);
         when(response.getType()).thenReturn((Class) HttpServletResponse.class);
@@ -40,7 +38,7 @@ class ServletHandlerMethodArgumentResolverTest {
     @Test
     public void notSupportParameter() throws Exception {
         // given
-        final Parameter parameter = mock(Parameter.class);
+        final MethodParameter parameter = mock(MethodParameter.class);
 
         when(parameter.getType()).thenReturn((Class) String.class);
 
@@ -55,7 +53,7 @@ class ServletHandlerMethodArgumentResolverTest {
     @Test
     public void resolveServletRequestArgument() throws Exception {
         // given
-        final Parameter parameter = mock(Parameter.class);
+        final MethodParameter parameter = mock(MethodParameter.class);
         final ServletWebRequest webRequest = mock(ServletWebRequest.class);
         final HttpServletRequest request = mock(HttpServletRequest.class);
 
@@ -73,7 +71,7 @@ class ServletHandlerMethodArgumentResolverTest {
     @Test
     public void resolveServletResponseArgument() throws Exception {
         // given
-        final Parameter parameter = mock(Parameter.class);
+        final MethodParameter parameter = mock(MethodParameter.class);
         final ServletWebRequest webRequest = mock(ServletWebRequest.class);
         final HttpServletResponse response = mock(HttpServletResponse.class);
 
