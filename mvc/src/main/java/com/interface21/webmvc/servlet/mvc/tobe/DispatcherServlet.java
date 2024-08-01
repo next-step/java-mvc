@@ -1,7 +1,5 @@
-package camp.nextstep;
+package com.interface21.webmvc.servlet.mvc.tobe;
 
-import com.interface21.webmvc.servlet.mvc.tobe.AnnotationHandlerMapping;
-import com.interface21.webmvc.servlet.mvc.tobe.HandlerAdaptor;
 import com.interface21.webmvc.servlet.mvc.tobe.config.HandlerScanConfig;
 import com.interface21.webmvc.servlet.mvc.tobe.config.ValueConfig;
 import jakarta.servlet.ServletException;
@@ -29,13 +27,11 @@ public class DispatcherServlet extends HttpServlet {
     public void init() {
         ValueConfig valueConfig = new ValueConfig();
         HandlerScanConfig handlerScanConfig = new HandlerScanConfig(valueConfig);
-        ManualHandlerMapping manualHandlerMapping = new ManualHandlerMapping();
         AnnotationHandlerMapping annotationHandlerMapping = new AnnotationHandlerMapping(
                 valueConfig,
                 handlerScanConfig.getBasePackages().toArray()
         );
         this.handlerAdaptor = new HandlerAdaptor(List.of(
-                manualHandlerMapping,
                 annotationHandlerMapping
         ));
     }

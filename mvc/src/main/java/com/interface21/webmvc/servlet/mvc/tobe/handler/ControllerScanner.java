@@ -1,7 +1,7 @@
 package com.interface21.webmvc.servlet.mvc.tobe.handler;
 
 import com.interface21.context.stereotype.Controller;
-import com.interface21.webmvc.servlet.mvc.asis.Value;
+import com.interface21.webmvc.servlet.mvc.tobe.Value;
 import org.reflections.Reflections;
 
 import java.lang.reflect.Constructor;
@@ -56,7 +56,6 @@ public class ControllerScanner {
         try {
             return classObj.getConstructor();
         } catch (NoSuchMethodException e) {
-            e.printStackTrace();
             return classObj.getConstructors()[0];
         }
     }
