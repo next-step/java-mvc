@@ -35,7 +35,6 @@ public class ControllerScanner {
                 .collect(Collectors.toMap(
                         classObj -> classObj,
                         classObj -> {
-
                             Constructor<?> ctor = getConstructor(classObj);
 
                             try {
