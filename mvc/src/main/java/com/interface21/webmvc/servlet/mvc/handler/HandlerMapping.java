@@ -1,4 +1,4 @@
-package com.interface21.webmvc.servlet.mvc.handlermapping;
+package com.interface21.webmvc.servlet.mvc.handler;
 
 import jakarta.servlet.http.HttpServletRequest;
 
