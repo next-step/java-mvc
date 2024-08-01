@@ -13,7 +13,7 @@ public class TestUserController {
 
     private static final Logger log = LoggerFactory.getLogger(TestUserController.class);
 
-    @RequestMapping(value = "/users", method = RequestMethod.POST)
+    @RequestMapping(value = "/users-create-string", method = RequestMethod.POST)
     public ModelAndView create_string(String userId, String password) {
         log.debug("userId: {}, password: {}", userId, password);
 
@@ -22,7 +22,7 @@ public class TestUserController {
                 .addObject("password", password);
     }
 
-    @RequestMapping(value = "/users", method = RequestMethod.POST)
+    @RequestMapping(value = "/users-create-int-long", method = RequestMethod.POST)
     public ModelAndView create_int_long(long id, int age) {
         log.debug("id: {}, age: {}", id, age);
 
@@ -31,7 +31,7 @@ public class TestUserController {
                 .addObject("age", age);
     }
 
-    @RequestMapping(value = "/users", method = RequestMethod.POST)
+    @RequestMapping(value = "/users-create-javabean", method = RequestMethod.POST)
     public ModelAndView create_javabean(TestUser testUser) {
         log.debug("testUser: {}", testUser);
 

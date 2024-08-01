@@ -2,7 +2,7 @@ package com.interface21.webmvc.servlet.mvc.tobe;
 
 import com.interface21.webmvc.servlet.ModelAndView;
 import com.interface21.webmvc.servlet.View;
-import com.interface21.webmvc.servlet.mvc.tobe.exception.HandlingExecutionException;
+import com.interface21.webmvc.servlet.mvc.tobe.exception.InternalServerError;
 import com.interface21.webmvc.servlet.mvc.tobe.exception.NotFoundException;
 import com.interface21.webmvc.servlet.mvc.tobe.exception.ViewMissingException;
 import com.interface21.webmvc.servlet.mvc.tobe.viewresolver.JsonViewResolver;
@@ -77,7 +77,7 @@ public class DispatcherServlet extends HttpServlet {
             }
             return null;
         } catch (Exception e) {
-            throw new HandlingExecutionException(e);
+            throw new InternalServerError(e);
         }
     }
 
@@ -93,7 +93,7 @@ public class DispatcherServlet extends HttpServlet {
             View view = resolveView(modelAndView);
             view.render(modelAndView.getModel(), request, response);
         } catch (Exception e) {
-            throw new ServletException("응답을 그리던 중에 예외가 발생했습니다.", e);
+            throw new InternalServerError(e);
         }
     }
 

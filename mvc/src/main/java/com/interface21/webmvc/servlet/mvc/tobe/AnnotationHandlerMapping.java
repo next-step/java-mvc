@@ -53,12 +53,6 @@ public class AnnotationHandlerMapping implements HandlerMapping {
                           .collect(Collectors.toList());
     }
 
-    private Set<Method> getRequestMappings(Class<?> controllerType) {
-        QueryFunction<Store, Method> requestMappingQuery =
-                Methods.of(controllerType).filter(withAnnotation(RequestMapping.class));
-        return ReflectionUtils.get(requestMappingQuery);
-    }
-
     private void registerMappings(Method methodType, Map<Class<?>, Object> controllersMap) {
         RequestMapping annotation = methodType.getAnnotation(RequestMapping.class);
         var uri = annotation.value();
@@ -67,19 +61,23 @@ public class AnnotationHandlerMapping implements HandlerMapping {
         var controllerObject = controllersMap.get(methodType.getDeclaringClass());
 
         for (RequestMethod requestMethod : requestMethods) {
-            handlerExecutions.put(
-                    new HandlerKey(uri, requestMethod),
-                    new HandlerExecution(controllerObject, methodType)
-            );
+            HandlerKey handlerKey = new HandlerKey(uri, requestMethod);
+            handlerExecutions.put(handlerKey, new HandlerExecution(controllerObject, methodType, handlerKey));
         }
+    }
+
+    private Set<Method> getRequestMappings(Class<?> controllerType) {
+        QueryFunction<Store, Method> requestMappingQuery =
+                Methods.of(controllerType).filter(withAnnotation(RequestMapping.class));
+        return ReflectionUtils.get(requestMappingQuery);
     }
 
     @Override
     public HandlerExecution getHandler(final HttpServletRequest request) {
-        String requestURI = request.getRequestURI();
-        RequestMethod requestMethod = RequestMethod.valueOf(request.getMethod());
-        HandlerKey handlerKey = new HandlerKey(requestURI, requestMethod);
-
-        return handlerExecutions.get(handlerKey);
+        return handlerExecutions.keySet().stream()
+                                .filter(handlerKey -> handlerKey.isMatch(request.getMethod(), request.getRequestURI()))
+                                .map(handlerExecutions::get)
+                                .findAny()
+                                .orElse(null);
     }
 }

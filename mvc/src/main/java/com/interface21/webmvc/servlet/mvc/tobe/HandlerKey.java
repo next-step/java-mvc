@@ -1,6 +1,7 @@
 package com.interface21.webmvc.servlet.mvc.tobe;
 
 import com.interface21.web.bind.annotation.RequestMethod;
+import com.interface21.webmvc.servlet.mvc.tobe.support.PathPatternUtil;
 
 import java.util.Objects;
 
@@ -15,11 +16,8 @@ public class HandlerKey {
     }
 
     @Override
-    public String toString() {
-        return "HandlerKey{" +
-                "url='" + url + '\'' +
-                ", requestMethod=" + requestMethod +
-                '}';
+    public int hashCode() {
+        return Objects.hash(url, requestMethod);
     }
 
     @Override
@@ -31,7 +29,22 @@ public class HandlerKey {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(url, requestMethod);
+    public String toString() {
+        return "HandlerKey{" +
+                "url='" + url + '\'' +
+                ", requestMethod=" + requestMethod +
+                '}';
+    }
+
+    public boolean isMatch(String method, String requestURI) {
+        RequestMethod requestMethod = RequestMethod.valueOf(method);
+        if (!this.requestMethod.equals(requestMethod)) return false;
+
+        return this.url.equals(requestURI) ||
+                PathPatternUtil.isUrlMatch(this.url, requestURI);
+    }
+
+    public String getPathVariable(String requestURI, String parameterName) {
+        return PathPatternUtil.getUriValue(this.url, requestURI, parameterName);
     }
 }
