@@ -1,5 +1,6 @@
 package com.interface21.webmvc.servlet.mvc.tobe;
 
+import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,7 @@ class HandlerAdapterRegistryTest {
         handlerAdapterRegistry.addHandlerAdapter(handlerAdapter);
 
         // then
-        assertEquals(handlerAdapter, handlerAdapterRegistry.getHandlerAdapter(new HandlerExecution(new TestController(), null)));
+        assertEquals(handlerAdapter, handlerAdapterRegistry.getHandlerAdapter(new HandlerExecution(new TestController(), null, List.of())));
     }
 
     @DisplayName("지원되지 않는 HandlerAdapter를 추가하면 IllegalStateException을 발생시킨다.")
