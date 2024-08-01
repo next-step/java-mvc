@@ -1,9 +1,5 @@
-package camp.nextstep;
+package com.interface21.webmvc.servlet.mvc.tobe;
 
-import com.interface21.webmvc.servlet.mvc.tobe.AnnotationHandlerMapping;
-import com.interface21.webmvc.servlet.mvc.tobe.HandlerAdapterRegistry;
-import com.interface21.webmvc.servlet.mvc.tobe.HandlerExecutionAdapter;
-import com.interface21.webmvc.servlet.mvc.tobe.HandlerMappingRegistry;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,9 +15,11 @@ public class DispatcherServlet extends HttpServlet {
     private final HandlerMappingRegistry handlerMappingRegistry;
     private final HandlerAdapterRegistry handlerAdapterRegistry;
 
-    public DispatcherServlet(Object... basePackage) {
-        handlerMappingRegistry = new HandlerMappingRegistry(new ManualHandlerMapping(), new AnnotationHandlerMapping(basePackage));
-        handlerAdapterRegistry = new HandlerAdapterRegistry(new ManualHandlerAdapter(), new HandlerExecutionAdapter());
+    public DispatcherServlet() {
+        handlerMappingRegistry = MvcConfig.getInstance()
+                .handlerMappingRegistry();
+        handlerAdapterRegistry = MvcConfig.getInstance()
+                .handlerAdapterRegistry();
     }
 
     @Override
@@ -36,7 +34,7 @@ public class DispatcherServlet extends HttpServlet {
 
         try {
             final var controller = handlerMappingRegistry.getHandlerMapping(request);
-            final var modelAndView = handlerAdapterRegistry.handle(request, response, controller);
+            final var modelAndView = handlerAdapterRegistry.handle(request, response, controller.getHandler(request));
             modelAndView.render(request, response);
         } catch (Throwable e) {
             log.error("Exception : {}", e.getMessage(), e);

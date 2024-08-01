@@ -22,7 +22,7 @@ class ControllerScannerTest {
 
         // then
         assertAll(
-                () -> assertThat(controllers.keySet().size()).isEqualTo(1),
+                () -> assertThat(controllers.keySet().size()).isEqualTo(2),
                 () -> assertThat(controllers.get(TestController.class)).isNotNull()
         );
     }

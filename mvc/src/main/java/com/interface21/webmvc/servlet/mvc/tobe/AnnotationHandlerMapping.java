@@ -41,8 +41,17 @@ public class AnnotationHandlerMapping implements HandlerMapping {
         final List<HandlerKey> handlerKeys = mapHandlerKeys(requestMapping.value(), requestMapping.method());
 
         handlerKeys.forEach(
-                handlerKey -> handlerExecutions.put(handlerKey, new HandlerExecution(instance, method))
+                handlerKey -> {
+                    validDuplicateHandlerKey(handlerKey);
+                    handlerExecutions.put(handlerKey, new HandlerExecution(instance, method));
+                }
         );
+    }
+
+    private void validDuplicateHandlerKey(final HandlerKey handlerKeys) {
+        if (handlerExecutions.containsKey(handlerKeys)) {
+            throw new IllegalStateException("Duplicate handler key: " + handlerKeys);
+        }
     }
 
     private Set<Method> getRequestMappingMethod(final Set<Class<?>> classes) {
