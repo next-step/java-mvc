@@ -11,10 +11,10 @@ public class ArgumentResolvers {
 
     private ArgumentResolvers() {
         resolvers = List.of(
-            new SimpleArgumentResolver(),
-            new PathVariableArgumentResolver(),
             new HttpServletRequestArgumentResolver(),
             new HttpServletResponseArgumentResolver(),
+            new PathVariableArgumentResolver(),
+            new SimpleArgumentResolver(),
             new ObjectArgumentResolver()
         );
     }

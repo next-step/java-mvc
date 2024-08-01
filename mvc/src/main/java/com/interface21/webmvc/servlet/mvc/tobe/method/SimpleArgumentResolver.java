@@ -7,12 +7,12 @@ public class SimpleArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public boolean supportsParameter(MethodParameter methodParameter) {
-        return SimpleArgument.isSimpleParameter(methodParameter.getParameterType());
+        return methodParameter.isEmptyAnnotation() && SimpleArgument.isSimpleParameter(methodParameter.getParameterType());
     }
 
     @Override
     public Object resolveArgument(MethodParameter methodParameter, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-        String variableValue =  httpServletRequest.getParameter(methodParameter.getParameterName());
+        String variableValue = httpServletRequest.getParameter(methodParameter.getParameterName());
         return SimpleArgument.convert(methodParameter.getParameterType(), variableValue);
     }
 }

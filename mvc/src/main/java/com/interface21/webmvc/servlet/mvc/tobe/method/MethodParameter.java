@@ -41,4 +41,8 @@ public class MethodParameter {
     public <T extends Annotation> T getMethodAnnotation(Class<T> annotation) {
         return method.getAnnotation(annotation);
     }
+
+    public boolean isEmptyAnnotation() {
+        return parameter.getAnnotations().length == 0;
+    }
 }
