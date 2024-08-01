@@ -1,43 +1,42 @@
 package com.interface21.webmvc.servlet.mvc.tobe;
 
-import com.interface21.webmvc.servlet.mvc.tobe.method.ArgumentResolvers;
-import com.interface21.webmvc.servlet.mvc.tobe.method.MethodParameter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 public class HandlerExecution {
 
     private final Object controller;
     private final Method method;
-    private final ArgumentResolvers argumentResolvers;
+    private final List<HandlerInterceptor> interceptors;
+    private List<Object> arguments;
 
-    public HandlerExecution(final Object controller, final Method method) {
+
+    public HandlerExecution(final Object controller, final Method method, List<HandlerInterceptor> interceptors) {
         this.controller = controller;
         this.method = method;
-        this.argumentResolvers = ArgumentResolvers.getInstance();
+        this.interceptors = interceptors;
+        this.arguments = new ArrayList<>();
     }
 
     public Object handle(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        return method.invoke(controller, resolveArguments(request, response));
+        preHandle(request, response);
+        return method.invoke(controller, arguments.toArray());
     }
 
     public Method getMethod() {
         return method;
     }
 
-    private Object[] resolveArguments(HttpServletRequest request, HttpServletResponse response) {
-        return convertToMethodParameters()
-            .stream()
-            .map(parameter -> argumentResolvers.resolveArgument(parameter, request, response))
-            .toArray();
+    public void addArgument(Object arguments) {
+        this.arguments.add(arguments);
     }
 
-    private List<MethodParameter> convertToMethodParameters() {
-        return Arrays.stream(method.getParameters())
-            .map(parameter -> new MethodParameter(method, parameter))
-            .toList();
+    private void preHandle(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        for (HandlerInterceptor interceptor : interceptors) {
+            interceptor.preHandle(request, response, this);
+        }
     }
 }
