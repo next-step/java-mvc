@@ -1,6 +1,9 @@
 package camp.nextstep;
 
-import com.interface21.webmvc.servlet.mvc.tobe.*;
+import com.interface21.webmvc.servlet.mvc.tobe.AnnotationHandlerMapping;
+import com.interface21.webmvc.servlet.mvc.tobe.HandlerAdapter;
+import com.interface21.webmvc.servlet.mvc.tobe.HandlerMappingRegistry;
+import com.interface21.webmvc.servlet.mvc.tobe.RequestHandlerAdapter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,8 +20,7 @@ public class DispatcherServlet extends HttpServlet {
     private final HandlerAdapter handlerAdapter;
 
     public DispatcherServlet(Object... basePackage) {
-        handlerMappingRegistry =
-                new HandlerMappingRegistry(new ManualHandlerMapping(), new AnnotationHandlerMapping(basePackage));
+        handlerMappingRegistry = new HandlerMappingRegistry(new AnnotationHandlerMapping(basePackage));
         handlerAdapter = new RequestHandlerAdapter();
     }
 
