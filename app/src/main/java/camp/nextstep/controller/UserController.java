@@ -7,25 +7,25 @@ import com.interface21.web.bind.annotation.RequestMapping;
 import com.interface21.web.bind.annotation.RequestMethod;
 import com.interface21.webmvc.servlet.ModelAndView;
 import com.interface21.webmvc.servlet.view.JsonView;
-import com.interface21.webmvc.servlet.view.JspView;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-// jsonView 테스트 컨트롤러
 @Controller
 public class UserController {
 
-  @RequestMapping(value = "/users", method = RequestMethod.GET)
-  public ModelAndView getUserByAccount(final HttpServletRequest req, final HttpServletResponse res) {
-    if (req.getQueryString() == null) {
-      return new ModelAndView(new JspView("redirect:/404.jsp"));
-    }
+  private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
-    User user = InMemoryUserDao.findByAccount("gugu");
-    ModelAndView modelAndView = new ModelAndView(new JsonView());
-    modelAndView.addObject("account", user.getAccount());
-    modelAndView.addObject("email", user.getEmail());
+  @RequestMapping(value = "/api/user", method = RequestMethod.GET)
+  public ModelAndView show(HttpServletRequest request, HttpServletResponse response) {
+    final String account = request.getParameter("account");
+    log.debug("user id : {}", account);
 
+    final ModelAndView modelAndView = new ModelAndView(new JsonView());
+    final User user = InMemoryUserDao.findByAccount(account);
+
+    modelAndView.addObject("user", user);
     return modelAndView;
   }
 }
