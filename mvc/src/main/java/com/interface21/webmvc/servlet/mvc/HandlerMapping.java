@@ -2,10 +2,8 @@ package com.interface21.webmvc.servlet.mvc;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-import java.util.Optional;
-
 public interface HandlerMapping {
-    Optional<Object> getHandler(HttpServletRequest request);
+    HandlerExecution getHandler(HttpServletRequest request);
 
     void initialize();
 }

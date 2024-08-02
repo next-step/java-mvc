@@ -16,9 +16,9 @@ public class AnnotationControllerClass {
         this.requestMappingMethods = findRequestMappingMethod();
     }
 
-    public Optional<Object> getNewInstance() {
+    public Object getNewInstance() {
         try {
-            return Optional.of(clazz.getDeclaredConstructor().newInstance());
+            return clazz.getDeclaredConstructor().newInstance();
         } catch (NoSuchMethodException | InvocationTargetException | InstantiationException |
                  IllegalAccessException e) {
             throw new ClassInstantiationException("Failed to instantiate object of type: " + clazz.getName(), e);

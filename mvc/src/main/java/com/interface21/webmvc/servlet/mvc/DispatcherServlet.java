@@ -1,6 +1,7 @@
 package com.interface21.webmvc.servlet.mvc;
 
-import jakarta.servlet.ServletException;
+import com.interface21.webmvc.servlet.ModelAndView;
+import com.interface21.webmvc.servlet.view.JspView;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,11 +13,11 @@ public class DispatcherServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static final Logger log = LoggerFactory.getLogger(DispatcherServlet.class);
 
-    private final HandlerMappingRegistry handlerMappingRegistry;
+    private final HandlerMappingRegistry handlerMappingRegistry = new HandlerMappingRegistry();
     private final HandlerAdapter handlerAdapter;
 
     public DispatcherServlet(Object... basePackage) {
-        handlerMappingRegistry = new HandlerMappingRegistry(new AnnotationHandlerMapping(basePackage));
+        handlerMappingRegistry.addHandlerMapping(new AnnotationHandlerMapping(basePackage));
         handlerAdapter = new RequestHandlerAdapter();
     }
 
@@ -26,15 +27,26 @@ public class DispatcherServlet extends HttpServlet {
     }
 
     @Override
-    protected void service(final HttpServletRequest request, final HttpServletResponse response) throws ServletException {
+    protected void service(final HttpServletRequest request, final HttpServletResponse response) {
         final String requestURI = request.getRequestURI();
         log.debug("Method : {}, Request URI : {}", request.getMethod(), requestURI);
 
         try {
-            final var handler = handlerMappingRegistry.getHandlerMapping(request);
+            final var handler = handlerMappingRegistry.getHandler(request);
             handlerAdapter.handle(request, response, handler);
-        } catch (Exception e) {
-            throw new ServletException(e.getMessage());
+        } catch (Throwable e) {
+            handlerException(e, request, response);
+        }
+    }
+
+    private static void handlerException(Throwable e, HttpServletRequest request, HttpServletResponse response) {
+        log.error("Exception : {}", e.getMessage(), e);
+
+        ModelAndView modelAndView = new ModelAndView(new JspView("redirect:/500.jsp"));
+        try {
+          modelAndView.getView().render(modelAndView.getModel(), request, response);
+        } catch (Exception ex) {
+          throw new RuntimeException(ex);
         }
     }
 }

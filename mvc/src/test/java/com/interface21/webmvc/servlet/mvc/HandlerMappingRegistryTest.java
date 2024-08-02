@@ -24,29 +24,32 @@ class HandlerMappingRegistryTest {
     handlerMapping2 = mock(HandlerMapping.class);
     request = mock(HttpServletRequest.class);
 
-    registry = new HandlerMappingRegistry(handlerMapping1, handlerMapping2);
+    registry = new HandlerMappingRegistry();
+    registry.addHandlerMapping(handlerMapping1);
+    registry.addHandlerMapping(handlerMapping2);
     registry.initialize();
   }
 
   @Test
   @DisplayName("등록한 HandlerMapping 객체를 조회한다")
-  public void testGetHandlerMapping_Found() {
-    when(handlerMapping1.getHandler(request)).thenReturn(Optional.empty());
-    when(handlerMapping2.getHandler(request)).thenReturn(Optional.of(new Object()));
+  public void testGetHandler_Found() {
+    final var handlerExecution = mock(HandlerExecution.class);
+    when(handlerMapping1.getHandler(request)).thenReturn(null);
+    when(handlerMapping2.getHandler(request)).thenReturn(handlerExecution);
 
-    HandlerMapping result = registry.getHandlerMapping(request);
+    HandlerExecution result = registry.getHandler(request);
 
-    assertThat(result).isEqualTo(handlerMapping2);
+    assertThat(result).isEqualTo(handlerExecution);
   }
 
   @Test
   @DisplayName("조회할 수 없는 request 일 때는 exception 이 발생한다")
-  public void testGetHandlerMapping_NotFound() {
-    when(handlerMapping1.getHandler(request)).thenReturn(Optional.empty());
-    when(handlerMapping2.getHandler(request)).thenReturn(Optional.empty());
+  public void testGetHandler_NotFound() {
+    when(handlerMapping1.getHandler(request)).thenReturn(null);
+    when(handlerMapping2.getHandler(request)).thenReturn(null);
 
     final var exception = assertThrows(UnSupportedHandlerException.class,
-        () -> registry.getHandlerMapping(request)
+        () -> registry.getHandler(request)
     );
 
     assertThat(exception.getMessage()).isEqualTo("Unsupported request: " + request.getRequestURI());

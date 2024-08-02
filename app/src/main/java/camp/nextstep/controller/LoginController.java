@@ -32,9 +32,9 @@ public class LoginController {
         if (user.checkPassword(req.getParameter("password"))) {
             final var session = req.getSession();
             session.setAttribute(UserSession.SESSION_KEY, user);
-            return new ModelAndView(new JspView("redirect:/index.jsp"));
+            return new ModelAndView(new JspView("redirect:/index"));
         }
 
-        return new ModelAndView(new JspView("redirect:/401.jsp"));
+        return new ModelAndView(new JspView("redirect:/401"));
     }
 }

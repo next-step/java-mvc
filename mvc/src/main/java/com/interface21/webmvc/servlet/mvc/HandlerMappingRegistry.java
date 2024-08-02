@@ -1,25 +1,29 @@
 package com.interface21.webmvc.servlet.mvc;
 
 import jakarta.servlet.http.HttpServletRequest;
-
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 public class HandlerMappingRegistry {
-    private final List<HandlerMapping> handlerMappings;
 
-    public HandlerMappingRegistry(final HandlerMapping... handlerMappings) {
-        this.handlerMappings = Arrays.asList(handlerMappings);
-    }
+  private final List<HandlerMapping> handlerMappings = new ArrayList<>();
 
-    public void initialize() {
-        handlerMappings.forEach(HandlerMapping::initialize);
-    }
+  public HandlerMappingRegistry() {
+  }
 
-    public HandlerMapping getHandlerMapping(final HttpServletRequest request) {
-        return handlerMappings.stream()
-                .filter(handlerMapping -> handlerMapping.getHandler(request).isPresent())
-                .findAny()
-                .orElseThrow(() -> new UnSupportedHandlerException("Unsupported request: " + request.getRequestURI()));
-    }
+  public void initialize() {
+    handlerMappings.forEach(HandlerMapping::initialize);
+  }
+
+  public void addHandlerMapping(final HandlerMapping handlerMapping) {
+      handlerMappings.add(handlerMapping);
+  }
+
+  public HandlerExecution getHandler(final HttpServletRequest request) {
+    return handlerMappings.stream()
+        .filter(handlerMapping -> handlerMapping.getHandler(request) != null)
+        .findAny()
+        .map(it -> it.getHandler(request))
+        .orElseThrow(() -> new UnSupportedHandlerException("Unsupported request: " + request.getRequestURI()));
+  }
 }

@@ -14,10 +14,9 @@ class AnnotationControllerClassTest {
     @DisplayName("클래스의 인스턴스를 가져온다")
     void testGetNewInstance() {
         AnnotationControllerClass controller = new AnnotationControllerClass(TestController.class);
-        Optional<Object> instance = controller.getNewInstance();
+        Object instance = controller.getNewInstance();
 
-        assertThat(instance).isPresent();
-        assertThat(instance.get()).isInstanceOf(TestController.class);
+        assertThat(instance).isInstanceOf(TestController.class);
     }
 
     @Test
