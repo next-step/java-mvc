@@ -12,6 +12,22 @@ public class ModelAndView {
     public ModelAndView(final Object view) {
         this.view = view;
         this.model = new HashMap<>();
+
+        validateView(view);
+    }
+
+    private void validateView(Object view) {
+        if (view == null) {
+            return;
+        }
+        if (view instanceof View) {
+            return;
+        }
+        if (view instanceof String) {
+            return;
+        }
+
+        throw new IllegalArgumentException("invalid view: " + view);
     }
 
     public ModelAndView addObject(final String attributeName, final Object attributeValue) {
