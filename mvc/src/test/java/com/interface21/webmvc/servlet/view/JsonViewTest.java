@@ -60,15 +60,15 @@ class JsonViewTest {
         final var handlerExecution = (HandlerExecution) handlerMapping.getHandler(request);
         final ModelAndView modelAndView = handlerExecution.handle(request, response);
         final Map<String, Object> model = modelAndView.getModel();
-        final View view = resolveView(modelAndView);
+        final View view = resolveView(modelAndView, handlerExecution);
         view.render(model, request, response);
     }
 
-    private View resolveView(ModelAndView modelAndView) {
+    private View resolveView(ModelAndView modelAndView, HandlerExecution handlerExecution) {
         String viewName = modelAndView.getViewName();
 
         return viewResolvers.stream()
-                            .map(viewResolver -> viewResolver.resolveView(viewName))
+                            .map(viewResolver -> viewResolver.resolveView(viewName, handlerExecution))
                             .filter(Objects::nonNull)
                             .findFirst()
                             .orElse(null);
@@ -107,5 +107,22 @@ class JsonViewTest {
 
         assertThat(targetStream.toString()).isEqualTo("{\"user\":{\"c\":\"d\"},\"age\":14}");
         verify(response).addHeader("Content-Type", "application/json;charset=UTF-8");
+    }
+
+    @Test
+    @DisplayName("ResponseBody 어노테이션이 붙어 있으면 JSON 으로 결과를 내려보낸다")
+    void testResponseBodyAnnotation() throws Exception {
+        final var request = mock(HttpServletRequest.class);
+        when(request.getRequestURI()).thenReturn("/json-post-test");
+        when(request.getMethod()).thenReturn("POST");
+
+        final var targetStream = new ByteArrayOutputStream();
+        final var delegatingServletOutputStream = new DelegatingServletOutputStream(targetStream);
+        final var response = mock(HttpServletResponse.class);
+        when(response.getOutputStream()).thenReturn(delegatingServletOutputStream);
+
+        processRequest(request, response);
+
+        assertThat(targetStream.toString()).isEqualTo("{\"user\":{\"c\":\"d\"},\"age\":14}");
     }
 }

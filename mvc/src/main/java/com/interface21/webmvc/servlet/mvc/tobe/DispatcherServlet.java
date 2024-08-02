@@ -8,7 +8,6 @@ import com.interface21.webmvc.servlet.mvc.tobe.exception.ViewMissingException;
 import com.interface21.webmvc.servlet.mvc.tobe.viewresolver.JsonViewResolver;
 import com.interface21.webmvc.servlet.mvc.tobe.viewresolver.JspViewResolver;
 import com.interface21.webmvc.servlet.mvc.tobe.viewresolver.RedirectViewResolver;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -54,20 +53,20 @@ public class DispatcherServlet extends HttpServlet {
 
     @Override
     protected void service(final HttpServletRequest request,
-                           final HttpServletResponse response) throws ServletException {
-        Object handler = getHandler(request);
+                           final HttpServletResponse response) {
+        HandlerExecution handlerExecution = getHandler(request);
 
-        ModelAndView modelAndView = process(handler, request, response);
+        ModelAndView modelAndView = process(handlerExecution, request, response);
 
-        render(request, response, modelAndView);
+        render(request, response, modelAndView, handlerExecution);
     }
 
-    private Object getHandler(HttpServletRequest request) {
-        return handlerMappings.stream()
-                              .map(handlerMapping -> handlerMapping.getHandler(request))
-                              .filter(Objects::nonNull)
-                              .findFirst()
-                              .orElse(null);
+    private HandlerExecution getHandler(HttpServletRequest request) {
+        return (HandlerExecution) handlerMappings.stream()
+                                                 .map(handlerMapping -> handlerMapping.getHandler(request))
+                                                 .filter(Objects::nonNull)
+                                                 .findFirst()
+                                                 .orElse(null);
     }
 
     private ModelAndView process(Object handler, HttpServletRequest request, HttpServletResponse response) {
@@ -83,45 +82,48 @@ public class DispatcherServlet extends HttpServlet {
 
     private void render(HttpServletRequest request,
                         HttpServletResponse response,
-                        ModelAndView modelAndView) throws ServletException {
+                        ModelAndView modelAndView,
+                        HandlerExecution handlerExecution) {
         try {
             if (modelAndView == null) {
-                renderNotFound(request, response);
+                renderNotFound(request, response, handlerExecution);
                 throw new NotFoundException(request);
             }
 
-            View view = resolveView(modelAndView);
+            View view = resolveView(modelAndView, handlerExecution);
             view.render(modelAndView.getModel(), request, response);
         } catch (Exception e) {
             throw new InternalServerError(e);
         }
     }
 
-    private void renderNotFound(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-
-        View view = resolveView(NOT_FOUND_VIEW_NAME);
-        view.render(Collections.emptyMap(), request, response);
-    }
-
-    private View resolveView(ModelAndView modelAndView) {
+    private View resolveView(ModelAndView modelAndView, HandlerExecution handlerExecution) {
         if (modelAndView.getView() != null) {
             return modelAndView.getView();
         }
 
         String viewName = modelAndView.getViewName();
         if (viewName != null) {
-            return resolveView(viewName);
+            return resolveView(viewName, handlerExecution);
         }
 
         throw new ViewMissingException();
     }
 
-    private View resolveView(String viewName) {
+    private View resolveView(String viewName, HandlerExecution handlerExecution) {
         return viewResolvers.stream()
-                            .map(viewResolver -> viewResolver.resolveView(viewName))
+                            .map(viewResolver -> viewResolver.resolveView(viewName, handlerExecution))
                             .filter(Objects::nonNull)
                             .findFirst()
                             .orElse(null);
+    }
+
+    private void renderNotFound(HttpServletRequest request,
+                                HttpServletResponse response,
+                                HandlerExecution handlerExecution) throws Exception {
+        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+
+        View view = resolveView(NOT_FOUND_VIEW_NAME, handlerExecution);
+        view.render(Collections.emptyMap(), request, response);
     }
 }

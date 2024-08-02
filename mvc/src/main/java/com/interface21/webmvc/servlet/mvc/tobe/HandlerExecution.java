@@ -1,5 +1,6 @@
 package com.interface21.webmvc.servlet.mvc.tobe;
 
+import com.interface21.web.bind.annotation.ResponseBody;
 import com.interface21.webmvc.servlet.ModelAndView;
 import com.interface21.webmvc.servlet.mvc.tobe.parameterresolver.HttpServletRequestResolver;
 import com.interface21.webmvc.servlet.mvc.tobe.parameterresolver.HttpServletResponseResolver;
@@ -40,8 +41,8 @@ public class HandlerExecution {
 
     public ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response) throws Exception {
         Object[] resolvedArguments = Arrays.stream(method.getParameters())
-                               .map(parameter -> resolveParameter(parameter, request, response))
-                               .toArray();
+                                           .map(parameter -> resolveParameter(parameter, request, response))
+                                           .toArray();
 
         return (ModelAndView) method.invoke(target, resolvedArguments);
     }
@@ -52,5 +53,10 @@ public class HandlerExecution {
                                  .findFirst()
                                  .map(resolver -> resolver.resolve(request, response, parameter))
                                  .orElseThrow(() -> new NoSuchElementException("No value present") /*XXX: 예외 정의할 것*/);
+    }
+
+    public boolean isResponseBodyAnnotated() {
+        return this.method.isAnnotationPresent(ResponseBody.class) ||
+                this.method.getDeclaringClass().isAnnotationPresent(ResponseBody.class);
     }
 }
