@@ -1,14 +1,12 @@
 package com.interface21.webmvc.servlet.mvc.tobe;
 
-import com.interface21.context.stereotype.Controller;
-import com.interface21.web.bind.annotation.RequestMapping;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.lang.reflect.Method;
 import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import samples.TestController;
 
 class AnnotationControllerClassTest {
 
@@ -30,13 +28,5 @@ class AnnotationControllerClassTest {
 
         assertThat(methods).hasSize(1);
         assertThat(methods[0].getName()).isEqualTo("annotatedMethod");
-    }
-
-    @Controller
-    static class TestController {
-        @RequestMapping
-        public void annotatedMethod() {}
-
-        public void nonAnnotatedMethod() {}
     }
 }
