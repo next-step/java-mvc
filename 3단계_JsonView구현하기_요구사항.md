@@ -46,7 +46,7 @@ public class UserController {
 
 [x] app 모듈에 있는 모든 컨트롤러를 어노테이션 기반 MVC 로 변경한다 
 [x] asis 에 있는 레거시 코드를 삭제한다 
-[ ] Legacy MVC 를 제거한 뒤 DispatcherServlet 을 app 패키지에서 mvc 패키지로 이동한다 
+[x] Legacy MVC 를 제거한 뒤 DispatcherServlet 을 app 패키지에서 mvc 패키지로 이동한다 
 
 ## 피드백 적용
 [x] 새롭게 만든 각 객체에 대해서 테스트 코드를 작성
