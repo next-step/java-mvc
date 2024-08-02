@@ -74,8 +74,23 @@
      - [x] model에 데이터가 1개면 값을 그대로 반환한다
      - [x] 2개 이상이면 Map 형태 그대로 JSON으로 변환해서 반환한다.
 1. - [X] UserController가 정상 동작한다
-     - [ ] JSON으로 응답할 때 Cont1entType은 MediaType.APPLICATION_JSON_UTF8_VALUE으로 반환해야 한다.
-3. - [ ] Legacy MVC 제거하기 
+     - [x] JSON으로 응답할 때 Cont1entType은 MediaType.APPLICATION_JSON_UTF8_VALUE으로 반환해야 한다.
+3. - [x] Legacy MVC 제거하기 
      - [X] app 모듈에 있는 모든 컨트롤러를 어노테이션 기반 MVC로 변경한다.
      - [X] asis 패키지에 있는 레거시 코드를 삭제해도 서비스가 정상 동작하도록 리팩터링.
      - [X] Legacy MVC를 제거하고 나서 DispatcherServlet도 app 패키지가 아닌 mvc 패키지로 옮긴다.
+
+### 4단계
+기능 요구 사항
+```markdown
+모든 Controller 메서드의 인자가 HttpServletRequest request, HttpServletResponse response라서 
+사용자가 전달하는 값을 매번 HttpServletRequest request에서 가져와 형 변환을 해야하는 불편함이 있다.
+
+- Controller 메서드의 인자 타입에 따라 HttpServletRequest에서 값을 꺼내와 자동으로 형 변환을 한 후 매핑하는 등의 작업을 자동 처리하도록 만들자.
+- URL을 통해서도 동적으로 값을 전달하는 방법이 있으면 좋겠다. 
+```
+
+1. - [ ] Controller 메서드의 인자 타입에 따라 매핑하는 기능을 추가한다
+     - [ ] Reflection으로 argument를 매핑한다 
+2. - [ ] URL을 통해서도 동적으로 값을 전달하는 기능을 추가한다 
+     - [ ] request path 에서 값을 추출한다 
