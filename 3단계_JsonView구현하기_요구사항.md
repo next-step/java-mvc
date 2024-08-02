@@ -40,7 +40,9 @@ public class UserController {
 
 ---
 ## 요구사항 정리
-[ ] JsonView 클래스를 구현한다
+[x] JsonView 클래스를 구현한다
+    [x] objectMapper 를 사용한다
+    [x] JSON으로 응답할 때 ContentType은 MediaType.APPLICATION_JSON_UTF8_VALUE으로 반환해야 한다.
 
 ## 피드백 적용
 [x] 새롭게 만든 각 객체에 대해서 테스트 코드를 작성
