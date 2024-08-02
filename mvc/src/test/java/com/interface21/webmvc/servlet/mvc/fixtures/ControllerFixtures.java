@@ -1,4 +1,4 @@
-package com.interface21.webmvc.servlet.mvc.tobe.fixtures;
+package com.interface21.webmvc.servlet.mvc.fixtures;
 
 import com.interface21.context.stereotype.Controller;
 import com.interface21.web.bind.annotation.RequestMapping;
