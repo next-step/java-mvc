@@ -43,6 +43,7 @@ public class UserController {
 [x] JsonView 클래스를 구현한다
     [x] objectMapper 를 사용한다
     [x] JSON으로 응답할 때 ContentType은 MediaType.APPLICATION_JSON_UTF8_VALUE으로 반환해야 한다.
+    [x] JsonView 응답하는 컨트롤러를 구현한다  
 
 [x] app 모듈에 있는 모든 컨트롤러를 어노테이션 기반 MVC 로 변경한다 
 [x] asis 에 있는 레거시 코드를 삭제한다 
