@@ -1,7 +1,6 @@
 package com.interface21.webmvc.servlet.mvc.tobe;
 
 import com.interface21.webmvc.servlet.ModelAndView;
-import com.interface21.webmvc.servlet.mvc.asis.Controller;
 import com.interface21.webmvc.servlet.mvc.tobe.exception.NoExactHandlerException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,9 +20,7 @@ public class HandlerAdaptor {
 
     public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Object handler = getHandler(request);
-        if (handler instanceof Controller) {
-            return ((Controller)handler).execute(request, response);
-        } else if (handler instanceof HandlerExecution) {
+        if (handler instanceof HandlerExecution) {
             return ((HandlerExecution)handler).handle(request, response);
         } else {
             throw new NoExactHandlerException("적절한 컨트롤러가 없습니다.");

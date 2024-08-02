@@ -1,5 +1,6 @@
 package com.interface21.webmvc.servlet.mvc.tobe;
 
+import com.interface21.webmvc.servlet.mvc.tobe.config.ValueConfig;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,7 +16,8 @@ class AnnotationHandlerMappingTest {
 
     @BeforeEach
     void setUp() {
-        handlerMapping = new AnnotationHandlerMapping("samples");
+        ValueConfig valueConfig = new ValueConfig();
+        handlerMapping = new AnnotationHandlerMapping(valueConfig, "samples");
         handlerMapping.initialize();
     }
 
