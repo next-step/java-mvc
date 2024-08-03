@@ -46,4 +46,6 @@ public class TestUserController {
         mav.addObject("id", id);
         return mav;
     }
+
+    public void show_nothing() {}
 }

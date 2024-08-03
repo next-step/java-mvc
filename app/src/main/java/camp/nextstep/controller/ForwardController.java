@@ -1,8 +1,5 @@
 package camp.nextstep.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
 import com.interface21.context.stereotype.Controller;
 import com.interface21.web.bind.annotation.RequestMapping;
 import com.interface21.web.bind.annotation.RequestMethod;
@@ -15,8 +12,7 @@ public class ForwardController {
     private final String PATH = "/index.jsp";
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public ModelAndView execute(
-            final HttpServletRequest request, final HttpServletResponse response) {
+    public ModelAndView execute() {
         return new ModelAndView(new JspView(PATH));
     }
 }

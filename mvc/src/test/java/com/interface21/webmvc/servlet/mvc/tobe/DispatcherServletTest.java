@@ -12,11 +12,13 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import org.assertj.core.api.Assertions;
 import org.assertj.core.util.CanIgnoreReturnValue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.mock.web.MockHttpServletRequest;
+
+import com.interface21.web.bind.annotation.RequestMethod;
 
 class DispatcherServletTest {
 
@@ -30,7 +32,7 @@ class DispatcherServletTest {
     @DisplayName("초기화 테스트")
     @Test
     public void test() throws Exception {
-        Assertions.assertThatNoException().isThrownBy(() -> sut.init());
+        assertThatNoException().isThrownBy(() -> sut.init());
     }
 
     @DisplayName("DispatcherServlet 가 정상적으로 초기화 되었다면 service 메소드가 정상적으로 동작해야 한다.")
@@ -94,6 +96,28 @@ class DispatcherServletTest {
         verify(writer)
                 .write(
                         "{user=User{id=1, account='gugu', email='hkkang@woowahan.com', password='password'}}");
+    }
+
+    @Test
+    @DisplayName("[/register, POST] 동적으로 파라미터를 추출 및 바인딩에 성공하면 서블릿이 정상적으로 동작해야 한다")
+    public void dynamicArgumentResolveTest() throws Exception {
+
+        // given
+        sut.init();
+        final var request = new MockHttpServletRequest();
+        request.setRequestURI("/register");
+        request.setMethod(RequestMethod.POST.name());
+        request.addParameter("account", "gugu");
+        request.addParameter("password", "password");
+        request.addParameter("email", "gugu@woowahan.com");
+
+        final var response = mock(HttpServletResponse.class);
+        when(response.getWriter()).thenReturn(mock(PrintWriter.class));
+
+        // then
+        assertThatNoException().isThrownBy(() -> sut.service(request, response));
+
+        verify(response).sendRedirect("/index.jsp");
     }
 
     private static RequestDispatcher mockRequestDispatcher() {

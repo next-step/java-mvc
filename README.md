@@ -90,7 +90,7 @@
 - URL을 통해서도 동적으로 값을 전달하는 방법이 있으면 좋겠다. 
 ```
 
-1. - [ ] Controller 메서드의 인자 타입에 따라 매핑하는 기능을 추가한다
-     - [ ] Reflection으로 argument를 매핑한다 
+1. - [x] Controller 메서드의 인자 타입에 따라 매핑하는 기능을 추가한다
+     - [x] Reflection으로 argument를 매핑한다 
 2. - [ ] URL을 통해서도 동적으로 값을 전달하는 기능을 추가한다 
      - [ ] request path 에서 값을 추출한다 
