@@ -10,7 +10,8 @@ public final class TypeResolver {
     private static final Map<Class<?>, Resolvable> RESOLVER_MAP =
             Map.of(
                     int.class, obj -> Integer.parseInt((String) obj),
-                    String.class, value -> value);
+                    String.class, value -> value,
+                    long.class, value -> Long.parseLong((String) value));
 
     public static Object resolve(Parameter parameter, Object value) {
         var type = parameter.getType();

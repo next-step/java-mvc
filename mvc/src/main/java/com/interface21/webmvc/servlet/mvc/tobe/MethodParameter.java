@@ -1,5 +1,6 @@
 package com.interface21.webmvc.servlet.mvc.tobe;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Objects;
@@ -42,6 +43,24 @@ public class MethodParameter {
         return parameter.getAnnotations().length > 0;
     }
 
+    public boolean isNativeType() {
+        return parameter.getType().isPrimitive()
+                || parameter.getParameterizedType() == String.class;
+    }
+
+    public boolean isType(Class<?> cls) {
+        assert cls != null;
+        return parameter.getType() == cls;
+    }
+
+    public Class<?> getDeclaredType() {
+        return parameter.getType();
+    }
+
+    public boolean hasAnnotation(Class<? extends Annotation> annotationType) {
+        return parameter.isAnnotationPresent(annotationType);
+    }
+
     @Override
     public final boolean equals(Object object) {
         if (this == object) return true;
@@ -62,17 +81,11 @@ public class MethodParameter {
         return result;
     }
 
-    public boolean isNativeType() {
-        return parameter.getType().isPrimitive()
-                || parameter.getParameterizedType() == String.class;
+    public Method getMethod() {
+        return method;
     }
 
-    public boolean isType(Class<?> cls) {
-        assert cls != null;
-        return parameter.getType() == cls;
-    }
-
-    public Class<?> getDeclaredType() {
-        return parameter.getType();
+    public Parameter getParameter() {
+        return parameter;
     }
 }

@@ -1,13 +1,13 @@
 
 
-### GET index page
+### 메인페이지
 GET http://localhost:8080/
 
 
-### 로그인
+### 로그인 페이지
 GET http://localhost:8080/login/view
 
-###
+### 로그인 요청
 POST http://localhost:8080/login
 Content-Type: application/x-www-form-urlencoded
 
@@ -17,10 +17,10 @@ password = password
 
 
 
-### 회원가입
+### 회원가입 페이지
 GET http://localhost:8080/register/view
 
-###
+### 회원가입 요청
 POST http://localhost:8080/register
 Content-Type: application/x-www-form-urlencoded
 
