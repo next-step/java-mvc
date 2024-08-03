@@ -2,8 +2,9 @@ package com.interface21.webmvc.servlet.mvc.tobe.method;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 public class ArgumentResolvers {
 
@@ -19,21 +20,33 @@ public class ArgumentResolvers {
         );
     }
 
-    private static class holder {
+    private static class Holder {
         private static final ArgumentResolvers INSTANCE = new ArgumentResolvers();
     }
 
     public static ArgumentResolvers getInstance() {
-        return holder.INSTANCE;
+        return Holder.INSTANCE;
     }
 
-    public Object resolveArgument(MethodParameter methodParameter, HttpServletRequest httpServletRequest,
-                                  HttpServletResponse httpServletResponse) {
+    public Object[] resolveArguments(Method method, HttpServletRequest httpServletRequest,
+                                     HttpServletResponse httpServletResponse) {
+        return extractMethodParameters(method).stream()
+            .map(parameter -> resolveArgument(parameter, httpServletRequest, httpServletResponse))
+            .toArray();
+    }
+
+    private Object resolveArgument(MethodParameter parameter, HttpServletRequest request,
+                                    HttpServletResponse response) {
         return resolvers.stream()
-            .filter(resolver -> resolver.supportsParameter(methodParameter))
-            .map(resolver -> resolver.resolveArgument(methodParameter, httpServletRequest, httpServletResponse))
-            .filter(Objects::nonNull)
+            .filter(resolver -> resolver.supportsParameter(parameter))
             .findFirst()
+            .map(resolver -> resolver.resolveArgument(parameter, request, response))
             .orElse(null);
+    }
+
+    private List<MethodParameter> extractMethodParameters(Method method) {
+        return Arrays.stream(method.getParameters())
+            .map(parameter -> new MethodParameter(method, parameter))
+            .toList();
     }
 }
