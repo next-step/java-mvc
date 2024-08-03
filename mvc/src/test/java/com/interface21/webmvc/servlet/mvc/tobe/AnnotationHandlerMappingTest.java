@@ -1,6 +1,7 @@
 package com.interface21.webmvc.servlet.mvc.tobe;
 
 import com.interface21.webmvc.servlet.ModelAndView;
+import com.interface21.webmvc.servlet.mvc.tobe.method.ArgumentResolvers;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -14,11 +15,14 @@ import static org.mockito.Mockito.when;
 class AnnotationHandlerMappingTest {
 
     private AnnotationHandlerMapping handlerMapping;
+    private ArgumentResolvers argumentResolvers;
+
 
     @BeforeEach
     void setUp() {
         handlerMapping = new AnnotationHandlerMapping("samples");
         handlerMapping.initialize();
+        argumentResolvers = ArgumentResolvers.getInstance();
     }
 
     @DisplayName("GET /get-test 요청을 처리한다.")
@@ -32,7 +36,7 @@ class AnnotationHandlerMappingTest {
         when(request.getMethod()).thenReturn("GET");
 
         final var handlerExecution = (HandlerExecution) handlerMapping.getHandler(request);
-        final ModelAndView modelAndView = (ModelAndView) handlerExecution.handle(request, response);
+        final ModelAndView modelAndView = (ModelAndView) handlerExecution.handle(argumentResolvers, request, response);
 
         assertThat(modelAndView.getObject("userId")).isEqualTo("gugu");
     }
@@ -46,7 +50,7 @@ class AnnotationHandlerMappingTest {
         when(request.getMethod()).thenReturn("GET");
 
         final var handlerExecution = (HandlerExecution) handlerMapping.getHandler(request);
-        final ModelAndView modelAndView = (ModelAndView) handlerExecution.handle(request, response);
+        final ModelAndView modelAndView = (ModelAndView) handlerExecution.handle(argumentResolvers, request, response);
 
         assertThat(modelAndView.getObject("userId")).isEqualTo("1");
     }
@@ -64,7 +68,7 @@ class AnnotationHandlerMappingTest {
         when(request.getMethod()).thenReturn("POST");
 
         final var handlerExecution = (HandlerExecution) handlerMapping.getHandler(request);
-        final ModelAndView modelAndView = (ModelAndView) handlerExecution.handle(request, response);
+        final ModelAndView modelAndView = (ModelAndView) handlerExecution.handle(argumentResolvers, request, response);
 
         assertThat(modelAndView.getObject("userId")).isEqualTo("gugu");
         assertThat(modelAndView.getObject("password")).isEqualTo("password");

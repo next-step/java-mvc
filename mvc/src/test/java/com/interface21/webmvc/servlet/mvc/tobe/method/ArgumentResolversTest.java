@@ -50,7 +50,7 @@ class ArgumentResolversTest {
             when(request.getParameter("userId")).thenReturn("gugu");
 
             // when
-            Object handlerMethodArgumentResolver = argumentResolvers.resolveArgument(methodParameter, request, response);
+            Object handlerMethodArgumentResolver = argumentResolvers.resolveArguments(methodParameter.getMethod(), request, response);
 
             // then
             assertNotNull(handlerMethodArgumentResolver);
@@ -74,7 +74,7 @@ class ArgumentResolversTest {
             when(request.getParameter("userId")).thenReturn(null);
 
             // when
-            Object handlerMethodArgumentResolver = argumentResolvers.resolveArgument(methodParameter, request, response);
+            Object handlerMethodArgumentResolver = argumentResolvers.resolveArguments(methodParameter.getMethod(), request, response);
 
             // then
             assertThat(handlerMethodArgumentResolver).isNull();

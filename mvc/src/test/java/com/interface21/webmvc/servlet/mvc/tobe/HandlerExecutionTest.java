@@ -1,9 +1,9 @@
 package com.interface21.webmvc.servlet.mvc.tobe;
 
 import com.interface21.webmvc.servlet.ModelAndView;
+import com.interface21.webmvc.servlet.mvc.tobe.method.ArgumentResolvers;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -14,6 +14,8 @@ import samples.TestController;
 
 @DisplayName("HandlerExecution 클래스는")
 class HandlerExecutionTest {
+
+    private final ArgumentResolvers argumentResolvers = ArgumentResolvers.getInstance();
 
     @DisplayName("handle 메서드는")
     @Nested
@@ -30,10 +32,10 @@ class HandlerExecutionTest {
             when(request.getParameter("userId")).thenReturn("gugu");
             final TestController testController = new TestController();
             final HandlerExecution handlerExecution = new HandlerExecution(testController,
-                testController.getClass().getMethod("findUserId", String.class), List.of(new ArgumentBindInterceptor()));
+                testController.getClass().getMethod("findUserId", String.class));
 
             // when
-            final ModelAndView result = (ModelAndView) handlerExecution.handle(request, response);
+            final ModelAndView result = (ModelAndView) handlerExecution.handle(argumentResolvers, request, response);
 
             // then
             assertThat(result).isNotNull();
@@ -51,10 +53,10 @@ class HandlerExecutionTest {
             when(request.getParameter("userId")).thenReturn(null);
             final TestController testController = new TestController();
             final HandlerExecution handlerExecution = new HandlerExecution(testController,
-                testController.getClass().getMethod("findUserId", String.class),  List.of(new ArgumentBindInterceptor()));
+                testController.getClass().getMethod("findUserId", String.class));
 
             // when
-            final ModelAndView result = (ModelAndView) handlerExecution.handle(request, response);
+            final ModelAndView result = (ModelAndView) handlerExecution.handle(argumentResolvers, request, response);
 
             // then
             assertThat(result).isNotNull();
