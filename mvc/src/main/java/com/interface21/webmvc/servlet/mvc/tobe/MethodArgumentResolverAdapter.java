@@ -10,7 +10,8 @@ public final class MethodArgumentResolverAdapter {
             List.of(
                     new ServletRequestMethodArgumentResolver(),
                     new DefaultMethodArgumentResolver(),
-                    new ObjectMethodArgumentResolver());
+                    new ObjectMethodArgumentResolver(),
+                    new PathVariableMethodArgumentResolver());
     private static final Map<MethodParameter, MethodArgumentResolver> CACHE =
             new ConcurrentHashMap<>();
 
