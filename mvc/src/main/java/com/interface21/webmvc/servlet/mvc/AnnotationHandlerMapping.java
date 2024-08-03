@@ -1,16 +1,14 @@
-package com.interface21.webmvc.servlet.mvc.tobe;
+package com.interface21.webmvc.servlet.mvc;
 
 import com.interface21.web.bind.annotation.RequestMapping;
 import com.interface21.web.bind.annotation.RequestMethod;
 import jakarta.servlet.http.HttpServletRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AnnotationHandlerMapping implements HandlerMapping{
 
@@ -32,12 +30,12 @@ public class AnnotationHandlerMapping implements HandlerMapping{
         controllers.values().forEach(this::mappingHandler);
     }
 
-    private void addHandlerExecution(final Method method, final Object controllerInstance) {
+    private void addHandlerExecution(final Method method, final AnnotationControllerClass controller) {
         final var requestMapping = method.getAnnotation(RequestMapping.class);
-        final var handlerExecution = new HandlerExecution(controllerInstance, method);
+        final var handlerExecution = new HandlerExecution(controller, method);
         final var httpPath = requestMapping.value();
 
-        log.info("Path : {}, Controller : {}", httpPath, controllerInstance.getClass());
+        log.info("Path : {}, Controller : {}", httpPath, controller.getClass());
 
         Arrays.stream(requestMapping.method())
                 .forEach(requestMethod -> {
@@ -48,13 +46,13 @@ public class AnnotationHandlerMapping implements HandlerMapping{
 
     private void mappingHandler(AnnotationControllerClass controllerClass) {
         Arrays.stream(controllerClass.getRequestMappingMethod())
-                .forEach(method -> addHandlerExecution(method, controllerClass.getNewInstance()));
+                .forEach(method -> addHandlerExecution(method, controllerClass));
     }
 
     @Override
-    public Optional<Object> getHandler(final HttpServletRequest request) {
+    public HandlerExecution getHandler(final HttpServletRequest request) {
         final var handlerKey = new HandlerKey(request.getRequestURI(), RequestMethod.valueOf(request.getMethod()));
 
-        return Optional.ofNullable(handlerExecutions.get(handlerKey));
+        return handlerExecutions.get(handlerKey);
     }
 }

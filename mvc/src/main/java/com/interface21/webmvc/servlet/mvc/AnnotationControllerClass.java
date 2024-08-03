@@ -1,4 +1,4 @@
-package com.interface21.webmvc.servlet.mvc.tobe;
+package com.interface21.webmvc.servlet.mvc;
 
 import com.interface21.web.bind.annotation.RequestMapping;
 
@@ -16,9 +16,9 @@ public class AnnotationControllerClass {
         this.requestMappingMethods = findRequestMappingMethod();
     }
 
-    public Optional<Object> getNewInstance() {
+    public Object getNewInstance() {
         try {
-            return Optional.of(clazz.getDeclaredConstructor().newInstance());
+            return clazz.getDeclaredConstructor().newInstance();
         } catch (NoSuchMethodException | InvocationTargetException | InstantiationException |
                  IllegalAccessException e) {
             throw new ClassInstantiationException("Failed to instantiate object of type: " + clazz.getName(), e);
