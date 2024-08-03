@@ -51,7 +51,7 @@
     - [X] `HandlerExecution`을 생성한다
     - [X] `HandlerExecution`는 실행할 메서드의 인스턴스와 실행할 메서드를 인스턴스 변수로 갖는다.
     - [X] `Map<HandlerKey, HandlerExecution> handlerExecutions`을 생성한다.  
-    - [X] `HandlerKey`에 매핑된 인스턴스의 메서드를 실행한다
+    - [ ] `HandlerKey`에 매핑된 인스턴스의 메서드를 실행한다
 3. `HandlerMapping`
    - [X] URL에 맵핑된 인스턴스를 조회하는 기능을 명세한 인터페이스다
    - [X] DispatcherServlet에서 HandlerMapping 구현체를 생성한다
