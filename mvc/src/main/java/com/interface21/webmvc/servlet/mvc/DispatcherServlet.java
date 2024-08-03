@@ -1,6 +1,5 @@
 package com.interface21.webmvc.servlet.mvc;
 
-import com.interface21.webmvc.servlet.ModelAndView;
 import com.interface21.webmvc.servlet.mvc.tobe.HandlerAdapterRegistry;
 import com.interface21.webmvc.servlet.mvc.tobe.HandlerMappingRegistry;
 import com.interface21.webmvc.servlet.mvc.tobe.ViewResolvers;
@@ -9,8 +8,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.Collections;
-import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,8 +17,8 @@ public class DispatcherServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(DispatcherServlet.class);
 
     private final String basePackage;
-    private HandlerMappingRegistry handlerMappingRegistry;
-    private HandlerAdapterRegistry handlerAdapterRegistry;
+    private HandlerMappingRegistry handlerMappingRegistry = new HandlerMappingRegistry();
+    private HandlerAdapterRegistry handlerAdapterRegistry = new HandlerAdapterRegistry();
     private ViewResolvers viewResolvers;
 
     public DispatcherServlet(String basePackage) {
@@ -44,25 +41,19 @@ public class DispatcherServlet extends HttpServlet {
 
         try {
             final var controller = handlerMappingRegistry.getHandler(request);
-            final var object = handlerAdapterRegistry.getHandlerAdapter(controller)
+            final var handlerResult = handlerAdapterRegistry.getHandlerAdapter(controller)
                 .handle(request, response, controller);
 
-            move(object, request, response);
+            move(handlerResult, request, response);
         } catch (Throwable e) {
             log.error("Exception : {}", e.getMessage(), e);
             throw new ServletException(e.getMessage());
         }
     }
 
-    private void move(final Object object, final HttpServletRequest request, final HttpServletResponse response) throws Exception {
-        Map<String, ?> model = extractModel(object);
-        viewResolvers.handleResolver(object).render(model, request, response);
+    private void move(final Object handlerResult, final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+        viewResolvers.resolveAndRenderView(handlerResult, request, response);
     }
 
-    private Map<String, ?> extractModel(final Object object) {
-        if (object instanceof ModelAndView modelAndView) {
-            return modelAndView.getModel();
-        }
-        return Collections.emptyMap();
-    }
+
 }
