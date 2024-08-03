@@ -39,3 +39,9 @@
 #### 기능 요구 사항
 - [x] : 1. JsonView 클래스를 구현한다.
 - [x] : 2. Legacy MVC 제거하기
+
+### 🚀 4단계 - Controller 메서드 인자 매핑
+#### 기능 요구 사항
+- Controller 메서드의 인자 타입에 따라 HttpServletRequest에서 값을 꺼내와 자동으로 형 변환을 한 후 매핑하는 등의 작업을 자동 처리
+
+- [x] : 1. HandlerMethodArgumentResolver 인터페이스 추가

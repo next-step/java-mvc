@@ -1,6 +1,8 @@
 package com.interface21.webmvc.servlet.mvc.tobe;
 
-import static org.junit.jupiter.api.Assertions.*;
+import com.interface21.webmvc.servlet.mvc.tobe.method.ArgumentResolvers;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import samples.TestController;
@@ -8,12 +10,14 @@ import samples.TestController;
 @DisplayName("HandlerAdapterRegistry 클래스는")
 class HandlerAdapterRegistryTest {
 
+    ArgumentResolvers argumentResolvers = ArgumentResolvers.getInstance();
+
     @DisplayName("HandlerAdapter를 추가하고, 해당 HandlerAdapter를 반환한다.")
     @Test
     void addHandlerAdapter() {
         // given
         final HandlerAdapterRegistry handlerAdapterRegistry = new HandlerAdapterRegistry();
-        final HandlerAdapter handlerAdapter = new AnnotationHandlerAdapter();
+        final HandlerAdapter handlerAdapter = new AnnotationHandlerAdapter(argumentResolvers);
 
         // when
         handlerAdapterRegistry.addHandlerAdapter(handlerAdapter);
@@ -27,7 +31,7 @@ class HandlerAdapterRegistryTest {
     void addHandlerAdapterWithUnsupportedHandler() {
         // given
         final HandlerAdapterRegistry handlerAdapterRegistry = new HandlerAdapterRegistry();
-        final HandlerAdapter handlerAdapter = new AnnotationHandlerAdapter();
+        final HandlerAdapter handlerAdapter = new AnnotationHandlerAdapter(argumentResolvers);
 
         // when
         handlerAdapterRegistry.addHandlerAdapter(handlerAdapter);

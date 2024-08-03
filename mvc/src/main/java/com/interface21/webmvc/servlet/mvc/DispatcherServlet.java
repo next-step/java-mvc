@@ -1,10 +1,9 @@
 package com.interface21.webmvc.servlet.mvc;
 
-import com.interface21.webmvc.servlet.ModelAndView;
-import com.interface21.webmvc.servlet.mvc.tobe.AnnotationHandlerAdapter;
-import com.interface21.webmvc.servlet.mvc.tobe.AnnotationHandlerMapping;
 import com.interface21.webmvc.servlet.mvc.tobe.HandlerAdapterRegistry;
 import com.interface21.webmvc.servlet.mvc.tobe.HandlerMappingRegistry;
+import com.interface21.webmvc.servlet.mvc.tobe.ViewResolvers;
+import com.interface21.webmvc.servlet.mvc.tobe.WebConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,8 +17,9 @@ public class DispatcherServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(DispatcherServlet.class);
 
     private final String basePackage;
-    HandlerMappingRegistry handlerMappingRegistry = new HandlerMappingRegistry();
-    HandlerAdapterRegistry handlerAdapterRegistry = new HandlerAdapterRegistry();
+    private HandlerMappingRegistry handlerMappingRegistry = new HandlerMappingRegistry();
+    private HandlerAdapterRegistry handlerAdapterRegistry = new HandlerAdapterRegistry();
+    private ViewResolvers viewResolvers;
 
     public DispatcherServlet(String basePackage) {
         this.basePackage = basePackage;
@@ -27,10 +27,11 @@ public class DispatcherServlet extends HttpServlet {
 
     @Override
     public void init() {
-        AnnotationHandlerMapping basePackageHandlerMapping = new AnnotationHandlerMapping(basePackage);
-        basePackageHandlerMapping.initialize();
-        handlerMappingRegistry.addHandlerMapping(basePackageHandlerMapping);
-        handlerAdapterRegistry.addHandlerAdapter(new AnnotationHandlerAdapter());
+        WebConfig webConfig = new WebConfig();
+        webConfig.init(basePackage);
+        handlerMappingRegistry = webConfig.handlerMappingRegistry();
+        handlerAdapterRegistry = webConfig.handlerAdapterRegistry();
+        viewResolvers = webConfig.viewResolvers();
     }
 
     @Override
@@ -40,17 +41,19 @@ public class DispatcherServlet extends HttpServlet {
 
         try {
             final var controller = handlerMappingRegistry.getHandler(request);
-            final var modelAndView = handlerAdapterRegistry.getHandlerAdapter(controller)
+            final var handlerResult = handlerAdapterRegistry.getHandlerAdapter(controller)
                 .handle(request, response, controller);
 
-            move(modelAndView, request, response);
+            move(handlerResult, request, response);
         } catch (Throwable e) {
             log.error("Exception : {}", e.getMessage(), e);
             throw new ServletException(e.getMessage());
         }
     }
 
-    private void move(final ModelAndView view, final HttpServletRequest request, final HttpServletResponse response) throws Exception {
-        view.getView().render(view.getModel(), request, response);
+    private void move(final Object handlerResult, final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+        viewResolvers.resolveAndRenderView(handlerResult, request, response);
     }
+
+
 }
