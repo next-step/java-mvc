@@ -1,5 +1,7 @@
 package samples;
 
+import java.util.Objects;
+
 public class TestUser {
     private String userId;
     private String password;
@@ -21,6 +23,25 @@ public class TestUser {
 
     public int getAge() {
         return age;
+    }
+
+    @Override
+    public final boolean equals(Object object) {
+
+        if (this == object) return true;
+        if (!(object instanceof TestUser testUser)) return false;
+
+        return age == testUser.age
+                && Objects.equals(userId, testUser.userId)
+                && Objects.equals(password, testUser.password);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hashCode(userId);
+        result = 31 * result + Objects.hashCode(password);
+        result = 31 * result + age;
+        return result;
     }
 
     @Override
