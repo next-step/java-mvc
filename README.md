@@ -44,8 +44,8 @@ public class RegisterController {
 }
 ```
 ### AnnotationHandlerMapping
-- [ ] Controller Scanner 추가
-- [ ] 컨트롤러 메서드 정보로 HandlerExecution 생성하기
+- [x] Controller Scanner 추가
+- [x] 컨트롤러 메서드 정보로 HandlerExecution 생성하기
 
 ### DispatcherServlet
 - [ ] HandlerMapping 인터페이스 추가
