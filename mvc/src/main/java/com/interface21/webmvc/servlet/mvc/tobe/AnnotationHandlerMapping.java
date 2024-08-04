@@ -9,7 +9,8 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Method;
 import java.util.*;
 
-public class AnnotationHandlerMapping {
+
+public class AnnotationHandlerMapping implements HandlerMapping {
 
   private static final Logger log = LoggerFactory.getLogger(AnnotationHandlerMapping.class);
 
@@ -21,6 +22,7 @@ public class AnnotationHandlerMapping {
     this.handlerExecutionsMap = new HashMap<>();
   }
 
+  @Override
   public void initialize() {
     log.info("Initializing AnnotationHandlerMapping");
 
@@ -41,6 +43,7 @@ public class AnnotationHandlerMapping {
     log.info("AnnotationHandlerMapping initialized {}", handlerExecutionsMap.size());
   }
 
+  @Override
   public Object getHandler(HttpServletRequest request) {
     // 요청 URI와 HTTP 메소드를 기반으로 HandlerKey를 생성
     HandlerKey key = new HandlerKey(request.getRequestURI(),
