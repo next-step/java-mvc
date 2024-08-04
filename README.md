@@ -24,7 +24,7 @@
 
 ## 🚀 2단계 - 점진적인 리팩터링
 
-### Legacy MVC와 @MVC 통합하기
+### Legacy MVC와 @MVC 통합하기AnnotationHandlerMapping은
 - Legacy MVC 프레임워크와 @MVC 프레임워크가 공존하도록 만들자
 - 회원가입 컨트롤러를 아래와 같이 변경해도 정상 동작해야 한다
 
@@ -48,8 +48,8 @@ public class RegisterController {
 - [x] 컨트롤러 메서드 정보로 HandlerExecution 생성하기
 
 ### DispatcherServlet
-- [ ] HandlerMapping 인터페이스 추가
-- [ ] DispatcherServlet의 초기화 과정에서 ManualHandlerMapping, AnnotationHandlerMapping 초기화
-- [ ] HandlerAdapter 인터페이스 추가
-    - [ ] AnnotationHandlerMapping은 HandlerExecution을 반환한다
-    - [ ] ManualHandlerMapping은 Controller를 반환한다
+- [x] HandlerMapping 인터페이스 추가
+- [x] DispatcherServlet의 초기화 과정에서 ManualHandlerMapping, AnnotationHandlerMapping 초기화
+- [x] HandlerAdapter 인터페이스 추가
+    - [x] AnnotationHandlerMapping은 HandlerExecution을 반환한다
+    - [x] ManualHandlerMapping은 Controller를 반환한다
