@@ -10,18 +10,16 @@ public class HandlerAdapters {
         this.values = new ArrayList<>();
     }
 
-    public static HandlerAdapters create() {
-        return new HandlerAdapters();
-    }
+    public static HandlerAdapters of(List<HandlerAdapter> handlerAdapters) {
+        HandlerAdapters handlerAdapter = new HandlerAdapters();
+        handlerAdapter.values.addAll(handlerAdapters);
 
-    public void add(HandlerAdapter handlerAdapter) {
-        values.add(handlerAdapter);
+        return handlerAdapter;
     }
-
     public HandlerAdapter findBy(Object handler) {
         return values.stream()
-                .filter(handlerAdapter -> handlerAdapter.supports(handler))
+                .filter(handlerAdapter -> handlerAdapter.accept(handler))
                 .findAny()
-                .orElseThrow(() -> new HandlerAdapterNotFoundException(handler.getClass().getSimpleName()));
+                .orElseThrow(() -> new RuntimeException("지원가능한 adapter가 없습니다."));
     }
 }

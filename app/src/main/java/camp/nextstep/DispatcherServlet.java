@@ -1,8 +1,9 @@
 package camp.nextstep;
 
+import com.interface21.webmvc.servlet.ModelAndView;
 import com.interface21.webmvc.servlet.View;
 import com.interface21.webmvc.servlet.mvc.asis.Controller;
-import com.interface21.webmvc.servlet.mvc.tobe.AnnotationHandlerMapping;
+import com.interface21.webmvc.servlet.mvc.tobe.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,23 +12,32 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.interface21.webmvc.servlet.view.JspView;
 
+import java.util.List;
+
 public class DispatcherServlet extends HttpServlet {
 
   private static final long serialVersionUID = 1L;
   private static final Logger log = LoggerFactory.getLogger(DispatcherServlet.class);
 
-  private ManualHandlerMapping manualHandlerMapping;
-  private AnnotationHandlerMapping annotationHandlerMapping;
+  private HandlerMappings handlerMappings;
+  private HandlerAdapters handlerAdapters;
 
   public DispatcherServlet() {
   }
 
   @Override
   public void init() {
-    this.manualHandlerMapping = new ManualHandlerMapping();
-    this.annotationHandlerMapping = new AnnotationHandlerMapping("camp.nextstep");
-    this.manualHandlerMapping.initialize();
-    this.annotationHandlerMapping.initialize();
+    initializeHandlerMappings();
+    initializeHandlerAdapters();
+  }
+
+  private void initializeHandlerMappings() {
+    handlerMappings = HandlerMappings.of(List.of(new ManualHandlerMapping(), new AnnotationHandlerMapping("camp.nextstep")));
+    handlerMappings.initialize();
+  }
+
+  private void initializeHandlerAdapters() {
+    handlerAdapters = HandlerAdapters.of(List.of(new ManualHandlerAdapter(), new AnnotationHandlerAdapter()));
   }
 
   @Override
@@ -37,9 +47,10 @@ public class DispatcherServlet extends HttpServlet {
     log.debug("Method : {}, Request URI : {}", request.getMethod(), requestURI);
 
     try {
-      final var controller = (Controller) manualHandlerMapping.getHandler(request);
+      Object handler = handlerMappings.getHandler(request);
 
-      final var modelAndView = controller.execute(request, response);
+      HandlerAdapter handlerAdapter = handlerAdapters.findBy(handler);
+      ModelAndView modelAndView = handlerAdapter.handle(handler, request, response);
 
       View view = modelAndView.getView();
       view.render(modelAndView.getModel(), request, response);

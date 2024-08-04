@@ -1,6 +1,7 @@
 package com.interface21.webmvc.servlet.mvc.tobe;
 
 import jakarta.servlet.http.HttpServletRequest;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -12,8 +13,8 @@ public class HandlerMappings {
         this.values = values;
     }
 
-    public static HandlerMappings create() {
-        return new HandlerMappings(new ArrayList<>());
+    public static HandlerMappings of(List<HandlerMapping> handlerMappings) {
+        return new HandlerMappings(new ArrayList<>(handlerMappings));
     }
 
     public void add(HandlerMapping handlerMapping) {
@@ -29,6 +30,6 @@ public class HandlerMappings {
                 .map(handlerMapping -> handlerMapping.getHandler(request))
                 .filter(Objects::nonNull)
                 .findAny()
-                .orElseThrow(() -> new HandlerNotFoundException(request.getRequestURI()));
+                .orElseThrow(() -> new RuntimeException("지원가능한 handler가 없습니다."));
     }
 }
