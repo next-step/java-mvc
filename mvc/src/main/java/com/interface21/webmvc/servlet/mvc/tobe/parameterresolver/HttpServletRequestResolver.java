@@ -1,5 +1,6 @@
 package com.interface21.webmvc.servlet.mvc.tobe.parameterresolver;
 
+import com.interface21.webmvc.servlet.mvc.tobe.HandlerKey;
 import com.interface21.webmvc.servlet.mvc.tobe.ParameterResolver;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,7 +14,10 @@ public class HttpServletRequestResolver implements ParameterResolver {
     }
 
     @Override
-    public Object resolve(HttpServletRequest request, HttpServletResponse response, Parameter parameter) {
+    public Object resolve(HttpServletRequest request,
+                          HttpServletResponse response,
+                          Parameter parameter,
+                          HandlerKey handlerKey) {
         return request;
     }
 }

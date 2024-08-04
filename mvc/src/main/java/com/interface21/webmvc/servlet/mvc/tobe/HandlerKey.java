@@ -36,15 +36,15 @@ public class HandlerKey {
                 '}';
     }
 
+    public String getUrl() {
+        return url;
+    }
+
     public boolean isMatch(String method, String requestURI) {
         RequestMethod requestMethod = RequestMethod.valueOf(method);
         if (!this.requestMethod.equals(requestMethod)) return false;
 
         return this.url.equals(requestURI) ||
                 PathPatternUtil.isUrlMatch(this.url, requestURI);
-    }
-
-    public String getPathVariable(String requestURI, String parameterName) {
-        return PathPatternUtil.getUriValue(this.url, requestURI, parameterName);
     }
 }
