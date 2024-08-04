@@ -80,7 +80,10 @@ public class AnnotationHandlerMapping implements HandlerMapping {
 
   private RequestMethod[] getRequestMethods(RequestMapping methodMapping) {
     RequestMethod[] requestMethods = methodMapping.method();
-    return requestMethods.length == 0 ? RequestMethod.values() : requestMethods;
+    if (requestMethods.length == 0) {
+      throw new IllegalArgumentException("request method가 정의되지 않았습니다.");
+    }
+    return requestMethods;
   }
 
   private void createHandlerExecutions(String fullUrl, RequestMethod[] requestMethods,
