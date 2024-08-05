@@ -25,7 +25,6 @@ public final class MethodArgumentResolverAdapter {
             return new Object[0];
         }
 
-
         return IntStream.range(0, methodParameters.size())
                 .mapToObj(methodParameters::indexOf)
                 .map(
