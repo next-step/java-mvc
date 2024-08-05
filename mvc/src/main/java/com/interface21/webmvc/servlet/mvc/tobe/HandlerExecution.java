@@ -11,12 +11,12 @@ public class HandlerExecution {
 
     private final Object callerClass;
     private final Method method;
-    private final MethodParameter[] args;
+    private final MethodParameters args;
 
     public HandlerExecution(Object clazz, Method method) {
         this.callerClass = clazz;
         this.method = method;
-        this.args = MethodParameter.createMethodParameters(method);
+        this.args = MethodParameters.from(method);
     }
 
     public ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response)

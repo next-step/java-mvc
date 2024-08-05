@@ -1,6 +1,7 @@
 package com.interface21.webmvc.servlet.mvc.tobe;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.lang.reflect.Method;
 
@@ -20,26 +21,26 @@ class MethodParameterProviderTest {
                 TestUserController.class.getMethod("create_string", String.class, String.class);
 
         // when
-        MethodParameter[] methodParameters = MethodParameter.createMethodParameters(method);
+        var methodParameters = MethodParameters.from(method);
 
         // then
-        assertThat(methodParameters).hasSize(2);
-        assertThat(methodParameters[0].getParameterName()).isEqualTo("userId");
-        assertThat(methodParameters[1].getParameterName()).isEqualTo("password");
+        assertThat(methodParameters.size()).isEqualTo(2);
+        assertThat(methodParameters.indexOf(0).getParameterName()).isEqualTo("userId");
+        assertThat(methodParameters.indexOf(1).getParameterName()).isEqualTo("password");
     }
 
     @Test
-    @DisplayName("Method의 인자가 없을 경우 MethodParameter 1개가 생성되며 파라미터 선언 순서를 의미하는 인덱스는 -1이다")
+    @DisplayName("Method의 인자가 없어도 MethodParameter 1개가 생성된다")
     public void createMethodParameterTest_whenMethodHasNoArguments() throws NoSuchMethodException {
 
         // given
         Method method = TestUserController.class.getMethod("show_nothing");
 
         // when
-        MethodParameter[] methodParameters = MethodParameter.createMethodParameters(method);
+        var methodParameters = MethodParameters.from(method);
 
         // then
-        assertThat(methodParameters).hasSize(1);
-        assertThat(methodParameters[0].getIndex()).isEqualTo(-1);
+        assertThat(methodParameters.size()).isEqualTo(1);
+        assertFalse(methodParameters.hasParameters());
     }
 }

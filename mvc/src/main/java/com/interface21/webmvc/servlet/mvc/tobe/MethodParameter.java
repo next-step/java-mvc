@@ -21,19 +21,7 @@ public class MethodParameter {
     }
 
     public MethodParameter(int parameterIndex, Method method) {
-        this.parameterIndex = parameterIndex;
-        this.method = method;
-    }
-
-    public static MethodParameter[] createMethodParameters(Method method) {
-        var parameters = method.getParameters();
-        if (parameters.length == 0) {
-            return new MethodParameter[] {new MethodParameter(-1, method)};
-        }
-
-        return IntStream.range(0, parameters.length)
-                .mapToObj(idx -> new MethodParameter(idx, parameters[idx], method))
-                .toArray(MethodParameter[]::new);
+        this(parameterIndex, null, method);
     }
 
     public String getParameterName() {

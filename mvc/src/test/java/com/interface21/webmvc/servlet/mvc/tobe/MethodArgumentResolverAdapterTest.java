@@ -19,7 +19,7 @@ class MethodArgumentResolverAdapterTest {
         // given
         var method =
                 TestUserController.class.getMethod("create_string", String.class, String.class);
-        var methodParameters = MethodParameter.createMethodParameters(method);
+        var methodParameters = MethodParameters.from(method);
 
         // when
         var request = new MockHttpServletRequest();
@@ -42,7 +42,7 @@ class MethodArgumentResolverAdapterTest {
         var method =
                 TestUserController.class.getMethod(
                         "show_pathvariable2", String.class, String.class);
-        var methodParameters = MethodParameter.createMethodParameters(method);
+        var methodParameters = MethodParameters.from(method);
 
         // when
         var request = new MockHttpServletRequest();

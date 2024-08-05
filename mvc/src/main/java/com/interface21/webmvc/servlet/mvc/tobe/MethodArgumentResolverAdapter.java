@@ -3,6 +3,7 @@ package com.interface21.webmvc.servlet.mvc.tobe;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.IntStream;
 
 public final class MethodArgumentResolverAdapter {
 
@@ -18,21 +19,21 @@ public final class MethodArgumentResolverAdapter {
     private MethodArgumentResolverAdapter() {}
 
     public static Object[] resolveArguments(
-            MethodParameter[] methodParameters, ServletRequestResponse request) {
+            MethodParameters methodParameters, ServletRequestResponse request) {
 
-        assert methodParameters != null;
-
-        if (methodParameters.length == 1 && methodParameters[0].hasNoParameter()) {
+        if (!methodParameters.hasParameters()) {
             return new Object[0];
         }
 
-        var args = new Object[methodParameters.length];
-        for (int i = 0; i < methodParameters.length; i++) {
-            var methodParameter = methodParameters[i];
-            var resolver = MethodArgumentResolverAdapter.findResolver(methodParameter);
-            args[i] = resolver.resolveArgument(methodParameter, request);
-        }
-        return args;
+
+        return IntStream.range(0, methodParameters.size())
+                .mapToObj(methodParameters::indexOf)
+                .map(
+                        methodParameter -> {
+                            var resolver = findResolver(methodParameter);
+                            return resolver.resolveArgument(methodParameter, request);
+                        })
+                .toArray(Object[]::new);
     }
 
     private static MethodArgumentResolver findResolver(MethodParameter parameter) {
