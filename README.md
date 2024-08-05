@@ -39,4 +39,4 @@
 
 ### [STEP3] JSON View 구현하기
 #### TODO
-- [ ] JsonView render 구현 후 UserController가 정상동작하는지 테스트
+- [X] JsonView render 구현 후 UserController가 정상동작하는지 테스트
