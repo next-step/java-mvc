@@ -24,5 +24,4 @@ public class ServletRequestResponse {
     public Object getParameter(String parameterName) {
         return request.getParameter(parameterName);
     }
-
 }
