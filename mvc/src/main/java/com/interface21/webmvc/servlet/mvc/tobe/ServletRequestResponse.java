@@ -25,11 +25,4 @@ public class ServletRequestResponse {
         return request.getParameter(parameterName);
     }
 
-    public static boolean isRequestType(Class<?> cls) {
-        return HttpServletRequest.class.isAssignableFrom(cls);
-    }
-
-    public static boolean isResponseType(Class<?> cls) {
-        return HttpServletResponse.class.isAssignableFrom(cls);
-    }
 }
