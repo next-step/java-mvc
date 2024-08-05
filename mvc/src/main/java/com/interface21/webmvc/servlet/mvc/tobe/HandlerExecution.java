@@ -16,7 +16,7 @@ public class HandlerExecution {
     public HandlerExecution(Object clazz, Method method) {
         this.callerClass = clazz;
         this.method = method;
-        this.args = MethodParameterProvider.create(method);
+        this.args = MethodParameter.createMethodParameters(method);
     }
 
     public ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response)

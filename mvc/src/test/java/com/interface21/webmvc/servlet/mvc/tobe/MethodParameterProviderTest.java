@@ -20,7 +20,7 @@ class MethodParameterProviderTest {
                 TestUserController.class.getMethod("create_string", String.class, String.class);
 
         // when
-        MethodParameter[] methodParameters = MethodParameterProvider.create(method);
+        MethodParameter[] methodParameters = MethodParameter.createMethodParameters(method);
 
         // then
         assertThat(methodParameters).hasSize(2);
@@ -36,7 +36,7 @@ class MethodParameterProviderTest {
         Method method = TestUserController.class.getMethod("show_nothing");
 
         // when
-        MethodParameter[] methodParameters = MethodParameterProvider.create(method);
+        MethodParameter[] methodParameters = MethodParameter.createMethodParameters(method);
 
         // then
         assertThat(methodParameters).hasSize(1);
