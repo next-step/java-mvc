@@ -40,3 +40,13 @@
 ### [STEP3] JSON View 구현하기
 #### TODO
 - [X] JsonView render 구현 후 UserController가 정상동작하는지 테스트
+
+### [STEP4] 4단계 - Controller 메서드 인자 매핑
+#### TODO
+- [ ] method의 parameter types를 통해 parsing할 수 있는 parameter parser
+  - [ ] request param parser
+  - [ ] path variable parser
+  - [ ] HttpSerlvetRequest parser
+  - [ ] HttpSerlvetResponse parser
+- [ ] handlerexecution에서 invoke 시점에 parser로 parsing
+- [ ] testusercontroller로 확인
