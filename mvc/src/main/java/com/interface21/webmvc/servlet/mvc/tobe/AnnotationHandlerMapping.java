@@ -81,9 +81,17 @@ public class AnnotationHandlerMapping implements HandlerMapping {
 
         for (RequestMethod requestMethod : requestMethods) {
             HandlerKey handlerKey = new HandlerKey(uri, requestMethod);
-            handlerExecutions.put(handlerKey,
-                    new HandlerExecution(controllerObject, methodType, handlerKey, parameterResolvers));
+
+            if (handlerExecutions.containsKey(handlerKey)) {
+                throw new IllegalStateException("이미 동일한 매핑이 등록되어 있습니다.");
+            }
+
+            handlerExecutions.put(handlerKey, newHandlerExecution(controllerObject, methodType, handlerKey));
         }
+    }
+
+    private HandlerExecution newHandlerExecution(Object controllerObject, Method methodType, HandlerKey handlerKey) {
+        return new HandlerExecution(controllerObject, methodType, handlerKey, parameterResolvers);
     }
 
     private Set<Method> getRequestMappings(Class<?> controllerType) {
