@@ -3,8 +3,8 @@ package samples;
 import com.interface21.web.bind.annotation.PathVariable;
 import com.interface21.web.bind.annotation.RequestMapping;
 import com.interface21.web.bind.annotation.RequestMethod;
-import com.interface21.webmvc.servlet.ModelAndView;
-import com.interface21.webmvc.servlet.view.JsonView;
+import com.interface21.webmvc.servlet.mvc.ModelAndView;
+import com.interface21.webmvc.servlet.mvc.view.JsonView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

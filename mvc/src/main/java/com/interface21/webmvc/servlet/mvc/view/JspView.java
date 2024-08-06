@@ -1,11 +1,11 @@
-package com.interface21.webmvc.servlet.view;
+package com.interface21.webmvc.servlet.mvc.view;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.interface21.webmvc.servlet.View;
+import com.interface21.webmvc.servlet.mvc.View;
 
 import java.util.Map;
 import java.util.Objects;

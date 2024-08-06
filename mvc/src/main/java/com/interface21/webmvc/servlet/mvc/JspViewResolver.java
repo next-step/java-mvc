@@ -1,6 +1,6 @@
-package com.interface21.webmvc.servlet;
+package com.interface21.webmvc.servlet.mvc;
 
-import com.interface21.webmvc.servlet.view.JspView;
+import com.interface21.webmvc.servlet.mvc.view.JspView;
 
 public class JspViewResolver implements ViewResolver {
 	@Override

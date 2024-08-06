@@ -1,6 +1,6 @@
-package com.interface21.webmvc.servlet.mvc.tobe;
+package com.interface21.webmvc.servlet.mvc.handler;
 
-import com.interface21.webmvc.servlet.ModelAndView;
+import com.interface21.webmvc.servlet.mvc.ModelAndView;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 

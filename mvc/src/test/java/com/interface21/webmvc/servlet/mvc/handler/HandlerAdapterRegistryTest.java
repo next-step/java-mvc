@@ -1,7 +1,8 @@
-package com.interface21.webmvc.servlet.mvc.tobe;
+package com.interface21.webmvc.servlet.mvc.handler;
 
-import com.interface21.webmvc.servlet.ModelAndView;
-import com.interface21.webmvc.servlet.view.JspView;
+import com.interface21.webmvc.servlet.mvc.HandlerAdapterRegistry;
+import com.interface21.webmvc.servlet.mvc.ModelAndView;
+import com.interface21.webmvc.servlet.mvc.view.JspView;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.DisplayName;
