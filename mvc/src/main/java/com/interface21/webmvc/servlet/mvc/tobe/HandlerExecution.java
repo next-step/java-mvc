@@ -45,8 +45,8 @@ public class HandlerExecution {
                                  .orElseThrow(() -> new NotSupportedTypeResolveException(parameter.getType()));
     }
 
-    public boolean isResponseBodyAnnotated() {
-        return this.method.isAnnotationPresent(ResponseBody.class) ||
-                this.method.getDeclaringClass().isAnnotationPresent(ResponseBody.class);
+    public boolean hasAnnotated(Class<ResponseBody> annotationClass) {
+        return this.method.isAnnotationPresent(annotationClass) ||
+                this.method.getDeclaringClass().isAnnotationPresent(annotationClass);
     }
 }
