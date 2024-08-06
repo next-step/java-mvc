@@ -18,14 +18,18 @@ import org.reflections.Reflections;
 public class HandlerExecutionMeta {
 
     public static final String EMPTY = "";
-    private static final Map<HandlerKey, HandlerExecution> handlerExecutions = new HashMap<>();
+    private final Map<HandlerKey, HandlerExecution> handlerExecutions;
 
-    public HandlerExecutionMeta(Object[] basePackages) {
-        Set<Class<?>> controllers = scanControllers(basePackages);
-        controllers.forEach(controller -> handlerExecutions.putAll(addController(controller)));
+    public HandlerExecutionMeta() {
+        this.handlerExecutions = new HashMap<>();
     }
 
-    public static Map<HandlerKey, HandlerExecution> addController(Class<?> controller) {
+    public void initialize(Object[] basePackages) {
+        Set<Class<?>> controllers = scanControllers(basePackages);
+        controllers.forEach(controller -> handlerExecutions.putAll(createHandlerMapping(controller)));
+    }
+
+    public static Map<HandlerKey, HandlerExecution> createHandlerMapping(Class<?> controller) {
         String controllerUri = getControllerUri(controller);
         Object instance = createInstance(controller);
 

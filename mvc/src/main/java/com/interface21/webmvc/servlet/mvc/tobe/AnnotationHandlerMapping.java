@@ -11,13 +11,16 @@ public class AnnotationHandlerMapping {
     private static final Logger log = LoggerFactory.getLogger(AnnotationHandlerMapping.class);
 
     private final HandlerExecutionMeta handlerExecutions;
+    private final Object[] basePackages;
 
     public AnnotationHandlerMapping(final Object... basePackage) {
-        this.handlerExecutions = new HandlerExecutionMeta(basePackage);
+        this.basePackages = basePackage;
+        this.handlerExecutions = new HandlerExecutionMeta();
     }
 
     public void initialize() {
         log.info("Initialized AnnotationHandlerMapping!");
+        handlerExecutions.initialize(this.basePackages);
     }
 
     public Object getHandler(final HttpServletRequest request) {
