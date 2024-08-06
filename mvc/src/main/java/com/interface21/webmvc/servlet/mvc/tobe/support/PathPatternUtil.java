@@ -5,14 +5,15 @@ import java.util.Map;
 public class PathPatternUtil {
 
     public static String getUriValue(String pattern, String path, String key) {
-        return null;
+        return getUriVariables(pattern, path).get(key);
     }
 
     public static Map<String, String> getUriVariables(String pattern, String path) {
-        return null;
+        var pathPatternParser = new PathPatternParser(pattern);
+        return pathPatternParser.extractUriVariables(path);
     }
 
     public static boolean isUrlMatch(String pattern, String path) {
-        return false;
+        return new PathPatternParser(pattern).matches(path);
     }
 }

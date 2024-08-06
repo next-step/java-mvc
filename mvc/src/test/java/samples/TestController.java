@@ -10,6 +10,7 @@ import com.interface21.context.stereotype.Controller;
 import com.interface21.web.bind.annotation.RequestMapping;
 import com.interface21.web.bind.annotation.RequestMethod;
 import com.interface21.webmvc.servlet.ModelAndView;
+import com.interface21.webmvc.servlet.view.JsonView;
 import com.interface21.webmvc.servlet.view.JspView;
 
 @Controller
@@ -32,5 +33,13 @@ public class TestController {
         final var modelAndView = new ModelAndView(new JspView(""));
         modelAndView.addObject("id", request.getAttribute("id"));
         return modelAndView;
+    }
+
+    public ModelAndView create_string(String userId, String password) {
+        log.debug("userId: {}, password: {}", userId, password);
+        ModelAndView mav = new ModelAndView(new JsonView());
+        mav.addObject("userId", userId);
+        mav.addObject("password", password);
+        return mav;
     }
 }

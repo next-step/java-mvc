@@ -3,12 +3,15 @@ package samples;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.interface21.context.stereotype.Controller;
 import com.interface21.web.bind.annotation.PathVariable;
 import com.interface21.web.bind.annotation.RequestMapping;
 import com.interface21.web.bind.annotation.RequestMethod;
 import com.interface21.webmvc.servlet.ModelAndView;
 import com.interface21.webmvc.servlet.view.JsonView;
+import com.interface21.webmvc.servlet.view.JspView;
 
+@Controller
 public class TestUserController {
 
     private static final Logger log = LoggerFactory.getLogger(TestUserController.class);
@@ -22,7 +25,15 @@ public class TestUserController {
         return mav;
     }
 
-    @RequestMapping(value = "/users", method = RequestMethod.POST)
+    public ModelAndView create_string(long userId, String password) {
+        log.debug("userId: {}, password: {}", userId, password);
+        ModelAndView mav = new ModelAndView(new JsonView());
+        mav.addObject("userId", userId);
+        mav.addObject("password", password);
+        return mav;
+    }
+
+    //    @RequestMapping(value = "/users", method = RequestMethod.POST)
     public ModelAndView create_int_long(long id, int age) {
         log.debug("id: {}, age: {}", id, age);
         ModelAndView mav = new ModelAndView(new JsonView());
@@ -46,4 +57,11 @@ public class TestUserController {
         mav.addObject("id", id);
         return mav;
     }
+
+    @RequestMapping(value = "/{foo}/{bar}", method = RequestMethod.GET)
+    public ModelAndView show_pathvariable2(@PathVariable String foo, @PathVariable String bar) {
+        return new ModelAndView(new JspView("/"));
+    }
+
+    public void show_nothing() {}
 }
