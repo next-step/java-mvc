@@ -59,7 +59,7 @@
 
 ## Mission 4
 
-- [ ] Controller 메서드 인자 매핑
-    - [ ] HttpServletRequest에서 값을 꺼내와 자동으로 형 변환을 한 후 매핑하는 등의 작업을 자동 처리
-        - [ ] HttpServletRequest를 사용하지 않고도 매핑할 수 있도록 리팩터링
-    - [ ] PathVariable 구현을 위해 URL 매칭과 값 추출
+- [X] Controller 메서드 인자 매핑
+    - [X] HttpServletRequest에서 값을 꺼내와 자동으로 형 변환을 한 후 매핑하는 등의 작업을 자동 처리
+        - [X] HttpServletRequest를 사용하지 않고도 매핑할 수 있도록 리팩터링
+    - [X] PathVariable 구현을 위해 URL 매칭과 값 추출
