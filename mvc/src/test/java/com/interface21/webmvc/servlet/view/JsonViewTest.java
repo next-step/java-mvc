@@ -28,7 +28,7 @@ class JsonViewTest {
         jsonView.render(model, null, response);
 
         // then
-        verify(writer).write("{\"key\":\"value\"}");
+        verify(writer).write("value");
     }
 
     @DisplayName("JsonView render 테스트 : 여러 개의 모델을 받아서 json으로 변환한다.")

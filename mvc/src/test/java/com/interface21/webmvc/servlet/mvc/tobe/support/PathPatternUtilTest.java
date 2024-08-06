@@ -18,4 +18,10 @@ class PathPatternUtilTest {
         assertThat(uriVariables.get("var1")).isEqualTo("foo");
         assertThat(uriVariables.get("var2")).isEqualTo("bar");
     }
+
+    @Test
+    void match() {
+        final var isMatch = PathPatternUtil.isUrlMatch("/users/{id}", "/users/1");
+        assertThat(isMatch).isTrue();
+    }
 }
