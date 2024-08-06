@@ -1,4 +1,4 @@
-package samples.noconstructor;
+package noconstructor;
 
 import com.interface21.context.stereotype.Controller;
 

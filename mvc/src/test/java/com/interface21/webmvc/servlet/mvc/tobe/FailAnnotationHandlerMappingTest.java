@@ -13,7 +13,7 @@ public class FailAnnotationHandlerMappingTest {
     @DisplayName("Controller가 생성자가 Private이면, Mapping Initialization가 실패합니다.")
     void get() {
 
-        assertThatThrownBy(() -> new AnnotationHandlerMapping("samples.noconstructor"))
+        assertThatThrownBy(() -> new AnnotationHandlerMapping("noconstructor"))
             .isInstanceOf(ControllerInitializationException.class);
     }
 }
