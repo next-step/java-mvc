@@ -1,6 +1,7 @@
 package samples;
 
 public class TestUser {
+
     private String userId;
     private String password;
     private int age;
@@ -26,9 +27,9 @@ public class TestUser {
     @Override
     public String toString() {
         return "TestUser{" +
-                "userId='" + userId + '\'' +
-                ", password='" + password + '\'' +
-                ", age=" + age +
-                '}';
+            "userId='" + userId + '\'' +
+            ", password='" + password + '\'' +
+            ", age=" + age +
+            '}';
     }
 }
