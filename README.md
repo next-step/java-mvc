@@ -32,6 +32,6 @@
    - 조건: Request Method가 없을때는, 모든 RequestMethod를 key값으로 생성한다. (생성자가 public 이어야한다.) 
    - 결과: Uri 를 가진 Request를 대상으로 Mapping을 가지고 알맞은 method를 실행한다.
 
-[] JspView 클래스 구현하기
-   - [] service에서 뷰처리 부분 파악하기
-   - [] JspView 클래스로 옮기기
+[x] JspView 클래스 구현하기
+   - [x] service에서 뷰처리 부분 파악하기
+   - [x] JspView 클래스로 옮기기
