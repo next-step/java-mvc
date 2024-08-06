@@ -68,16 +68,15 @@ public class DispatcherServlet extends HttpServlet {
                                                  .map(handlerMapping -> handlerMapping.getHandler(request))
                                                  .filter(Objects::nonNull)
                                                  .findFirst()
-                                                 .orElse(null);
+                                                 .orElseThrow(() -> new NotFoundException(request));
     }
 
     @Nullable
-    private ModelAndView process(Object handler, HttpServletRequest request, HttpServletResponse response) {
+    private ModelAndView process(HandlerExecution handlerExecution,
+                                 HttpServletRequest request,
+                                 HttpServletResponse response) {
         try {
-            if (handler instanceof HandlerExecution handlerExecution) {
-                return handlerExecution.handle(request, response);
-            }
-            return null;
+            return handlerExecution.handle(request, response);
         } catch (Exception e) {
             throw new InternalServerError(e);
         }
