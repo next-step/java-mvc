@@ -3,6 +3,7 @@ package com.interface21.webmvc.servlet.mvc.tobe;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -47,5 +48,17 @@ class AnnotationHandlerMappingTest {
         final var modelAndView = handlerExecution.handle(request, response);
 
         assertThat(modelAndView.getObject("id")).isEqualTo("gugu");
+    }
+
+    @DisplayName("@Controller 애노테이션이 없는 경우 등록되지 않는다.")
+    @Test
+    void withNoControllerAnnotation() throws Exception {
+        final var request = mock(HttpServletRequest.class);
+
+        when(request.getRequestURI()).thenReturn("/test");
+        when(request.getMethod()).thenReturn("POST");
+
+        final var handlerExecution = (HandlerExecution) handlerMapping.getHandler(request);
+        assertThat(handlerExecution).isNull();
     }
 }

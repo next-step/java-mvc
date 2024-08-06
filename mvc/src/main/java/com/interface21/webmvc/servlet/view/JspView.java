@@ -1,11 +1,14 @@
 package com.interface21.webmvc.servlet.view;
 
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.interface21.webmvc.servlet.View;
 
+import java.io.IOException;
 import java.util.Map;
 
 public class JspView implements View {
@@ -22,21 +25,29 @@ public class JspView implements View {
 
     @Override
     public void render(final Map<String, ?> model, final HttpServletRequest request, final HttpServletResponse response) throws Exception {
-
-        model.keySet().forEach(key -> {
-            log.debug("attribute name : {}, value : {}", key, model.get(key));
-            request.setAttribute(key, model.get(key));
+        model.forEach((key, value) -> {
+            log.debug("attribute name : {}, value : {}", key, value);
+            request.setAttribute(key, value);
         });
-        move(viewName, request, response);
+
+        if (isRedirect(viewName)) {
+            redirect(viewName, response);
+        } else {
+            forward(viewName, request, response);
+        }
     }
 
-    private void move(final String viewName, final HttpServletRequest request, final HttpServletResponse response) throws Exception {
-        if (viewName.startsWith(JspView.REDIRECT_PREFIX)) {
-            response.sendRedirect(viewName.substring(JspView.REDIRECT_PREFIX.length()));
-            return;
-        }
+    private boolean isRedirect(String viewName) {
+        return viewName.startsWith(REDIRECT_PREFIX);
+    }
 
-        final var requestDispatcher = request.getRequestDispatcher(viewName);
+    private void redirect(String viewName, HttpServletResponse response) throws IOException {
+        String redirectUrl = viewName.substring(REDIRECT_PREFIX.length());
+        response.sendRedirect(redirectUrl);
+    }
+
+    private void forward(String viewName, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher(viewName);
         requestDispatcher.forward(request, response);
     }
 }

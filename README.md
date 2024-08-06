@@ -21,37 +21,35 @@
 2. [Servlet](study/src/test/java/servlet)
 
 
-## 1단계 - @MVC 구현하기
 
-아래와 같은 형태의 컨트롤러를 지원하는 프레임워크를 구현한다.
+## 🚀 2단계 - 점진적인 리팩터링
 
-```
+### Legacy MVC와 @MVC 통합하기AnnotationHandlerMapping은
+- Legacy MVC 프레임워크와 @MVC 프레임워크가 공존하도록 만들자
+- 회원가입 컨트롤러를 아래와 같이 변경해도 정상 동작해야 한다
+
+```java
 @Controller
-public class TestController {
+public class RegisterController {
 
-    private static final Logger log = LoggerFactory.getLogger(TestController.class);
-
-    @RequestMapping(value = "/get-test", method = RequestMethod.GET)
-    public ModelAndView findUserId(HttpServletRequest request, HttpServletResponse response) {
-        log.info("test controller get method");
-        final ModelAndView modelAndView = new ModelAndView(new JspView("/get-test.jsp"));
-        modelAndView.addObject("id", request.getAttribute("id"));
-        return modelAndView;
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public ModelAndView save(HttpServletRequest req, HttpServletResponse res) {
+        // ...
     }
 
-    @RequestMapping(value = "/post-test", method = RequestMethod.POST)
-    public ModelAndView save(HttpServletRequest request, HttpServletResponse response) {
-        log.info("test controller post method");
-        final ModelAndView modelAndView = new ModelAndView(new JspView("/post-test.jsp"));
-        modelAndView.addObject("id", request.getAttribute("id"));
-        return modelAndView;
+    @RequestMapping(value = "/register", method = RequestMethod.GET)
+    public ModelAndView show(HttpServletRequest req, HttpServletResponse res) {
+        // ...
     }
 }
 ```
+### AnnotationHandlerMapping
+- [x] Controller Scanner 추가
+- [x] 컨트롤러 메서드 정보로 HandlerExecution 생성하기
 
-- ###  1. @MVC Framework 테스트 통과하기
-    - [x] AnnotationHandlerMappingTest 통과
-
-- ### 2. JspView 클래스를 구현한다.
-    - [x] JspView 클래스 구현한다
-    - [x] service 메서드에서 뷰에 대한 처리를 하는 부분을 JspView 로 옮긴다.
+### DispatcherServlet
+- [x] HandlerMapping 인터페이스 추가
+- [x] DispatcherServlet의 초기화 과정에서 ManualHandlerMapping, AnnotationHandlerMapping 초기화
+- [x] HandlerAdapter 인터페이스 추가
+    - [x] AnnotationHandlerMapping은 HandlerExecution을 반환한다
+    - [x] ManualHandlerMapping은 Controller를 반환한다
