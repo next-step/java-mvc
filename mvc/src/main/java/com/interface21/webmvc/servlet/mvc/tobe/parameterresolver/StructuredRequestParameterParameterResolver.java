@@ -20,7 +20,7 @@ public class StructuredRequestParameterParameterResolver implements ParameterRes
 
         return parameterType.getSuperclass() == Object.class &&
                 Modifier.isPublic(parameterType.getModifiers()) &&
-                parameterType.getDeclaredConstructors().length == 1;
+                parameterType.getDeclaredConstructors().length > 0;
     }
 
     @Override

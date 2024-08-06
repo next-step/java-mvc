@@ -26,12 +26,12 @@ public class ViewResolvers {
     public ViewResolver findResolver(@Nullable ModelAndView modelAndView,
                                      @Nullable HandlerExecution handlerExecution) {
         if (modelAndView == null) {
-            throw new IllegalStateException("템플릿을 찾을 수 없습니다 XXX");
+            throw new IllegalStateException("템플릿을 찾을 수 없습니다");
         }
 
         return viewResolvers.stream()
                             .filter(it -> it.accept(modelAndView, handlerExecution))
                             .findFirst()
-                            .orElseThrow(() -> new IllegalStateException("템플릿을 찾을 수 없습니다 XXX"));
+                            .orElseThrow(() -> new IllegalStateException("템플릿을 찾을 수 없습니다"));
     }
 }

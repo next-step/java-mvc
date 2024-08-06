@@ -14,8 +14,16 @@ public class User {
         this.email = email;
     }
 
+    public User(long id, User user) {
+        this(id, user.account, user.password, user.email);
+    }
+
     public boolean checkPassword(String password) {
         return this.password.equals(password);
+    }
+
+    public long getId() {
+        return id;
     }
 
     public String getAccount() {
