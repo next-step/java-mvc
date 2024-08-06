@@ -1,13 +1,9 @@
 package com.interface21.webmvc.servlet.view;
 
 import com.interface21.webmvc.servlet.ModelAndView;
-import com.interface21.webmvc.servlet.View;
 import com.interface21.webmvc.servlet.mvc.tobe.AnnotationHandlerMapping;
 import com.interface21.webmvc.servlet.mvc.tobe.HandlerExecution;
-import com.interface21.webmvc.servlet.mvc.tobe.ViewResolver;
 import com.interface21.webmvc.servlet.mvc.tobe.viewresolver.JsonViewResolver;
-import com.interface21.webmvc.servlet.mvc.tobe.viewresolver.JspViewResolver;
-import com.interface21.webmvc.servlet.mvc.tobe.viewresolver.RedirectViewResolver;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,27 +12,22 @@ import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.DelegatingServletOutputStream;
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class JsonViewTest {
-    private final List<ViewResolver> viewResolvers = new ArrayList<>();
     private AnnotationHandlerMapping handlerMapping;
+    private JsonViewResolver jsonViewResolver;
 
     @BeforeEach
     void setUp() {
         handlerMapping = new AnnotationHandlerMapping("samples");
         handlerMapping.initialize();
 
-        viewResolvers.clear();
-        viewResolvers.add(new RedirectViewResolver());
-        viewResolvers.add(new JspViewResolver());
-        viewResolvers.add(new JsonViewResolver());
+        jsonViewResolver = new JsonViewResolver();
     }
 
     @Test
@@ -59,19 +50,10 @@ class JsonViewTest {
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
         final var handlerExecution = (HandlerExecution) handlerMapping.getHandler(request);
         final ModelAndView modelAndView = handlerExecution.handle(request, response);
-        final Map<String, Object> model = modelAndView.getModel();
-        final View view = resolveView(modelAndView, handlerExecution);
-        view.render(model, request, response);
-    }
 
-    private View resolveView(ModelAndView modelAndView, HandlerExecution handlerExecution) {
-        String viewName = modelAndView.getViewName();
+        assertThat(jsonViewResolver.accept(modelAndView, handlerExecution)).isTrue();
 
-        return viewResolvers.stream()
-                            .map(viewResolver -> viewResolver.resolveView(viewName, handlerExecution))
-                            .filter(Objects::nonNull)
-                            .findFirst()
-                            .orElse(null);
+        jsonViewResolver.render(modelAndView, request, response);
     }
 
     @Test

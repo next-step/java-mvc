@@ -1,33 +1,19 @@
 package com.interface21.webmvc.servlet;
 
+import jakarta.annotation.Nullable;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ModelAndView {
 
-    private final Object view;
+    private final String view;
     private final Map<String, Object> model;
 
-    public ModelAndView(final Object view) {
+    public ModelAndView(@Nullable final String view) {
         this.view = view;
         this.model = new HashMap<>();
-
-        validateView(view);
-    }
-
-    private void validateView(Object view) {
-        if (view == null) {
-            return;
-        }
-        if (view instanceof View) {
-            return;
-        }
-        if (view instanceof String) {
-            return;
-        }
-
-        throw new IllegalArgumentException("invalid view: " + view);
     }
 
     public ModelAndView addObject(final String attributeName, final Object attributeValue) {
@@ -39,12 +25,8 @@ public class ModelAndView {
         return model.get(attributeName);
     }
 
-    public View getView() {
-        return view instanceof View ? (View) view : null;
-    }
-
-    public String getViewName() {
-        return view instanceof String ? (String) view : null;
+    public String getView() {
+        return view;
     }
 
     public Map<String, Object> getModel() {
