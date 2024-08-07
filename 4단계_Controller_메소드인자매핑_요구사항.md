@@ -172,6 +172,7 @@ public class PathPatternParser {
   - [x] HandlerMethod, MethodParameter 역할을 하는 객체를 생성한다
   - [ ] InvocableHandlerMethod 클래스를 생성해서 형변환한 메서드 인자들을 리턴하는 메서드를 구현한다
   - [ ] HandlerMethodArgumentResolver 인터페이스를 구현한다  
+  - [ ] request path 과 urlPattern 이 일치하는 handler 를 조회한다 (pathVariable 이 쓰일 경우)
   - [ ] AbstractNamedValueMethodArgumentResolver 를 구현한다 
   - [ ] PathVariableMethodArgumentResolver 를 구현한다
   - [ ] RequestParamMethodArgumentResolver 를 구현한다
