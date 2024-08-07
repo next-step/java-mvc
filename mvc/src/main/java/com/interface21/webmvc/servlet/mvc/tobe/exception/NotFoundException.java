@@ -2,7 +2,7 @@ package com.interface21.webmvc.servlet.mvc.tobe.exception;
 
 public class NotFoundException extends RuntimeException{
 
-    public NotFoundException() {
-        super("Path not found");
+    public NotFoundException(String message) {
+        super(message);
     }
 }
