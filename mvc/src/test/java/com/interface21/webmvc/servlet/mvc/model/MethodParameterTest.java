@@ -15,7 +15,7 @@ class MethodParameterTest {
     final Class<?> test = MethodParameterTest.class;
     final Method[] methods = test.getDeclaredMethods();
 
-    MethodParameter methodParameter = new MethodParameter(methods[0].getParameters()[0]);
+    MethodParameter methodParameter = new MethodParameter(0, methods[0].getParameters()[0]);
 
     assertThat(methodParameter.hasAnnotation(PathVariable.class)).isTrue();
   }

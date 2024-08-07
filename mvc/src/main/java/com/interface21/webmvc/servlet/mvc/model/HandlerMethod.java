@@ -1,7 +1,7 @@
 package com.interface21.webmvc.servlet.mvc.model;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
+import java.lang.reflect.Parameter;
 
 public class HandlerMethod {
   private final Method method;
@@ -9,7 +9,7 @@ public class HandlerMethod {
 
   public HandlerMethod(Method method) {
     this.method = method;
-    this.methodParameters = Arrays.stream(method.getParameters()).map(MethodParameter::new).toArray(MethodParameter[]::new);
+    this.methodParameters = getMethodParameters(method);
   }
 
   public Method method() {
@@ -18,5 +18,14 @@ public class HandlerMethod {
 
   public MethodParameter[] methodParameters() {
     return this.methodParameters;
+  }
+
+  private static MethodParameter[] getMethodParameters(Method method) {
+    Parameter[] parameters = method.getParameters();
+    MethodParameter[] methodParameters = new MethodParameter[parameters.length];
+    for(int i = 0; i < parameters.length; i++) {
+      methodParameters[i] = new MethodParameter(i, parameters[i]);
+    }
+    return methodParameters;
   }
 }
