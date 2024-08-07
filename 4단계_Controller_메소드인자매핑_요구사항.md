@@ -178,3 +178,4 @@ public class PathPatternParser {
   - [ ] PathVariableMethodArgumentResolver 를 구현한다
   - [ ] RequestParamMethodArgumentResolver 를 구현한다
   - [ ] TestUser 용 custom 어노테이션을 만들고 Resolver 를 구현한다
+  - [x] 파라미터 타입 관련 enum class 를 구현하고 컨버팅하는 메서드를 구현한다 
