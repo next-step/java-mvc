@@ -170,9 +170,10 @@ public class PathPatternParser {
 ## 요구사항 정리
 - [ ]  Controller 메서드의 인자 타입에 따라 HttpServletRequest 에서 값을 꺼내와 자동으로 형 변환을 한 후 매핑하는 등의 작업을 자동 처리
   - [x] HandlerMethod, MethodParameter 역할을 하는 객체를 생성한다
-  - [ ] InvocableHandlerMethod 클래스를 생성해서 형변환한 메서드 인자들을 리턴하는 메서드를 구현한다
-  - [ ] HandlerMethodArgumentResolver 인터페이스를 구현한다  
+  - [x] InvocableHandlerMethod 클래스를 생성해서 형변환한 메서드 인자들을 리턴하는 메서드를 구현한다
+  - [x] HandlerMethodArgumentResolver 인터페이스를 구현한다
   - [x] request path 과 urlPattern 이 일치하는 handler 를 조회한다 (pathVariable 이 쓰일 경우)
+  - [x] Resolver list 를 관리하고 resolver 를 반환하는 HandlerMethodArgumentResolverComposite 클래스를 추가한다 
   - [ ] AbstractNamedValueMethodArgumentResolver 를 구현한다 
   - [ ] PathVariableMethodArgumentResolver 를 구현한다
   - [ ] RequestParamMethodArgumentResolver 를 구현한다
