@@ -1,8 +1,7 @@
 package com.interface21.webmvc.servlet.mvc;
 
+import com.interface21.web.bind.annotation.RequestMapping;
 import com.interface21.webmvc.servlet.ModelAndView;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 
 public class HandlerExecution {
@@ -15,7 +14,15 @@ public class HandlerExecution {
         this.method = method;
     }
 
-    public ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response) throws Exception {
-        return (ModelAndView) method.invoke(controller.getNewInstance(), request, response);
+    public Method method() {
+        return this.method;
+    }
+
+    public String urlPattern() {
+        return this.method.getAnnotation(RequestMapping.class).value();
+    }
+
+    public ModelAndView handle(final Object[] arguments) throws Exception {
+        return (ModelAndView) method.invoke(controller.getNewInstance(), arguments);
     }
 }
