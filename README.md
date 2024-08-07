@@ -20,7 +20,7 @@
 1. [Reflection API](study/src/test/java/reflection)
 2. [Servlet](study/src/test/java/servlet)
 
-## 요구사항
+## 1단계 요구사항
 
 [x] [Junit3TestRunner](study/src/test/java/reflection/Junit3TestRunner.java)
 [x] [Junit4TestRunner](study/src/test/java/reflection/Junit4TestRunner.java)
@@ -35,3 +35,17 @@
 [x] JspView 클래스 구현하기
    - [x] service에서 뷰처리 부분 파악하기
    - [x] JspView 클래스로 옮기기
+
+## 2단계 요구사항
+[] 피드백 사항
+- [x] 클래스명과 변수명 맞추기
+- [] 유틸성 메서드 createHandlerKeys 빼두기
+- [] RequestMethod에 값지정 안되있을때, 디폴트 값을 지정함으로써 분기 피하기
+- [] 기본 생성자가 없을때, 메세지 정확하게 하기
+
+
+[] 프론트 컨트롤러 패턴을 구현해서 AnnotationHandlerMapping과 ManualHandlerMapping을 통합합니다.
+- [] HandlerMapping 인터페이스 구현
+  - [] DispatcherServlet 초기화할때, AnnotationHandlerMapping과 ManualHandlerMapping 초기화
+  - [] HandlerMapping을 List로 관리한다
+- [] HandlerAdapter 인터페이스 구현

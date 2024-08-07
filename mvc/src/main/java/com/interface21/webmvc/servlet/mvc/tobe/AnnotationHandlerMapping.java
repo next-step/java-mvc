@@ -10,24 +10,24 @@ public class AnnotationHandlerMapping {
 
     private static final Logger log = LoggerFactory.getLogger(AnnotationHandlerMapping.class);
 
-    private final HandlerExecutionMeta handlerExecutions;
+    private final HandlerExecutionMeta handlerExecutionMeta;
     private final Object[] basePackages;
 
     public AnnotationHandlerMapping(final Object... basePackage) {
         this.basePackages = basePackage;
-        this.handlerExecutions = new HandlerExecutionMeta();
+        this.handlerExecutionMeta = new HandlerExecutionMeta();
     }
 
     public void initialize() {
         log.info("Initialized AnnotationHandlerMapping!");
-        handlerExecutions.initialize(this.basePackages);
+        handlerExecutionMeta.initialize(this.basePackages);
     }
 
     public Object getHandler(final HttpServletRequest request) {
         HandlerKey key = HandlerKey.of(request.getRequestURI(),
             RequestMethod.from(request.getMethod()));
 
-        return handlerExecutions.get(key)
+        return handlerExecutionMeta.get(key)
             .orElseThrow(NotFoundException::new);
     }
 }
