@@ -175,7 +175,7 @@ public class PathPatternParser {
   - [x] request path 과 urlPattern 이 일치하는 handler 를 조회한다 (pathVariable 이 쓰일 경우)
   - [x] Resolver list 를 관리하고 resolver 를 반환하는 HandlerMethodArgumentResolverComposite 클래스를 추가한다 
   - [ ] AbstractNamedValueMethodArgumentResolver 를 구현한다 
-  - [ ] PathVariableMethodArgumentResolver 를 구현한다
+  - [x] PathVariableMethodArgumentResolver 를 구현한다
   - [ ] RequestParamMethodArgumentResolver 를 구현한다
   - [ ] TestUser 용 custom 어노테이션을 만들고 Resolver 를 구현한다
   - [x] 파라미터 타입 관련 enum class 를 구현하고 컨버팅하는 메서드를 구현한다 
