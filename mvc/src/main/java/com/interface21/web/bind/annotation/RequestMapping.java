@@ -10,5 +10,6 @@ import java.lang.annotation.Target;
 public @interface RequestMapping {
     String value() default "";
 
-    RequestMethod[] method() default {};
+    RequestMethod[] method() default {RequestMethod.GET, RequestMethod.POST, RequestMethod.HEAD,
+        RequestMethod.PUT, RequestMethod.OPTIONS, RequestMethod.TRACE, RequestMethod.DELETE};
 }

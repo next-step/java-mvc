@@ -60,19 +60,10 @@ public class HandlerExecutionMeta {
         String requestUri = controllerUri +
             method.getAnnotation(RequestMapping.class).value();
 
-        List<HandlerKey> keys = Arrays.stream(method.getAnnotation(RequestMapping.class).method())
+        return Arrays.stream(method.getAnnotation(RequestMapping.class).method())
             .map(
                 requestMethod -> HandlerKey.of(requestUri, requestMethod)
             ).toList();
-
-        if (keys.isEmpty()) {
-            return Arrays.stream(RequestMethod.values())
-                .map(
-                    requestMethod -> HandlerKey.of(requestUri, requestMethod)
-                ).toList();
-        }
-
-        return keys;
     }
 
     private static Object createInstance(Class<?> controller) {
@@ -81,7 +72,7 @@ public class HandlerExecutionMeta {
 
         } catch (NoSuchMethodException | InvocationTargetException | InstantiationException |
                  IllegalAccessException e) {
-            throw new ControllerInitializationException();
+            throw new ControllerInitializationException("Controller Does not have a constructor");
         }
 
     }
