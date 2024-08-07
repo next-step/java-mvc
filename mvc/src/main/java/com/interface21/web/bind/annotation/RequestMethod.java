@@ -1,6 +1,6 @@
 package com.interface21.web.bind.annotation;
 
-import com.interface21.web.MethodNotSupprotedException;
+import com.interface21.web.MethodNotSupportedException;
 import java.util.Arrays;
 
 public enum RequestMethod {
@@ -10,6 +10,6 @@ public enum RequestMethod {
         return Arrays.stream(values())
             .filter(value -> value.name().equals(method))
             .findAny()
-            .orElseThrow(MethodNotSupprotedException::new);
+            .orElseThrow(MethodNotSupportedException::new);
     }
 }
