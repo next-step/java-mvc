@@ -19,3 +19,19 @@
 ## 학습 테스트
 1. [Reflection API](study/src/test/java/reflection)
 2. [Servlet](study/src/test/java/servlet)
+
+## 요구사항
+
+[x] [Junit3TestRunner](study/src/test/java/reflection/Junit3TestRunner.java)
+[x] [Junit4TestRunner](study/src/test/java/reflection/Junit4TestRunner.java)
+[x] [ReflectionTest](study/src/test/java/reflection/ReflectionTest.java)
+[x] [ReflectionsTest](study/src/test/java/reflection/ReflectionsTest.java)
+[x] @MVC Framework 테스트 통과하기
+  - [x] @Controller를 가져와서 Mapping을 생성한다.
+   - 기능: @Controller로 표기된 클래스들을 스캔해서 (uri, method) 를 key로 method를 value로 가진 해쉬맵을 생성한다.
+   - 조건: Request Method가 없을때는, 모든 RequestMethod를 key값으로 생성한다. (생성자가 public 이어야한다.) 
+   - 결과: Uri 를 가진 Request를 대상으로 Mapping을 가지고 알맞은 method를 실행한다.
+
+[x] JspView 클래스 구현하기
+   - [x] service에서 뷰처리 부분 파악하기
+   - [x] JspView 클래스로 옮기기

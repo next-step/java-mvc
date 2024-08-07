@@ -12,6 +12,7 @@ public class DispatcherServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     private static final Logger log = LoggerFactory.getLogger(DispatcherServlet.class);
+    private static final String REDIRECT_PREFIX = "redirect:";
 
     private ManualHandlerMapping manualHandlerMapping;
 
@@ -40,8 +41,8 @@ public class DispatcherServlet extends HttpServlet {
     }
 
     private void move(final String viewName, final HttpServletRequest request, final HttpServletResponse response) throws Exception {
-        if (viewName.startsWith(JspView.REDIRECT_PREFIX)) {
-            response.sendRedirect(viewName.substring(JspView.REDIRECT_PREFIX.length()));
+        if (viewName.startsWith(REDIRECT_PREFIX)) {
+            response.sendRedirect(viewName.substring(REDIRECT_PREFIX.length()));
             return;
         }
 
