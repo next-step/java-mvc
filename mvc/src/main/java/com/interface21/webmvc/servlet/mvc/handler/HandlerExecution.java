@@ -1,28 +1,44 @@
 package com.interface21.webmvc.servlet.mvc.handler;
 
+import com.interface21.web.bind.annotation.RequestMapping;
 import com.interface21.webmvc.servlet.mvc.ModelAndView;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class HandlerExecution {
 
     private final Object declaredObject;
     private final Method method;
+    private final ArgumentResolvers argumentResolvers;
 
-    public HandlerExecution(Object declaredObject, Method method) {
+    public HandlerExecution(Object declaredObject, Method method, ArgumentResolvers argumentResolvers) {
         this.declaredObject = declaredObject;
         this.method = method;
+        this.argumentResolvers = argumentResolvers;
     }
 
     public HandlerExecution(Object handler, String methodName) {
-        this(handler, getMethod(handler, methodName));
+        this(handler, getMethod(handler, methodName), new ArgumentResolvers());
     }
 
     public ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response) throws Exception {
-        return (ModelAndView) method.invoke(declaredObject, request, response);
+        Parameter[] parameters = method.getParameters();
+        Object[] arguments = Arrays.stream(parameters)
+                .map(parameter -> {
+                    try {
+                        ArgumentResolver argumentResolver = argumentResolvers.findOneSupports(parameter);
+                        return argumentResolver.resolve(parameter, method, request, response);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .toArray();
+        return (ModelAndView) method.invoke(declaredObject, arguments);
     }
 
     private static Method getMethod(Object handler, String methodName) {
@@ -45,5 +61,9 @@ public class HandlerExecution {
     @Override
     public int hashCode() {
         return Objects.hash(declaredObject, method);
+    }
+
+    public RequestMapping extractAnnotation(final Class<RequestMapping> requestMappingClass) {
+        return method.getAnnotation(requestMappingClass);
     }
 }

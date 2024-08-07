@@ -15,60 +15,60 @@ public class AnnotationHandlerMapping implements HandlerMapping {
     private static final Logger log = LoggerFactory.getLogger(AnnotationHandlerMapping.class);
 
     private final Object[] basePackage;
-    private final Map<HandlerKey, HandlerExecution> handlerExecutions;
+    private final Map<HandlerKey, HandlerExecution> handlerExecutionsMap;
 
     public AnnotationHandlerMapping(final Object... basePackage) {
         this.basePackage = basePackage;
-        this.handlerExecutions = new HashMap<>();
+        this.handlerExecutionsMap = new HashMap<>();
     }
 
     public void initialize() {
+        log.info("Initialized AnnotationHandlerMapping!");
+        ArgumentResolvers argumentResolvers = initializeArgumentResolvers();
+        initializeHandlerExecutionsMap(argumentResolvers);
+
+    }
+
+    private void initializeHandlerExecutionsMap(final ArgumentResolvers argumentResolvers) {
         ControllerScanner controllerScanner = new ControllerScanner(basePackage);
         Map<Class<?>, Object> controllers = controllerScanner.getControllers();
-        Set<Method> methods = getRequestMappingMethods(controllers.keySet());
 
-        methods.forEach(method -> addHandlerExecutions(controllers, method, method.getDeclaredAnnotation(RequestMapping.class)));
-        log.info("Initialized AnnotationHandlerMapping!");
+        for (Class<?> controllerClass : controllers.keySet()) {
+            HandlerExecutions handlerExecutions = HandlerExecutions.of(controllerClass, controllers.get(controllerClass), argumentResolvers);
+            registerHandlerExecutions(controllerClass, handlerExecutions);
+        }
+    }
+
+    private void registerHandlerExecutions(final Class<?> controllerClass, final HandlerExecutions handlerExecutions) {
+        String uriPrefix = extractUriPrefix(controllerClass);
+        for (HandlerExecution handlerExecution : handlerExecutions) {
+            HandlerKeys handlerKeys = HandlerKeys.of(uriPrefix, handlerExecution.extractAnnotation(RequestMapping.class));
+            handlerKeys.forEach(handlerKey -> this.handlerExecutionsMap.put(handlerKey, handlerExecution));
+        }
+    }
+
+    private String extractUriPrefix(final Class<?> controllerClass) {
+        RequestMapping controllerRequestMapping = controllerClass.getAnnotation(RequestMapping.class);
+        if (controllerRequestMapping == null) {
+            return "";
+        }
+        return controllerRequestMapping.value();
+
+    }
+
+    private ArgumentResolvers initializeArgumentResolvers() {
+        ArgumentResolvers argumentResolvers = new ArgumentResolvers();
+        argumentResolvers.add(new RequestParamArgumentResolver());
+        return argumentResolvers;
     }
 
     public Object getHandler(final HttpServletRequest request) {
-        return handlerExecutions.get(new HandlerKey(request.getRequestURI(), RequestMethod.valueOf(request.getMethod())));
-    }
-
-    private void addHandlerExecutions(Map<Class<?>, Object> handlerExecution, Method method, RequestMapping requestMapping) {
-        String url = requestMapping.value();
-        RequestMethod[] requestMethods = requestMapping.method();
-        mapHandlerKeys(url, requestMethods)
-                .forEach(handlerKey -> handlerExecutions.put(handlerKey, new HandlerExecution(handlerExecution.get(method.getDeclaringClass()), method)));
-    }
-
-    private Set<Method> getRequestMappingMethods(Set<Class<?>> controllersKeySet) {
-        return controllersKeySet.stream()
-                .map(clazz -> Arrays.stream(clazz.getMethods())
-                        .filter(method -> method.isAnnotationPresent(RequestMapping.class))
-                        .toList())
-                .flatMap(List::stream)
-                .collect(Collectors.toSet());
-    }
-
-    private List<HandlerKey> mapHandlerKeys(String url, RequestMethod[] requestMethods) {
-        return Arrays.stream(requestMethods)
-                .map(requestMethod -> new HandlerKey(url, requestMethod))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        final AnnotationHandlerMapping that = (AnnotationHandlerMapping) o;
-        boolean deepEquals = Objects.deepEquals(basePackage, that.basePackage);
-        boolean equals = Objects.equals(handlerExecutions, that.handlerExecutions);
-        return Objects.deepEquals(basePackage, that.basePackage) && Objects.equals(handlerExecutions, that.handlerExecutions);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(Arrays.hashCode(basePackage), handlerExecutions);
+        HandlerKey newHandlerKey = new HandlerKey(request.getRequestURI(), RequestMethod.valueOf(request.getMethod()));
+        return handlerExecutionsMap.keySet()
+                .stream()
+                .filter(handlerKey -> handlerKey.checkUrlPatternAndMethod(newHandlerKey))
+                .findAny()
+                .map(handlerExecutionsMap::get)
+                .orElse(null);
     }
 }

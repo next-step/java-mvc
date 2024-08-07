@@ -1,6 +1,7 @@
 package com.interface21.webmvc.servlet.mvc.handler;
 
 import com.interface21.web.bind.annotation.RequestMethod;
+import com.interface21.webmvc.servlet.mvc.support.PathPatternUtil;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.Objects;
@@ -30,13 +31,18 @@ public class HandlerKey {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof HandlerKey)) return false;
-        HandlerKey that = (HandlerKey) o;
+        if (!(o instanceof HandlerKey that)) return false;
         return Objects.equals(url, that.url) && requestMethod == that.requestMethod;
     }
+
 
     @Override
     public int hashCode() {
         return Objects.hash(url, requestMethod);
+    }
+
+    public boolean checkUrlPatternAndMethod(final HandlerKey newHandlerKey) {
+        return PathPatternUtil.isUrlMatch(url, newHandlerKey.url)
+                && requestMethod == newHandlerKey.requestMethod;
     }
 }
