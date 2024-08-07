@@ -91,4 +91,12 @@ class AnnotationHandlerMappingTest {
 
         assertThat(modelAndView.getObject("id")).isEqualTo("gugu");
     }
+
+    @Test
+    void initialize() {
+    }
+
+    @Test
+    void getHandler() {
+    }
 }

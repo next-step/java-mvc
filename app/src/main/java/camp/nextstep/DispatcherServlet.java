@@ -1,10 +1,11 @@
 package camp.nextstep;
 
 import com.interface21.webmvc.servlet.ModelAndView;
+import com.interface21.webmvc.servlet.mvc.tobe.AdapterRegistry;
 import com.interface21.webmvc.servlet.mvc.tobe.AnnotationHandlerAdapter;
 import com.interface21.webmvc.servlet.mvc.tobe.AnnotationHandlerMapping;
 import com.interface21.webmvc.servlet.mvc.tobe.HandlerAdapter;
-import com.interface21.webmvc.servlet.mvc.tobe.HandlerMappingRegistry;
+import com.interface21.webmvc.servlet.mvc.tobe.MappingRegistry;
 import com.interface21.webmvc.servlet.mvc.tobe.exception.NotFoundException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -21,8 +22,8 @@ public class DispatcherServlet extends HttpServlet {
 
     private ManualHandlerMapping manualHandlerMapping;
     private AnnotationHandlerMapping annotationHandlerMapping;
-    private HandlerMappingRegistry mappingRegistry;
-    private HandlerAdapterRegistry adapterRegistry;
+    private MappingRegistry mappingRegistry;
+    private AdapterRegistry adapterRegistry;
 
     public DispatcherServlet(final Object... basePackage) {
         this.manualHandlerMapping = new ManualHandlerMapping();
