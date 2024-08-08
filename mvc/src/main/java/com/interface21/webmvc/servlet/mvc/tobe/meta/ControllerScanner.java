@@ -75,7 +75,7 @@ public class ControllerScanner {
             .orElse(EMPTY);
     }
 
-    public void initialize(Object[] basePackages) {
+    public void initialize(Object... basePackages) {
         Set<Class<?>> controllers = ReflectionUtils.getAnnotatedClass(basePackages,
             Controller.class);
         controllers.forEach(
