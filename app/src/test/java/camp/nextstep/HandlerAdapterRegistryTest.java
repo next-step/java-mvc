@@ -14,7 +14,7 @@ class HandlerAdapterRegistryTest {
 
     @Test
     @DisplayName("지원하는 HandlerAdapter 반환한다.")
-    void getHandlerAdapter() throws Exception {
+    void getHandleAdapter() throws Exception {
         ManualHandlerAdapter manualHandlerAdapter = new ManualHandlerAdapter();
         HandlerAdapterRegistry handlerAdapterRegistry = new HandlerAdapterRegistry(
             List.of(manualHandlerAdapter));
@@ -28,7 +28,7 @@ class HandlerAdapterRegistryTest {
 
     @Test
     @DisplayName("지원하지 않는 HandlerAdapter 반환에 실패한다.")
-    void failGettingHandlerAdapter() throws Exception {
+    void failGettingHandleAdapter() throws Exception {
         ManualHandlerAdapter manualHandlerAdapter = new ManualHandlerAdapter();
         HandlerAdapterRegistry handlerAdapterRegistry = new HandlerAdapterRegistry(
             List.of(manualHandlerAdapter));

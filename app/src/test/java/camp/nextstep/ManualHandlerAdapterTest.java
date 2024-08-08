@@ -15,7 +15,7 @@ class ManualHandlerAdapterTest {
 
     @Test
     @DisplayName("String 이 아닌 ModelView를 반환한다.")
-    void handlerAdapter() throws Exception {
+    void handleAdapter() throws Exception {
         ManualHandlerAdapter manualHandlerAdapter = new ManualHandlerAdapter();
 
         final var request = mock(HttpServletRequest.class);
@@ -24,7 +24,7 @@ class ManualHandlerAdapterTest {
         when(request.getAttribute("id")).thenReturn("gugu");
         when(request.getRequestURI()).thenReturn("/no-method");
 
-        final var modelAndView = manualHandlerAdapter.handler(new RegisterViewController(), request,
+        final var modelAndView = manualHandlerAdapter.handle(new RegisterViewController(), request,
             response);
         assertThat(modelAndView).isInstanceOf(ModelAndView.class);
     }

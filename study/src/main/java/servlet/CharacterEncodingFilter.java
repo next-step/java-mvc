@@ -1,5 +1,7 @@
 package servlet;
 
+import static servlet.KoreanServlet.인코딩;
+
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 
@@ -11,6 +13,8 @@ public class CharacterEncodingFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         request.getServletContext().log("doFilter() 호출");
+        request.setCharacterEncoding(인코딩);
+        response.setCharacterEncoding(인코딩);
         chain.doFilter(request, response);
     }
 }
