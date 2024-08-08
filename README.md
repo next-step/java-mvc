@@ -49,3 +49,11 @@
   - [x] DispatcherServlet 초기화할때, AnnotationHandlerMapping과 ManualHandlerMapping 초기화
   - [x] HandlerMapping을 List로 관리한다
 - [x] HandlerAdapter 인터페이스 구현
+
+[] 피드백 사항
+- [] 메서드 명 handler 변경
+- [x] 레거시 코드와 @Controller 에노테이션 공존 확인
+- [] 테스트 추가 작성해보기
+- [] DispatcherServlet 멤버 변수 다른곳으로 이전하기
+
+
