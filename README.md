@@ -49,3 +49,13 @@
   - [x] DispatcherServlet 초기화할때, AnnotationHandlerMapping과 ManualHandlerMapping 초기화
   - [x] HandlerMapping을 List로 관리한다
 - [x] HandlerAdapter 인터페이스 구현
+
+## 3단계 요구사항
+
+[] JsonView 클래스를 구현한다.
+    - [] Jackson 사용해서 json으로 만들어서 Response 객체와 ContentLength를 지정해준다.
+[] Legacy MVC 제거한다.
+    - [] @RequestMapping 과 ModelAndView를 반환하게끔 리팩토링한다.
+    - [] /api/user 컨트롤러를 추가하고 정상 동작 테스트한다.
+    - [] model 데이터 값에 다른 반환형태를 달리한다.
+    - [] ContentType은 Application_JSON_UTF8_VALUE 로 변경한다.
