@@ -2,6 +2,7 @@ package com.interface21.webmvc.servlet.mvc.tobe;
 
 import com.interface21.web.bind.annotation.RequestMapping;
 import com.interface21.web.bind.annotation.RequestMethod;
+import com.interface21.webmvc.servlet.mvc.tobe.exception.RequestMethodNotDefinedException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,10 +34,9 @@ public class AnnotationHandlerMapping implements HandlerMapping {
 
     // 스캔된 각 컨트롤러 클래스에 대해 인스턴스를 생성하고 핸들러를 매핑
     controllerMap.entrySet().stream().forEach(entry -> {
-      Class<?> controllerClass = entry.getKey();
       //싱글톤 패턴 구현 & 의존성 주입 준비
-      Object controllerInstance = createControllerInstance(controllerClass);
-
+      Class<?> controllerClass = entry.getKey();
+      Object controllerInstance = entry.getValue(); // ControllerScanner에서 생성한 인스턴스 사용
       //mapHandlers는 컨트롤러 클래스의 메소드들을 분석하여 HTTP 요청 패턴(URL과 HTTP 메소드)을 메소드에 매핑하는 역할
       mapHandlers(controllerClass, controllerInstance);
     });
@@ -49,14 +49,6 @@ public class AnnotationHandlerMapping implements HandlerMapping {
     HandlerKey key = new HandlerKey(request.getRequestURI(),
         RequestMethod.valueOf(request.getMethod()));
     return handlerExecutionsMap.get(key);
-  }
-
-  private Object createControllerInstance(Class<?> controllerClass) {
-    try {
-      return controllerClass.getDeclaredConstructor().newInstance();
-    } catch (ReflectiveOperationException e) {
-      throw new RuntimeException("Failed to load instance", e);
-    }
   }
 
   private void mapHandlers(Class<?> controllerClass, Object controllerInstance) {
@@ -81,7 +73,7 @@ public class AnnotationHandlerMapping implements HandlerMapping {
   private RequestMethod[] getRequestMethods(RequestMapping methodMapping) {
     RequestMethod[] requestMethods = methodMapping.method();
     if (requestMethods.length == 0) {
-      throw new IllegalArgumentException("request method가 정의되지 않았습니다.");
+      throw new RequestMethodNotDefinedException();
     }
     return requestMethods;
   }

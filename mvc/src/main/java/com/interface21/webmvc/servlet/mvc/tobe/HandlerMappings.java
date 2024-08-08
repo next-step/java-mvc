@@ -1,5 +1,6 @@
 package com.interface21.webmvc.servlet.mvc.tobe;
 
+import com.interface21.webmvc.servlet.mvc.tobe.exception.HandlerNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.ArrayList;
@@ -30,6 +31,6 @@ public class HandlerMappings {
                 .map(handlerMapping -> handlerMapping.getHandler(request))
                 .filter(Objects::nonNull)
                 .findAny()
-                .orElseThrow(() -> new RuntimeException("지원가능한 handler가 없습니다."));
+                .orElseThrow(() -> new HandlerNotFoundException(request.getRequestURI()));
     }
 }
