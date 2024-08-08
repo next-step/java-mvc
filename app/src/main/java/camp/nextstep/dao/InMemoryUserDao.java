@@ -15,7 +15,19 @@ public class InMemoryUserDao {
     }
 
     public static void save(User user) {
-        database.put(user.getAccount(), user);
+        assert user.getId() == 0L;
+
+        long id = getNewId();
+        User newUser = new User(id, user);
+        database.put(newUser.getAccount(), newUser);
+    }
+
+    private static long getNewId() {
+        long maxId = database.values().stream()
+                         .mapToLong(User::getId)
+                         .max()
+                         .orElse(0L);
+        return maxId + 1;
     }
 
     public static User findByAccount(String account) {

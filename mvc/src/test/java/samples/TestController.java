@@ -3,6 +3,7 @@ package samples;
 import com.interface21.context.stereotype.Controller;
 import com.interface21.web.bind.annotation.RequestMapping;
 import com.interface21.web.bind.annotation.RequestMethod;
+import com.interface21.web.bind.annotation.ResponseBody;
 import com.interface21.webmvc.servlet.ModelAndView;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -41,9 +42,10 @@ public class TestController {
                 .addObject("user", Map.of("a", "b"));
     }
 
+    @ResponseBody
     @RequestMapping(value = "/json-post-test", method = RequestMethod.POST)
     public ModelAndView postAndReturn(final HttpServletRequest request, final HttpServletResponse response) {
-        return new ModelAndView("jsonView")
+        return new ModelAndView(null)
                 .addObject("user", Map.of("c", "d"))
                 .addObject("age", 14);
     }
