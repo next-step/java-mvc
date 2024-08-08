@@ -1,5 +1,6 @@
 package camp.nextstep.controller;
 
+import camp.nextstep.dao.UserSession;
 import camp.nextstep.domain.User;
 import camp.nextstep.dao.InMemoryUserDao;
 import com.interface21.web.bind.annotation.RequestMapping;
@@ -32,10 +33,10 @@ public class LoginController {
     return login(req, user);
   }
 
-  @RequestMapping(value = "/login/view", method = RequestMethod.GET)
-  public ModelAndView loginView(final HttpServletRequest httpServletRequest,
-      final HttpServletResponse httpServletResponse) {
-    return UserSession.getUserFrom(httpServletRequest.getSession())
+  @RequestMapping(value = "/view", method = RequestMethod.GET)
+  public ModelAndView loginView(final HttpServletRequest req,
+      final HttpServletResponse res) {
+    return UserSession.getUserFrom(req.getSession())
         .map(user -> {
           log.info("logged in {}", user.getAccount());
           return new ModelAndView(new JspView("redirect:/index.jsp"));
@@ -43,9 +44,9 @@ public class LoginController {
         .orElse(new ModelAndView(new JspView("login.jsp")));
   }
 
-  private ModelAndView login(final HttpServletRequest request, final User user) {
-    if (user.checkPassword(request.getParameter("password"))) {
-      final var session = request.getSession();
+  private ModelAndView login(final HttpServletRequest req, final User user) {
+    if (user.checkPassword(req.getParameter("password"))) {
+      final var session = req.getSession();
       session.setAttribute(UserSession.SESSION_KEY, user);
       return new ModelAndView(new JspView("redirect:/index.jsp"));
     }

@@ -1,4 +1,4 @@
-package camp.nextstep.controller;
+package camp.nextstep.dao;
 
 import camp.nextstep.domain.User;
 import jakarta.servlet.http.HttpSession;
