@@ -5,6 +5,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+
+import java.lang.reflect.Method;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -87,6 +91,23 @@ class AnnotationHandlerMappingTest {
         assertAll(
                 () -> assertThat(modelAndView.getObject("id")).isEqualTo(1L),
                 () -> assertThat(modelAndView.getObject("age")).isEqualTo(31)
+        );
+    }
+
+    @DisplayName("요청과 상관 없이 @PathVariable은 url의 {} 에 작성된 이름과 동일하면 파싱된다.")
+    @Test
+    void pathVariable() throws Exception {
+        final var request = mock(HttpServletRequest.class);
+        final var response = mock(HttpServletResponse.class);
+
+        when(request.getRequestURI()).thenReturn("/users/1");
+        when(request.getMethod()).thenReturn("GET");
+
+        final var handlerExecution = (HandlerExecution) handlerMapping.getHandler(request);
+        final var modelAndView = handlerExecution.handle(request, response);
+
+        assertAll(
+                () -> assertThat(modelAndView.getObject("id")).isEqualTo(1L)
         );
     }
 }
