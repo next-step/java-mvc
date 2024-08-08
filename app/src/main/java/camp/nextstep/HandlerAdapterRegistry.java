@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class HandlerAdapterRegistry implements AdapterRegistry {
+
     private final List<HandlerAdapter> handlerAdapters;
 
     public HandlerAdapterRegistry(List<HandlerAdapter> handlerAdapters) {
@@ -13,7 +14,7 @@ public class HandlerAdapterRegistry implements AdapterRegistry {
     }
 
     @Override
-    public Optional<HandlerAdapter> getHandlerAdapter(Object handler){
+    public Optional<HandlerAdapter> getHandlerAdapter(Object handler) {
         return handlerAdapters.stream()
             .filter(handlerAdapter -> handlerAdapter.supports(handler))
             .findFirst();

@@ -8,13 +8,14 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class HandlerMappingRegistry implements MappingRegistry {
+
     private final List<HandlerMapping> handlerMappings;
 
     public HandlerMappingRegistry(List<HandlerMapping> handlerMappings) {
         this.handlerMappings = handlerMappings;
     }
 
-    public Optional<Object> getHandler(HttpServletRequest request){
+    public Optional<Object> getHandler(HttpServletRequest request) {
         return handlerMappings.stream()
             .map(handlerMapping -> handlerMapping.getHandler(request))
             .filter(Objects::nonNull)

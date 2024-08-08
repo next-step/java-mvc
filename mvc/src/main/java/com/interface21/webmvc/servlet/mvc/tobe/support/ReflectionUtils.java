@@ -5,7 +5,9 @@ import java.util.Set;
 import org.reflections.Reflections;
 
 public class ReflectionUtils {
-    public static Set<Class<?>> getAnnotatedClass(Object[] basePackages, Class<? extends Annotation> clazz) {
+
+    public static Set<Class<?>> getAnnotatedClass(Object[] basePackages,
+        Class<? extends Annotation> clazz) {
         Reflections reflections = new Reflections(basePackages);
 
         return reflections.getTypesAnnotatedWith(clazz);

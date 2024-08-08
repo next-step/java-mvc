@@ -1,7 +1,5 @@
 package com.interface21.webmvc.servlet.mvc.tobe.meta;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.Test;
 
 class ControllerScannerTest {

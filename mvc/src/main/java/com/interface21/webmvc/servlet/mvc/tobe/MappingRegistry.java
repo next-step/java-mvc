@@ -4,5 +4,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 public interface MappingRegistry {
-     Optional<Object> getHandler(HttpServletRequest request);
+
+    Optional<Object> getHandler(HttpServletRequest request);
 }

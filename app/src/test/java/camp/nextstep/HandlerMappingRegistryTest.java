@@ -31,7 +31,6 @@ class HandlerMappingRegistryTest {
         when(request.getRequestURI()).thenReturn("/register");
         when(request.getMethod()).thenReturn("POST");
 
-
         assertThat(registry.getHandler(request)).isInstanceOf(Optional.class);
         assertThat(registry.getHandler(request).get()).isInstanceOf(Controller.class);
     }

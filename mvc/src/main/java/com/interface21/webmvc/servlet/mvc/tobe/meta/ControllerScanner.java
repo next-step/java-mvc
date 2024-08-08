@@ -25,11 +25,6 @@ public class ControllerScanner {
         this.handlerExecutions = new HashMap<>();
     }
 
-    public void initialize(Object[] basePackages) {
-        Set<Class<?>> controllers = ReflectionUtils.getAnnotatedClass(basePackages, Controller.class);
-        controllers.forEach(controller -> handlerExecutions.putAll(createHandlerMapping(controller)));
-    }
-
     public static Map<HandlerKey, HandlerExecution> createHandlerMapping(Class<?> controller) {
         String controllerUri = getControllerUri(controller);
         Object instance = createInstance(controller);
@@ -78,6 +73,13 @@ public class ControllerScanner {
             .ofNullable(controller.getAnnotation(RequestMapping.class))
             .map(RequestMapping::value)
             .orElse(EMPTY);
+    }
+
+    public void initialize(Object[] basePackages) {
+        Set<Class<?>> controllers = ReflectionUtils.getAnnotatedClass(basePackages,
+            Controller.class);
+        controllers.forEach(
+            controller -> handlerExecutions.putAll(createHandlerMapping(controller)));
     }
 
     public HandlerExecution get(HandlerKey key) {
