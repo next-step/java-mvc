@@ -14,11 +14,12 @@ public class DispatcherServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(DispatcherServlet.class);
 
     private final HandlerMappingRegistry handlerMappingRegistry = new HandlerMappingRegistry();
-    private final HandlerAdapter handlerAdapter;
+    private final RequestHandlerAdapter handlerAdapter = new RequestHandlerAdapter();
 
     public DispatcherServlet(Object... basePackage) {
         handlerMappingRegistry.addHandlerMapping(new AnnotationHandlerMapping(basePackage));
-        handlerAdapter = new RequestHandlerAdapter();
+        // default resolver 추가
+        handlerAdapter.addArgumentResolvers(handlerAdapter.getDefaultArgumentResolvers());
     }
 
     @Override

@@ -2,10 +2,13 @@ package com.interface21.webmvc.servlet.mvc;
 
 import com.interface21.web.bind.annotation.RequestMapping;
 import com.interface21.web.bind.annotation.RequestMethod;
+import com.interface21.webmvc.servlet.mvc.support.PathPatternUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +19,7 @@ public class AnnotationHandlerMapping implements HandlerMapping{
 
     private final Object[] basePackage;
     private final Map<HandlerKey, HandlerExecution> handlerExecutions;
+    private final List<String> urlPatterns = new ArrayList<>();
     private final ControllerScanner controllerScanner = ControllerScanner.getInstance();
 
     public AnnotationHandlerMapping(final Object... basePackage) {
@@ -33,14 +37,15 @@ public class AnnotationHandlerMapping implements HandlerMapping{
     private void addHandlerExecution(final Method method, final AnnotationControllerClass controller) {
         final var requestMapping = method.getAnnotation(RequestMapping.class);
         final var handlerExecution = new HandlerExecution(controller, method);
-        final var httpPath = requestMapping.value();
+        final var urlPattern = requestMapping.value();
 
-        log.info("Path : {}, Controller : {}", httpPath, controller.getClass());
+        log.info("Path : {}, Controller : {}", urlPattern, controller.getClass());
 
         Arrays.stream(requestMapping.method())
                 .forEach(requestMethod -> {
-                    final var handlerKey = new HandlerKey(httpPath, requestMethod);
+                    final var handlerKey = new HandlerKey(urlPattern, requestMethod);
                     handlerExecutions.put(handlerKey, handlerExecution);
+                    urlPatterns.add(urlPattern);
                 });
     }
 
@@ -51,7 +56,12 @@ public class AnnotationHandlerMapping implements HandlerMapping{
 
     @Override
     public HandlerExecution getHandler(final HttpServletRequest request) {
-        final var handlerKey = new HandlerKey(request.getRequestURI(), RequestMethod.valueOf(request.getMethod()));
+        String urlPattern = urlPatterns.stream()
+            .filter(it -> PathPatternUtil.isUrlMatch(it, request.getRequestURI()))
+            .findFirst()
+            .orElseThrow(() -> new UnSupportedHandlerException("Unsupported request: " + request.getRequestURI()));
+
+        final var handlerKey = new HandlerKey(urlPattern, RequestMethod.valueOf(request.getMethod()));
 
         return handlerExecutions.get(handlerKey);
     }
