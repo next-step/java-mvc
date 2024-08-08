@@ -8,6 +8,6 @@ public interface HandlerAdapter {
 
     boolean supports(Object handler);
 
-    ModelAndView handler(Object handler, HttpServletRequest request, HttpServletResponse response)
+    ModelAndView handle(Object handler, HttpServletRequest request, HttpServletResponse response)
         throws Exception;
 }

@@ -53,7 +53,7 @@ public class DispatcherServlet extends HttpServlet {
             final HandlerAdapter handlerAdapter = adapterRegistry.getHandlerAdapter(handler)
                 .orElseThrow(() -> new IllegalStateException("Handler Not Found"));
 
-            ModelAndView modelAndView = handlerAdapter.handler(handler, request, response);
+            ModelAndView modelAndView = handlerAdapter.handle(handler, request, response);
             modelAndView.render(request, response);
         } catch (Throwable e) {
             log.error("Exception : {}", e.getMessage(), e);
