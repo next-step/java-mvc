@@ -21,6 +21,8 @@ public class AnnotationHandlerMapping implements HandlerMapping {
     public void initialize() {
         log.info("Initialized AnnotationHandlerMapping!");
         controllerScanner.initialize(this.basePackages);
+
+
     }
 
     @Override
