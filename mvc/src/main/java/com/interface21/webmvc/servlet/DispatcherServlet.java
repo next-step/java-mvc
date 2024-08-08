@@ -1,8 +1,5 @@
-package camp.nextstep;
+package com.interface21.webmvc.servlet;
 
-import com.interface21.webmvc.servlet.ModelAndView;
-import com.interface21.webmvc.servlet.View;
-import com.interface21.webmvc.servlet.mvc.asis.Controller;
 import com.interface21.webmvc.servlet.mvc.tobe.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -10,7 +7,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.interface21.webmvc.servlet.view.JspView;
 
 import java.util.List;
 
@@ -32,12 +28,12 @@ public class DispatcherServlet extends HttpServlet {
   }
 
   private void initializeHandlerMappings() {
-    handlerMappings = HandlerMappings.of(List.of(new ManualHandlerMapping(), new AnnotationHandlerMapping("camp.nextstep")));
+    handlerMappings = HandlerMappings.of(List.of(new AnnotationHandlerMapping("camp.nextstep")));
     handlerMappings.initialize();
   }
 
   private void initializeHandlerAdapters() {
-    handlerAdapters = HandlerAdapters.of(List.of(new ManualHandlerAdapter(), new AnnotationHandlerAdapter()));
+    handlerAdapters = HandlerAdapters.of(List.of(new AnnotationHandlerAdapter()));
   }
 
   @Override
