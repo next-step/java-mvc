@@ -3,6 +3,7 @@ package camp.nextstep.dao;
 import camp.nextstep.domain.User;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class InMemoryUserDao {
@@ -18,8 +19,8 @@ public class InMemoryUserDao {
         database.put(user.getAccount(), user);
     }
 
-    public static User findByAccount(String account) {
-        return database.get(account);
+    public static Optional<User> findByAccount(String account) {
+        return Optional.ofNullable(database.get(account));
     }
 
     private InMemoryUserDao() {}
