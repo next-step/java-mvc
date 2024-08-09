@@ -22,34 +22,37 @@
 
 
 
-## 🚀 2단계 - 점진적인 리팩터링
+## 🚀 3단계 - JSON View 구현하기
 
-### Legacy MVC와 @MVC 통합하기AnnotationHandlerMapping은
-- Legacy MVC 프레임워크와 @MVC 프레임워크가 공존하도록 만들자
-- 회원가입 컨트롤러를 아래와 같이 변경해도 정상 동작해야 한다
+### JsonView 클래스를 구현한다.
+
+- [x] HTML 이외에 JSON으로 응답할 수 있도록 JsonView 클래스를 구현
+    - [x] JSON으로 응답할 때 ContentType은 MediaType.APPLICATION_JSON_UTF8_VALUE으로 반환
+    - [x] model에 데이터가 1개면 값을 그대로 반환하고 2개 이상이면 Map 형태 그대로 JSON으로 변환해서 반환
+    - [x] 아래 코드를 추가하여 정상 동작하는지 확인한다.  
 
 ```java
 @Controller
-public class RegisterController {
+public class UserController {
 
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ModelAndView save(HttpServletRequest req, HttpServletResponse res) {
-        // ...
-    }
+  private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
-    @RequestMapping(value = "/register", method = RequestMethod.GET)
-    public ModelAndView show(HttpServletRequest req, HttpServletResponse res) {
-        // ...
-    }
+  @RequestMapping(value = "/api/user", method = RequestMethod.GET)
+  public ModelAndView show(HttpServletRequest request, HttpServletResponse response) {
+    final String account = request.getParameter("account");
+    log.debug("user id : {}", account);
+
+    final ModelAndView modelAndView = new ModelAndView(new JsonView());
+    final User user = InMemoryUserRepository.findByAccount(account)
+        .orElseThrow();
+
+    modelAndView.addObject("user", user);
+    return modelAndView;
+  }
 }
-```
-### AnnotationHandlerMapping
-- [x] Controller Scanner 추가
-- [x] 컨트롤러 메서드 정보로 HandlerExecution 생성하기
+```  
 
-### DispatcherServlet
-- [x] HandlerMapping 인터페이스 추가
-- [x] DispatcherServlet의 초기화 과정에서 ManualHandlerMapping, AnnotationHandlerMapping 초기화
-- [x] HandlerAdapter 인터페이스 추가
-    - [x] AnnotationHandlerMapping은 HandlerExecution을 반환한다
-    - [x] ManualHandlerMapping은 Controller를 반환한다
+### Legacy MVC 제거하기
+- [x] app 모듈에 있는 모든 컨트롤러를 어노테이션 기반 MVC로 변경한다.
+- [x] asis 패키지에 있는 레거시 코드를 삭제해도 서비스가 정상 동작하도록 리팩터링
+- [x] DispatcherServlet도 app 패키지가 아닌 mvc 패키지로 옮겨보자.
