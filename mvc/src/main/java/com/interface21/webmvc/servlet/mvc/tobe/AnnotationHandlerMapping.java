@@ -1,33 +1,33 @@
 package com.interface21.webmvc.servlet.mvc.tobe;
 
 import com.interface21.web.bind.annotation.RequestMethod;
-import com.interface21.webmvc.servlet.mvc.tobe.exception.NotFoundException;
+import com.interface21.webmvc.servlet.mvc.tobe.meta.ControllerScanner;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AnnotationHandlerMapping {
+public class AnnotationHandlerMapping implements HandlerMapping {
 
     private static final Logger log = LoggerFactory.getLogger(AnnotationHandlerMapping.class);
 
-    private final HandlerExecutionMeta handlerExecutions;
+    private final ControllerScanner controllerScanner;
     private final Object[] basePackages;
 
     public AnnotationHandlerMapping(final Object... basePackage) {
         this.basePackages = basePackage;
-        this.handlerExecutions = new HandlerExecutionMeta();
+        this.controllerScanner = new ControllerScanner();
     }
 
     public void initialize() {
         log.info("Initialized AnnotationHandlerMapping!");
-        handlerExecutions.initialize(this.basePackages);
+        controllerScanner.initialize(this.basePackages);
     }
 
+    @Override
     public Object getHandler(final HttpServletRequest request) {
         HandlerKey key = HandlerKey.of(request.getRequestURI(),
             RequestMethod.from(request.getMethod()));
 
-        return handlerExecutions.get(key)
-            .orElseThrow(NotFoundException::new);
+        return controllerScanner.get(key);
     }
 }

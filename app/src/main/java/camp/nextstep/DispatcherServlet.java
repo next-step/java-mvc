@@ -1,52 +1,61 @@
 package camp.nextstep;
 
+import com.interface21.webmvc.servlet.ModelAndView;
+import com.interface21.webmvc.servlet.mvc.tobe.AdapterRegistry;
+import com.interface21.webmvc.servlet.mvc.tobe.AnnotationHandlerAdapter;
+import com.interface21.webmvc.servlet.mvc.tobe.AnnotationHandlerMapping;
+import com.interface21.webmvc.servlet.mvc.tobe.HandlerAdapter;
+import com.interface21.webmvc.servlet.mvc.tobe.MappingRegistry;
+import com.interface21.webmvc.servlet.mvc.tobe.exception.NotFoundException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.interface21.webmvc.servlet.view.JspView;
 
 public class DispatcherServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     private static final Logger log = LoggerFactory.getLogger(DispatcherServlet.class);
-    private static final String REDIRECT_PREFIX = "redirect:";
 
-    private ManualHandlerMapping manualHandlerMapping;
+    private final Object[] basePackages;
+    private MappingRegistry mappingRegistry;
+    private AdapterRegistry adapterRegistry;
 
-    public DispatcherServlet() {
+    public DispatcherServlet(final Object... basePackage) {
+        basePackages = basePackage;
     }
 
     @Override
     public void init() {
-        this.manualHandlerMapping = new ManualHandlerMapping();
-        this.manualHandlerMapping.initialize();
+        this.mappingRegistry = new HandlerMappingRegistry(
+            List.of(new ManualHandlerMapping(), new AnnotationHandlerMapping(basePackages)));
+        this.adapterRegistry = new HandlerAdapterRegistry(
+            List.of(new ManualHandlerAdapter(), new AnnotationHandlerAdapter()));
+
+        this.mappingRegistry.initialize();
     }
 
     @Override
-    protected void service(final HttpServletRequest request, final HttpServletResponse response) throws ServletException {
+    protected void service(final HttpServletRequest request, final HttpServletResponse response)
+        throws ServletException {
         final String requestURI = request.getRequestURI();
         log.debug("Method : {}, Request URI : {}", request.getMethod(), requestURI);
 
         try {
-            final var controller = manualHandlerMapping.getHandler(requestURI);
-            final var viewName = controller.execute(request, response);
-            move(viewName, request, response);
+            final Object handler = mappingRegistry.getHandler(request)
+                .orElseThrow(() -> new NotFoundException("Path Not found"));
+            final HandlerAdapter handlerAdapter = adapterRegistry.getHandlerAdapter(handler)
+                .orElseThrow(() -> new IllegalStateException("Handler Not Found"));
+
+            ModelAndView modelAndView = handlerAdapter.handle(handler, request, response);
+            modelAndView.render(request, response);
         } catch (Throwable e) {
             log.error("Exception : {}", e.getMessage(), e);
             throw new ServletException(e.getMessage());
         }
     }
 
-    private void move(final String viewName, final HttpServletRequest request, final HttpServletResponse response) throws Exception {
-        if (viewName.startsWith(REDIRECT_PREFIX)) {
-            response.sendRedirect(viewName.substring(REDIRECT_PREFIX.length()));
-            return;
-        }
-
-        final var requestDispatcher = request.getRequestDispatcher(viewName);
-        requestDispatcher.forward(request, response);
-    }
 }
