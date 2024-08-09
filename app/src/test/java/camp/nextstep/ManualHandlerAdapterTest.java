@@ -24,7 +24,7 @@ class ManualHandlerAdapterTest {
         when(request.getAttribute("id")).thenReturn("gugu");
         when(request.getRequestURI()).thenReturn("/no-method");
 
-        final var modelAndView = manualHandlerAdapter.handle(new RegisterViewController(), request,
+        final var modelAndView = manualHandlerAdapter.handle(new LogoutTestController(), request,
             response);
         assertThat(modelAndView).isInstanceOf(ModelAndView.class);
     }

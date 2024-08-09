@@ -28,7 +28,7 @@ class HandlerMappingRegistryTest {
         final var response = mock(HttpServletResponse.class);
 
         when(request.getAttribute("id")).thenReturn("gugu");
-        when(request.getRequestURI()).thenReturn("/register");
+        when(request.getRequestURI()).thenReturn("/logoutTest");
         when(request.getMethod()).thenReturn("POST");
 
         assertThat(registry.getHandler(request)).isInstanceOf(Optional.class);
