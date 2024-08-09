@@ -11,11 +11,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 @Controller
 public class LoginController {
 
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);
-    @RequestMapping(value="/login", method= RequestMethod.POST)
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ModelAndView execute(final HttpServletRequest req, final HttpServletResponse res) {
 
         if (UserSession.isLoggedIn(req.getSession())) {
