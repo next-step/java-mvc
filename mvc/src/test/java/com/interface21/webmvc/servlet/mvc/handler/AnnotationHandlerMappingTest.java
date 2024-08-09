@@ -140,4 +140,50 @@ class AnnotationHandlerMappingTest {
                 () -> assertThat(testUser.getAge()).isEqualTo(19)
         );
     }
+
+    @DisplayName("GET 요청일 때, 파라미터에 @ModelAttribute가 있고 객체가 있으면 QueryString을 파싱해서 객체를 만들어준다.")
+    @Test
+    void modelAttributeGet() throws Exception {
+        final var request = mock(HttpServletRequest.class);
+        final var response = mock(HttpServletResponse.class);
+
+        when(request.getRequestURI()).thenReturn("/users-model");
+        when(request.getQueryString()).thenReturn("userId=gugu&password=123&age=19");
+        when(request.getMethod()).thenReturn("GET");
+
+        final var handlerExecution = (HandlerExecution) handlerMapping.getHandler(request);
+        final var modelAndView = handlerExecution.handle(request, response);
+
+        TestUser testUser = (TestUser) modelAndView.getObject("testUser");
+        assertAll(
+                () -> assertThat(testUser.getUserId()).isEqualTo("gugu"),
+                () -> assertThat(testUser.getPassword()).isEqualTo("123"),
+                () -> assertThat(testUser.getAge()).isEqualTo(19)
+        );
+    }
+
+    @DisplayName("POST 요청일 때, 파라미터에 @ModelAttribute가 있고 객체가 있으면 RequestBody를 파싱해서 객체를 만들어준다.")
+    @Test
+    void modelAttributePost() throws Exception {
+        final var request = mock(HttpServletRequest.class);
+        final var response = mock(HttpServletResponse.class);
+
+        when(request.getRequestURI()).thenReturn("/users-model");
+        when(request.getHeader("Content-Type")).thenReturn(MediaType.FORM_URL_ENCODED);
+        when(request.getMethod()).thenReturn("POST");
+
+        String body = "userId=gugu&password=123&age=19";
+        InputStream byteArrayInputStream = new ByteArrayInputStream(body.getBytes());
+        when(request.getInputStream()).thenReturn(new DelegatingServletInputStream(byteArrayInputStream));
+
+        final var handlerExecution = (HandlerExecution) handlerMapping.getHandler(request);
+        final var modelAndView = handlerExecution.handle(request, response);
+
+        TestUser testUser = (TestUser) modelAndView.getObject("testUser");
+        assertAll(
+                () -> assertThat(testUser.getUserId()).isEqualTo("gugu"),
+                () -> assertThat(testUser.getPassword()).isEqualTo("123"),
+                () -> assertThat(testUser.getAge()).isEqualTo(19)
+        );
+    }
 }

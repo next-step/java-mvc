@@ -39,4 +39,4 @@
 - [x] 1. `@RequestParam` 을 이용한 맵핑처리
 - [x] 2. `@PathVariable` 을 이용한 맵핑처리
 - [x] 3. `@RequestBody` 을 이용한 맵핑처리
-- [ ] 4. `@ModelAttribute` 을 이용한 맵핑처리
+- [x] 4. `@ModelAttribute` 을 이용한 맵핑처리

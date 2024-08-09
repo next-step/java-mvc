@@ -53,4 +53,20 @@ public class TestUserController {
         mav.addObject("id", id);
         return mav;
     }
+
+    @RequestMapping(value = "/users-model", method = RequestMethod.GET)
+    public ModelAndView create_javabean1(@ModelAttribute TestUser testUser) {
+        log.debug("testUser: {}", testUser);
+        ModelAndView mav = new ModelAndView(new JsonView());
+        mav.addObject("testUser", testUser);
+        return mav;
+    }
+
+    @RequestMapping(value = "/users-model", method = RequestMethod.POST)
+    public ModelAndView create_javabean2(@ModelAttribute TestUser testUser) {
+        log.debug("testUser: {}", testUser);
+        ModelAndView mav = new ModelAndView(new JsonView());
+        mav.addObject("testUser", testUser);
+        return mav;
+    }
 }
