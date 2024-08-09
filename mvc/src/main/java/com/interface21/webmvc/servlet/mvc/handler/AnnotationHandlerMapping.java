@@ -59,6 +59,7 @@ public class AnnotationHandlerMapping implements HandlerMapping {
         ArgumentResolvers argumentResolvers = new ArgumentResolvers();
         argumentResolvers.add(new RequestParamArgumentResolver());
         argumentResolvers.add(new PathVariableArgumentResolver());
+        argumentResolvers.add(new RequestBodyArgumentResolver());
         return argumentResolvers;
     }
 

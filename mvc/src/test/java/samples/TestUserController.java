@@ -1,10 +1,7 @@
 package samples;
 
 import com.interface21.context.stereotype.Controller;
-import com.interface21.web.bind.annotation.PathVariable;
-import com.interface21.web.bind.annotation.RequestMapping;
-import com.interface21.web.bind.annotation.RequestMethod;
-import com.interface21.web.bind.annotation.RequestParam;
+import com.interface21.web.bind.annotation.*;
 import com.interface21.webmvc.servlet.mvc.ModelAndView;
 import com.interface21.webmvc.servlet.mvc.view.JsonView;
 import org.slf4j.Logger;
@@ -41,6 +38,13 @@ public class TestUserController {
         return mav;
     }
 
+    @RequestMapping(value = "/users-json", method = RequestMethod.POST)
+    public ModelAndView create_javabean3(@RequestBody TestUser testUser) {
+        log.debug("testUser: {}", testUser);
+        ModelAndView mav = new ModelAndView(new JsonView());
+        mav.addObject("testUser", testUser);
+        return mav;
+    }
 
     @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
     public ModelAndView show_pathvariable(@PathVariable long id) {

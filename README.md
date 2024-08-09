@@ -38,5 +38,5 @@
    - PathVariable 은 `@RequestMapping.value` 의 url 중 특정 pattern 을 토대로 맵핑해 넣어준다
 - [x] 1. `@RequestParam` 을 이용한 맵핑처리
 - [x] 2. `@PathVariable` 을 이용한 맵핑처리
-- [ ] 3. `@RequestBody` 을 이용한 맵핑처리
+- [x] 3. `@RequestBody` 을 이용한 맵핑처리
 - [ ] 4. `@ModelAttribute` 을 이용한 맵핑처리

@@ -1,5 +1,6 @@
 package com.interface21.webmvc.servlet.mvc.handler;
 
+import com.interface21.web.http.MediaType;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -7,7 +8,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.mock.web.DelegatingServletInputStream;
+import samples.TestUser;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -108,6 +113,31 @@ class AnnotationHandlerMappingTest {
 
         assertAll(
                 () -> assertThat(modelAndView.getObject("id")).isEqualTo(1L)
+        );
+    }
+
+    @DisplayName("POST 요청이고, 콘텐츠 타입 헤더에 application/json이 있고, 파라미터에 @RequestBody 있고 객체가 있으면 RequestBody의 JSON을 파싱해서 객체를 만들어준다.")
+    @Test
+    void requestBodyPost() throws Exception {
+        final var request = mock(HttpServletRequest.class);
+        final var response = mock(HttpServletResponse.class);
+
+        when(request.getRequestURI()).thenReturn("/users-json");
+        when(request.getHeader("Content-Type")).thenReturn(MediaType.APPLICATION_JSON_UTF8_VALUE);
+        when(request.getMethod()).thenReturn("POST");
+
+        String body = "{\"userId\":\"gugu\",\"password\":\"123\",\"age\":\"19\"}";
+        InputStream byteArrayInputStream = new ByteArrayInputStream(body.getBytes());
+        when(request.getInputStream()).thenReturn(new DelegatingServletInputStream(byteArrayInputStream));
+
+        final var handlerExecution = (HandlerExecution) handlerMapping.getHandler(request);
+        final var modelAndView = handlerExecution.handle(request, response);
+
+        TestUser testUser = (TestUser) modelAndView.getObject("testUser");
+        assertAll(
+                () -> assertThat(testUser.getUserId()).isEqualTo("gugu"),
+                () -> assertThat(testUser.getPassword()).isEqualTo("123"),
+                () -> assertThat(testUser.getAge()).isEqualTo(19)
         );
     }
 }
