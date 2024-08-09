@@ -1,7 +1,6 @@
 package camp.nextstep.dao;
 
 import camp.nextstep.domain.User;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
