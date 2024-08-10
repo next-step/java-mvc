@@ -1,5 +1,6 @@
 package samples;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.interface21.web.bind.annotation.PathVariable;
 import com.interface21.web.bind.annotation.RequestMapping;
 import com.interface21.web.bind.annotation.RequestMethod;
@@ -15,7 +16,7 @@ public class TestUserController {
     @RequestMapping(value = "/users", method = RequestMethod.POST)
     public ModelAndView create_string(String userId, String password) {
         log.debug("userId: {}, password: {}", userId, password);
-        ModelAndView mav = new ModelAndView(new JsonView());
+        ModelAndView mav = new ModelAndView(new JsonView(new ObjectMapper()));
         mav.addObject("userId", userId);
         mav.addObject("password", password);
         return mav;
@@ -24,7 +25,7 @@ public class TestUserController {
     @RequestMapping(value = "/users", method = RequestMethod.POST)
     public ModelAndView create_int_long(long id, int age) {
         log.debug("id: {}, age: {}", id, age);
-        ModelAndView mav = new ModelAndView(new JsonView());
+        ModelAndView mav = new ModelAndView(new JsonView(new ObjectMapper()));
         mav.addObject("id", id);
         mav.addObject("age", age);
         return mav;
@@ -33,7 +34,7 @@ public class TestUserController {
     @RequestMapping(value = "/users", method = RequestMethod.POST)
     public ModelAndView create_javabean(TestUser testUser) {
         log.debug("testUser: {}", testUser);
-        ModelAndView mav = new ModelAndView(new JsonView());
+        ModelAndView mav = new ModelAndView(new JsonView(new ObjectMapper()));
         mav.addObject("testUser", testUser);
         return mav;
     }
@@ -42,7 +43,7 @@ public class TestUserController {
     @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
     public ModelAndView show_pathvariable(@PathVariable long id) {
         log.debug("userId: {}", id);
-        ModelAndView mav = new ModelAndView(new JsonView());
+        ModelAndView mav = new ModelAndView(new JsonView(new ObjectMapper()));
         mav.addObject("id", id);
         return mav;
     }

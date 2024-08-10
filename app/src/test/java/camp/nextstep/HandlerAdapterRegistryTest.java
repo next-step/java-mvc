@@ -4,7 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import camp.nextstep.controller.RegisterViewController;
+import camp.nextstep.controller.UserSession;
+import com.interface21.webmvc.servlet.mvc.asis.Controller;
 import com.interface21.webmvc.servlet.mvc.tobe.HandlerAdapter;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -20,7 +24,7 @@ class HandlerAdapterRegistryTest {
             List.of(manualHandlerAdapter));
 
         final var handlerAdapter = handlerAdapterRegistry.getHandlerAdapter(
-            new RegisterViewController());
+            new LogoutTestController());
         assertThat(handlerAdapter).isInstanceOf(Optional.class);
         assertThat(handlerAdapter.get()).isInstanceOf(HandlerAdapter.class);
 
@@ -36,4 +40,5 @@ class HandlerAdapterRegistryTest {
         assertThatThrownBy(() -> handlerAdapterRegistry.getHandlerAdapter(new String())
             .orElseThrow(RuntimeException::new)).isInstanceOf(RuntimeException.class);
     }
+
 }

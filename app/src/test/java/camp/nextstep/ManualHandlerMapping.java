@@ -1,12 +1,6 @@
 package camp.nextstep;
 
-import camp.nextstep.controller.LoginController;
-import camp.nextstep.controller.LoginViewController;
-import camp.nextstep.controller.LogoutController;
-import camp.nextstep.controller.RegisterController;
-import camp.nextstep.controller.RegisterViewController;
 import com.interface21.webmvc.servlet.mvc.asis.Controller;
-import com.interface21.webmvc.servlet.mvc.asis.ForwardController;
 import com.interface21.webmvc.servlet.mvc.tobe.HandlerMapping;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -21,10 +15,7 @@ public class ManualHandlerMapping implements HandlerMapping {
     private final Map<String, Controller> controllers = new HashMap<>();
 
     public void initialize() {
-        controllers.put("/", new ForwardController("/index.jsp"));
-        controllers.put("/login", new LoginController());
-        controllers.put("/login/view", new LoginViewController());
-        controllers.put("/logout", new LogoutController());
+        controllers.put("/logoutTest", new LogoutTestController());
 
         log.info("Initialized Handler Mapping!");
         controllers.keySet()
@@ -37,4 +28,5 @@ public class ManualHandlerMapping implements HandlerMapping {
         log.debug("Request Mapping Uri : {}", httpServletRequest.getRequestURI());
         return controllers.get(httpServletRequest.getRequestURI());
     }
+
 }
