@@ -13,6 +13,9 @@ java {
 repositories {
     mavenCentral()
 }
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs << '-parameters'
+}
 
 dependencies {
     implementation 'jakarta.servlet:jakarta.servlet-api:5.0.0'
