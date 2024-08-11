@@ -5,6 +5,7 @@ import com.interface21.webmvc.servlet.mvc.model.MethodParameter;
 import com.interface21.webmvc.servlet.mvc.support.DefaultParameterType;
 import com.interface21.webmvc.servlet.mvc.support.PathPatternUtil;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 public class PathVariableHandlerMethodArgumentResolver implements HandlerMethodArgumentResolver {
 
