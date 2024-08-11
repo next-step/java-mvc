@@ -18,7 +18,6 @@ public class DispatcherServlet extends HttpServlet {
 
     public DispatcherServlet(Object... basePackage) {
         handlerMappingRegistry.addHandlerMapping(new AnnotationHandlerMapping(basePackage));
-        // default resolver 추가
         handlerAdapter.addArgumentResolvers(handlerAdapter.getDefaultArgumentResolvers());
     }
 

@@ -24,6 +24,7 @@ public class HandlerMappingRegistry {
     Optional<HandlerMapping> handlerMappingOptional = handlerMappings.stream()
         .filter(handlerMapping -> handlerMapping.getHandler(request) != null)
         .findFirst();
+
     if(handlerMappingOptional.isEmpty()) {
       throw new UnSupportedHandlerException("Unsupported request: " + request.getRequestURI());
     }

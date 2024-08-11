@@ -11,17 +11,14 @@ public class HandlerMethodArgumentResolverComposite implements HandlerMethodArgu
 
   private final List<HandlerMethodArgumentResolver> argumentResolvers = new ArrayList<>();
   private final Map<MethodParameter, HandlerMethodArgumentResolver> argumentResolverCache = new ConcurrentHashMap<>(256);
-
-  public HandlerMethodArgumentResolverComposite addResolver(HandlerMethodArgumentResolver resolver) {
-    argumentResolvers.add(resolver);
-
-    return this;
-  }
+  private HandlerMethodArgumentResolver defaultHandlerMethodArgumentResolver;
 
   public void addResolvers(List<? extends HandlerMethodArgumentResolver> resolvers) {
     if (resolvers != null) {
       this.argumentResolvers.addAll(resolvers);
     }
+
+    defaultHandlerMethodArgumentResolver = new DefaultHandlerMethodArgumentResolver();
   }
 
   @Override
@@ -53,6 +50,9 @@ public class HandlerMethodArgumentResolverComposite implements HandlerMethodArgu
       }
     }
 
+    if(result == null) {
+      return defaultHandlerMethodArgumentResolver;
+    }
     return result;
   }
 }
