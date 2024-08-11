@@ -70,16 +70,15 @@
 
 [] 학습 테스트를 
 [] Controller 메서드의 인자 타입에 따라 자동 으로 형변환 후 맵핑
-    - [] compilerArgs 옵션을 생성해서 메서드 파라미터를 가져올 수 있게 적용합니다.
+    - [x] compilerArgs 옵션을 생성해서 메서드 파라미터를 가져올 수 있게 적용합니다.
     - [] HandlerMethodArgumentResolver에 기능 추가를 합니다.
         - Resolvers들을 Registry 형태로 생성합니다.
             - primitive type에 대한 지원을 추가합니다.
             - 객체 타입에 대한 지원을 추가합니다.
             - 기본적인 Wrapper class에 대한 지원을 추가합니다.
-    - [] PathPatternParser를 이용해서 PathVariable 구현을 위한 기능을 추가합니다.
+    - [x] PathPatternParser를 이용해서 PathVariable 구현을 위한 기능을 추가합니다.
         - 기능
             - URL 매칭과 경로에서 변수를 추출한다.
         - 조건
             - "/users/{id}"
             - "/users/{id}/otherResource/{resourceId}" 와 같은 포맷을 지원한다.
-    - [] build.gradle 에 compileJava 옵션으로 메서드 파라미터명을 가져올 수 있도록 변경한다.
