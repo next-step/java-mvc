@@ -3,6 +3,7 @@ package com.interface21.webmvc.servlet.mvc;
 import com.interface21.webmvc.servlet.mvc.resolver.HandlerMethodArgumentResolver;
 import com.interface21.webmvc.servlet.mvc.resolver.HandlerMethodArgumentResolverComposite;
 import com.interface21.webmvc.servlet.mvc.resolver.PathVariableHandlerMethodArgumentResolver;
+import com.interface21.webmvc.servlet.mvc.resolver.RequestParamHandlerMethodArgumentResolver;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
@@ -23,19 +24,20 @@ public class RequestHandlerAdapter implements HandlerAdapter {
 
   public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
     if (argumentResolvers == null) {
-        this.argumentResolvers = null;
-        return;
+      this.argumentResolvers = null;
+      return;
     }
 
-      this.argumentResolvers = new HandlerMethodArgumentResolverComposite();
-      this.argumentResolvers.addResolvers(argumentResolvers);
-    }
-
-    public List<HandlerMethodArgumentResolver> getDefaultArgumentResolvers () {
-      List<HandlerMethodArgumentResolver> resolvers = new ArrayList<>(30); // 이건 왜 해놓은걸까?
-
-      // Annotation-based argument resolution
-      resolvers.add(new PathVariableHandlerMethodArgumentResolver());
-      return resolvers;
-    }
+    this.argumentResolvers = new HandlerMethodArgumentResolverComposite();
+    this.argumentResolvers.addResolvers(argumentResolvers);
   }
+
+  public List<HandlerMethodArgumentResolver> getDefaultArgumentResolvers() {
+    List<HandlerMethodArgumentResolver> resolvers = new ArrayList<>(30);
+
+    // Annotation-based argument resolution
+    resolvers.add(new PathVariableHandlerMethodArgumentResolver());
+    resolvers.add(new RequestParamHandlerMethodArgumentResolver());
+    return resolvers;
+  }
+}
