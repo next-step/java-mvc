@@ -2,7 +2,7 @@ package com.interface21.webmvc.servlet.mvc.tobe.support;
 
 import java.util.Map;
 
-public class PathPatternUtil {
+public final class PathPatternUtil {
 
     public static String getUriValue(String pattern, String path, String key) {
         final Map<String, String> uriVariables = getUriVariables(pattern, path);
