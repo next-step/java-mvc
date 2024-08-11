@@ -5,6 +5,7 @@ import com.interface21.web.bind.annotation.PathVariable;
 import com.interface21.web.bind.annotation.RequestMapping;
 import com.interface21.web.bind.annotation.RequestMethod;
 import com.interface21.webmvc.servlet.ModelAndView;
+import com.interface21.webmvc.servlet.view.JsonView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,23 +22,21 @@ public class TestUserController {
   @RequestMapping(value = "/users", method = RequestMethod.POST)
   public ModelAndView create_int_long(long id, int age) {
     logger.debug("id: {}, age: {}", id, age);
-    return null;
-  }
 
-  @RequestMapping(value = "/users", method = RequestMethod.POST)
-  public ModelAndView create_javabean(TestUser testUser) {
-    logger.debug("testUser: {}", testUser);
-    return null;
-  }
+    final ModelAndView modelAndView = new ModelAndView(new JsonView());
+    modelAndView.addObject("id", id);
+    modelAndView.addObject("age", age);
 
-  public record TestUser(String name, String age) {
+    return modelAndView;
   }
-
 
   @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
   public ModelAndView show_pathvariable(@PathVariable long id) {
     logger.debug("userId: {}", id);
-    return null;
+
+    final ModelAndView modelAndView = new ModelAndView(new JsonView());
+    modelAndView.addObject("id", id);
+
+    return modelAndView;
   }
 }
-
