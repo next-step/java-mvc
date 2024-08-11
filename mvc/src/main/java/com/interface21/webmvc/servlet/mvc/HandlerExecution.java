@@ -22,7 +22,7 @@ public class HandlerExecution {
         return this.method.getAnnotation(RequestMapping.class).value();
     }
 
-    public ModelAndView handle(final Object[] arguments) throws Exception {
-        return (ModelAndView) method.invoke(controller.getNewInstance(), arguments);
+    public ModelAndView handle(Object... args) throws Exception {
+        return (ModelAndView) method.invoke(controller.getNewInstance(), args);
     }
 }
