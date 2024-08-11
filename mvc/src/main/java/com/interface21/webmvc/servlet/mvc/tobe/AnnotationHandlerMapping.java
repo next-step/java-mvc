@@ -2,6 +2,7 @@ package com.interface21.webmvc.servlet.mvc.tobe;
 
 import com.interface21.web.bind.annotation.RequestMethod;
 import com.interface21.webmvc.servlet.mvc.tobe.meta.ControllerScanner;
+import com.interface21.webmvc.servlet.mvc.tobe.parameter.ResolverRegistry;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,9 +14,10 @@ public class AnnotationHandlerMapping implements HandlerMapping {
     private final ControllerScanner controllerScanner;
     private final Object[] basePackages;
 
-    public AnnotationHandlerMapping(final Object... basePackage) {
+
+    public AnnotationHandlerMapping(ResolverRegistry methodArgumentResolverRegistry, final Object... basePackage) {
         this.basePackages = basePackage;
-        this.controllerScanner = new ControllerScanner();
+        this.controllerScanner = new ControllerScanner(methodArgumentResolverRegistry);
     }
 
     public void initialize() {
@@ -27,7 +29,6 @@ public class AnnotationHandlerMapping implements HandlerMapping {
     public Object getHandler(final HttpServletRequest request) {
         HandlerKey key = HandlerKey.of(request.getRequestURI(),
             RequestMethod.from(request.getMethod()));
-
         return controllerScanner.get(key);
     }
 }

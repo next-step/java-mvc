@@ -5,6 +5,9 @@ import com.interface21.web.bind.annotation.RequestMapping;
 import com.interface21.webmvc.servlet.mvc.tobe.HandlerExecution;
 import com.interface21.webmvc.servlet.mvc.tobe.HandlerKey;
 import com.interface21.webmvc.servlet.mvc.tobe.exception.ControllerInitializationException;
+import com.interface21.webmvc.servlet.mvc.tobe.exception.NotFoundException;
+import com.interface21.webmvc.servlet.mvc.tobe.parameter.MethodArgumentResolverRegistry;
+import com.interface21.webmvc.servlet.mvc.tobe.parameter.ResolverRegistry;
 import com.interface21.webmvc.servlet.mvc.tobe.support.ReflectionUtils;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -24,12 +27,14 @@ public class ControllerScanner {
     private static final Logger log = LoggerFactory.getLogger(ControllerScanner.class);
 
     private final Map<HandlerKey, HandlerExecution> handlerExecutions;
+    private final ResolverRegistry methodArgumentResolverRegistry;
 
-    public ControllerScanner() {
+    public ControllerScanner(ResolverRegistry methodArgumentResolverRegistry) {
+        this.methodArgumentResolverRegistry = methodArgumentResolverRegistry;
         this.handlerExecutions = new HashMap<>();
     }
 
-    public static Map<HandlerKey, HandlerExecution> createHandlerMapping(Class<?> controller) {
+    public static Map<HandlerKey, HandlerExecution> createHandlerMapping(Class<?> controller, ResolverRegistry resolverRegistry) {
         String controllerUri = getControllerUri(controller);
         Object instance = createInstance(controller);
 
@@ -40,7 +45,7 @@ public class ControllerScanner {
                 Collector.of(
                     HashMap::new,  //supplier
                     (acc, method) -> createHandlerKeys(controllerUri, method)  // accumulator
-                        .forEach(key -> acc.put(key, new HandlerExecution(instance, method))),
+                        .forEach(key -> acc.put(key, new HandlerExecution(instance, method, resolverRegistry))),
                     (acc1, acc2) -> { // combiner
                         acc1.putAll(acc2);
                         return acc1;
@@ -83,7 +88,7 @@ public class ControllerScanner {
         Set<Class<?>> controllers = ReflectionUtils.getAnnotatedClass(basePackages,
             Controller.class);
         controllers.forEach(
-            controller -> handlerExecutions.putAll(createHandlerMapping(controller)));
+            controller -> handlerExecutions.putAll(createHandlerMapping(controller, methodArgumentResolverRegistry)));
 
         log.info("Initialized Handler Mapping!");
         handlerExecutions.keySet()
@@ -91,7 +96,13 @@ public class ControllerScanner {
                 handlerExecutions.get(path).getClass()));
     }
 
-    public HandlerExecution get(HandlerKey key) {
-        return handlerExecutions.get(key);
+    public HandlerExecution get(HandlerKey handlerKey) {
+        return handlerExecutions.keySet()
+                .stream()
+                    .filter(key -> key.matches(handlerKey))
+                    .findFirst()
+                .map(key -> handlerExecutions.get(key))
+                .orElse(null);
+
     }
 }

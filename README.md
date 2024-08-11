@@ -76,9 +76,11 @@
             - primitive type에 대한 지원을 추가합니다.
             - 객체 타입에 대한 지원을 추가합니다.
             - 기본적인 Wrapper class에 대한 지원을 추가합니다.
+            - HttpServletRequest와 HttpServletResponse를 지원한다.
     - [x] PathPatternParser를 이용해서 PathVariable 구현을 위한 기능을 추가합니다.
         - 기능
             - URL 매칭과 경로에서 변수를 추출한다.
         - 조건
             - "/users/{id}"
             - "/users/{id}/otherResource/{resourceId}" 와 같은 포맷을 지원한다.
+    - [x] Resolver를 MethodMapping 할때, 알맞은 args를 넘겨주도록 사용합니다.
