@@ -9,6 +9,9 @@ public class QueryStringParser {
 	private static final String QUERY_SEPARATOR = "&";
 	private static final String KEY_VALUE_SEPARATOR = "=";
 
+	private QueryStringParser() {
+	}
+
 	public static Map<String, String> parse(String queryString) {
 		return Arrays.stream(splitQueryString(queryString))
 				.map(QueryStringParser::splitKeyAndValue)

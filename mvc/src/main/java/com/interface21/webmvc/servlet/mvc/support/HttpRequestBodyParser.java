@@ -6,6 +6,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class HttpRequestBodyParser {
+
+    private HttpRequestBodyParser() {
+    }
+
     public static String parse(HttpServletRequest request) throws IOException {
         StringBuilder sb = new StringBuilder();
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(request.getInputStream()))) {
