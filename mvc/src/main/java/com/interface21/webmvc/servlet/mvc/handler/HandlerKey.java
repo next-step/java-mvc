@@ -30,8 +30,12 @@ public class HandlerKey {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof HandlerKey that)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof HandlerKey that)) {
+            return false;
+        }
         return Objects.equals(url, that.url) && requestMethod == that.requestMethod;
     }
 

@@ -52,8 +52,12 @@ public class HandlerExecution {
 
     @Override
     public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         final HandlerExecution that = (HandlerExecution) o;
         return Objects.equals(declaredObject.getClass(), that.declaredObject.getClass()) && Objects.equals(method, that.method);
     }
