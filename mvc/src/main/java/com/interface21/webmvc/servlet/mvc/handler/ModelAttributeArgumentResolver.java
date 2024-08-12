@@ -51,6 +51,18 @@ public class ModelAttributeArgumentResolver implements ArgumentResolver {
         if (type1.isPrimitive() && type1.equals(boolean.class)) {
             return false;
         }
+        if (type1.isPrimitive() && type1.equals(char.class)) {
+            return '\u0000';
+        }
+        if (type1.isPrimitive() && type1.equals(long.class)) {
+            return 0L;
+        }
+        if (type1.isPrimitive() && type1.equals(double.class)) {
+            return 0.0;
+        }
+        if (type1.isPrimitive() && type1.equals(float.class)) {
+            return 0.0f;
+        }
         if (type1.isPrimitive()) {
             return 0;
         }
