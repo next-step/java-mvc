@@ -53,7 +53,7 @@ class ModelAttributeArgumentResolverTest {
     @Test
     void resolvePostAndFormData() throws Exception {
         HttpServletRequest request = mock(HttpServletRequest.class);
-        when(request.getHeader("Content-Type")).thenReturn(MediaType.FORM_URL_ENCODED);
+        when(request.getHeader("Content-Type")).thenReturn(MediaType.FORM_URL_ENCODED.getValue());
         when(request.getMethod()).thenReturn("POST");
 
         String body = "userId=gugu&password=123&age=19";

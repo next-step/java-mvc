@@ -55,7 +55,7 @@ class RequestBodyArgumentResolverTest {
         HttpServletResponse response = mock(HttpServletResponse.class);
 
         when(request.getRequestURI()).thenReturn("/users-json");
-        when(request.getHeader("Content-Type")).thenReturn(MediaType.APPLICATION_JSON_UTF8_VALUE);
+        when(request.getHeader("Content-Type")).thenReturn(MediaType.APPLICATION_JSON_UTF8_VALUE.getValue());
         when(request.getMethod()).thenReturn("POST");
 
         String body = "{\"userId\":\"gugu\",\"password\":\"123\",\"age\":\"19\"}";

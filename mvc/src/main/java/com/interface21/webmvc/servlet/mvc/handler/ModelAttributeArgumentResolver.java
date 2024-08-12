@@ -32,6 +32,8 @@ public class ModelAttributeArgumentResolver implements ArgumentResolver {
     }
 
     private String getQueryString(HttpServletRequest request) throws IOException {
+        RequestMethod targetMethod = RequestMethod.from(request.getMethod());
+        MediaType.from(request.getHeader("Content-Type"));
         if (request.getMethod().equals(RequestMethod.POST.name()) && request.getHeader("Content-Type").equals(MediaType.FORM_URL_ENCODED)) {
             return HttpRequestBodyParser.parse(request);
         }

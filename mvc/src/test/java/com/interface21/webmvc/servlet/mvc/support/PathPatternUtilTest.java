@@ -1,6 +1,5 @@
 package com.interface21.webmvc.servlet.mvc.support;
 
-import com.interface21.webmvc.servlet.mvc.support.PathPatternUtil;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
