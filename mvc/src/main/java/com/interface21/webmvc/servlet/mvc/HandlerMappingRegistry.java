@@ -3,12 +3,18 @@ package com.interface21.webmvc.servlet.mvc;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class HandlerMappingRegistry {
 
+  private static final HandlerMappingRegistry instance = new HandlerMappingRegistry();
   private final List<HandlerMapping> handlerMappings = new ArrayList<>();
 
-  public HandlerMappingRegistry() {
+  private HandlerMappingRegistry() {
+  }
+
+  public static HandlerMappingRegistry getInstance() {
+    return instance;
   }
 
   public void initialize() {
@@ -20,10 +26,15 @@ public class HandlerMappingRegistry {
   }
 
   public HandlerExecution getHandler(final HttpServletRequest request) {
-    return handlerMappings.stream()
+    Optional<HandlerMapping> handlerMappingOptional = handlerMappings.stream()
         .filter(handlerMapping -> handlerMapping.getHandler(request) != null)
-        .findAny()
-        .map(it -> it.getHandler(request))
-        .orElseThrow(() -> new UnSupportedHandlerException("Unsupported request: " + request.getRequestURI()));
+        .findFirst();
+
+    if(handlerMappingOptional.isEmpty()) {
+      throw new UnSupportedHandlerException("Unsupported request: " + request.getRequestURI());
+    }
+
+    HandlerMapping handlerMapping = handlerMappingOptional.get();
+    return handlerMapping.getHandler(request);
   }
 }

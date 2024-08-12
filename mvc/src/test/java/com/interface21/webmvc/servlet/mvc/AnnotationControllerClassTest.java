@@ -25,7 +25,7 @@ class AnnotationControllerClassTest {
         AnnotationControllerClass controller = new AnnotationControllerClass(TestController.class);
         Method[] methods = controller.getRequestMappingMethod();
 
-        assertThat(methods).hasSize(1);
-        assertThat(methods[0].getName()).isEqualTo("annotatedMethod");
+        assertThat(methods).hasSize(2);
+        assertThat(methods[0].getName()).isEqualTo("save");
     }
 }
