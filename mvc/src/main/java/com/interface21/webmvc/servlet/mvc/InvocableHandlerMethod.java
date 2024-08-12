@@ -10,6 +10,7 @@ import org.apache.commons.lang3.ObjectUtils;
 
 public class InvocableHandlerMethod extends HandlerMethod {
   private static final Object[] EMPTY_ARGS = new Object[0];
+
   private final HandlerMethodArgumentResolverComposite resolvers;
 
   public InvocableHandlerMethod(Method method, HandlerMethodArgumentResolverComposite resolvers) {
@@ -18,7 +19,7 @@ public class InvocableHandlerMethod extends HandlerMethod {
   }
 
   public Object[] getMethodArgumentValues(HttpServletRequest request, String urlPattern) {
-    MethodParameter[] parameters = this.methodParameters(); // 파라미터들을 가져옴
+    MethodParameter[] parameters = this.methodParameters();
 
     Object[] args = new Object[parameters.length];
 

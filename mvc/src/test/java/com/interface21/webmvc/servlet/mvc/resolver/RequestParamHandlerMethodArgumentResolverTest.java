@@ -13,8 +13,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 class RequestParamHandlerMethodArgumentResolverTest {
-
   private final static String URL_PATTERN = "/users";
+
   private final HandlerMethodArgumentResolver target = new RequestParamHandlerMethodArgumentResolver();
 
   @Test
