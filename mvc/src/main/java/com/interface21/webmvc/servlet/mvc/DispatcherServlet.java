@@ -13,8 +13,8 @@ public class DispatcherServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static final Logger log = LoggerFactory.getLogger(DispatcherServlet.class);
 
-    private final HandlerMappingRegistry handlerMappingRegistry = new HandlerMappingRegistry();
-    private final RequestHandlerAdapter handlerAdapter = new RequestHandlerAdapter();
+    private final HandlerMappingRegistry handlerMappingRegistry = HandlerMappingRegistry.getInstance();
+    private final RequestHandlerAdapter handlerAdapter = RequestHandlerAdapter.getInstance();
 
     public DispatcherServlet(Object... basePackage) {
         handlerMappingRegistry.addHandlerMapping(new AnnotationHandlerMapping(basePackage));

@@ -7,9 +7,14 @@ import java.util.Optional;
 
 public class HandlerMappingRegistry {
 
+  private static final HandlerMappingRegistry instance = new HandlerMappingRegistry();
   private final List<HandlerMapping> handlerMappings = new ArrayList<>();
 
-  public HandlerMappingRegistry() {
+  private HandlerMappingRegistry() {
+  }
+
+  public static HandlerMappingRegistry getInstance() {
+    return instance;
   }
 
   public void initialize() {

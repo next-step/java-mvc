@@ -11,7 +11,16 @@ import java.util.List;
 
 public class RequestHandlerAdapter implements HandlerAdapter {
 
+  private static final RequestHandlerAdapter instance = new RequestHandlerAdapter();
   private HandlerMethodArgumentResolverComposite argumentResolvers;
+
+  private RequestHandlerAdapter() {
+  }
+
+  // 미리 생성된 인스턴스를 반환
+  public static RequestHandlerAdapter getInstance() {
+    return instance;
+  }
 
   @Override
   public void handle(HttpServletRequest request, HttpServletResponse response, HandlerExecution handler) throws Exception {

@@ -24,7 +24,7 @@ class HandlerMappingRegistryTest {
     handlerMapping2 = mock(HandlerMapping.class);
     request = mock(HttpServletRequest.class);
 
-    registry = new HandlerMappingRegistry();
+    registry = HandlerMappingRegistry.getInstance();
     registry.addHandlerMapping(handlerMapping1);
     registry.addHandlerMapping(handlerMapping2);
     registry.initialize();
