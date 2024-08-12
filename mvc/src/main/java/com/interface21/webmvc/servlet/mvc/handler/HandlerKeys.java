@@ -11,6 +11,9 @@ public class HandlerKeys implements Iterable<HandlerKey>{
 	private final List<HandlerKey> values;
 
 	private HandlerKeys(List<HandlerKey> values) {
+		if (values == null) {
+			throw new IllegalArgumentException("values must not be null");
+		}
 		this.values = values;
 	}
 

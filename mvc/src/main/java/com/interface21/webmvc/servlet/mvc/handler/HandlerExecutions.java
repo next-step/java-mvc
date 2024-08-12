@@ -12,6 +12,9 @@ public class HandlerExecutions implements Iterable<HandlerExecution>{
 	private final List<HandlerExecution> handlerExecutions;
 
 	private HandlerExecutions(List<HandlerExecution> handlerExecutions) {
+		if (handlerExecutions == null) {
+			throw new IllegalArgumentException("handlerExecutions must not be null");
+		}
 		this.handlerExecutions = handlerExecutions;
 	}
 
