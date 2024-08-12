@@ -2,7 +2,7 @@ package com.interface21.webmvc.servlet.mvc;
 
 import com.interface21.webmvc.servlet.mvc.view.JspView;
 
-public class JspViewResolver implements ViewResolver {
+public class InternalResourceViewResolver implements ViewResolver {
 	@Override
 	public View resolveViewName(final String viewName) {
 		if (viewName == null) {
