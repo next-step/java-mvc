@@ -2,6 +2,7 @@ package com.interface21.webmvc.servlet.mvc.handler;
 
 import com.interface21.web.bind.annotation.RequestMapping;
 import com.interface21.web.bind.annotation.RequestMethod;
+import com.interface21.webmvc.servlet.mvc.support.WebConfig;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,11 +57,7 @@ public class AnnotationHandlerMapping implements HandlerMapping {
     }
 
     private ArgumentResolvers initializeArgumentResolvers() {
-        ArgumentResolvers argumentResolvers = new ArgumentResolvers();
-        argumentResolvers.add(new RequestParamArgumentResolver());
-        argumentResolvers.add(new PathVariableArgumentResolver());
-        argumentResolvers.add(new RequestBodyArgumentResolver());
-        argumentResolvers.add(new ModelAttributeArgumentResolver());
+        ArgumentResolvers argumentResolvers = WebConfig.getArgumentResolvers();
         return argumentResolvers;
     }
 
