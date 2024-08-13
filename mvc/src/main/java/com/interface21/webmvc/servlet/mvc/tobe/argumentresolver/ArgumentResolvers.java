@@ -14,7 +14,8 @@ public class ArgumentResolvers {
             new SimpleObjectArgumentResolver(),
             new HttpServletRequestResolver(),
             new HttpServletResponseResolver(),
-            new PathVariableResolver()
+            new PathVariableResolver(),
+            new ObjectArgumentResolver()
     );
     private final List<HandlerMethodArgumentResolver> resolvers;
 
