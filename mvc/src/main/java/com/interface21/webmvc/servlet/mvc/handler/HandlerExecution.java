@@ -28,16 +28,11 @@ public class HandlerExecution {
 
     public ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response) throws Exception {
         Parameter[] parameters = method.getParameters();
-        Object[] arguments = Arrays.stream(parameters)
-                .map(parameter -> {
-                    try {
-                        ArgumentResolver argumentResolver = argumentResolvers.findOneSupports(parameter);
-                        return argumentResolver.resolve(parameter, method, request, response);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                })
-                .toArray();
+        Object[] arguments = new Object[parameters.length];
+        for(int i = 0; i < parameters.length; i++) {
+            ArgumentResolver argumentResolver = argumentResolvers.findOneSupports(parameters[i]);
+            arguments[i] = argumentResolver.resolve(parameters[i], method, request, response);
+        }
         return (ModelAndView) method.invoke(declaredObject, arguments);
     }
 
