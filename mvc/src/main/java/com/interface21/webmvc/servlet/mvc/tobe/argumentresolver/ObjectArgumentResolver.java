@@ -3,9 +3,10 @@ package com.interface21.webmvc.servlet.mvc.tobe.argumentresolver;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.lang.reflect.Field;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.Arrays;
 
 public class ObjectArgumentResolver implements HandlerMethodArgumentResolver {
 
@@ -16,29 +17,27 @@ public class ObjectArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public Object resolveArgument(Parameter parameter, Method method, HttpServletRequest request, HttpServletResponse response) {
-        final Object object = createInstance(parameter.getType());
-        for (final Field field : parameter.getType().getDeclaredFields()) {
-            setField(object, request, field);
-        }
-        return object;
+        return createInstance(parameter, request);
     }
 
-    private Object createInstance(final Class<?> parameterType) {
+    private Object createInstance(final Parameter parameter, final HttpServletRequest request) {
         try {
-            return parameterType.getDeclaredConstructor().newInstance();
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Failed to create instance of " + parameterType.getName());
+            final Constructor<?> constructor = constructor(parameter);
+            final Object[] arguments = constructorArguments(constructor.getParameters(), request);
+            return constructor.newInstance(arguments);
+        } catch (final Exception e) {
+            throw new IllegalArgumentException("Failed to create instance : " + parameter.getType());
         }
     }
 
-    private void setField(final Object object, final HttpServletRequest httpServletRequest, final Field field) {
-        field.setAccessible(true);
-        String parameterValue = httpServletRequest.getParameter(field.getName());
-        Object value = ParameterClassType.parse(field.getType(), parameterValue);
-        try {
-            field.set(object, value);
-        } catch (IllegalAccessException e) {
-            throw new IllegalArgumentException("Failed to set value to field " + field.getName());
-        }
+    private Constructor<?> constructor(final Parameter parameter) {
+        return parameter.getType()
+                .getConstructors()[0];
+    }
+
+    private Object[] constructorArguments(final Parameter[] parameters, final HttpServletRequest request) {
+        return Arrays.stream(parameters)
+                .map(parameter -> ParameterClassType.parse(parameter.getType(), request.getParameter(parameter.getName())))
+                .toArray();
     }
 }
