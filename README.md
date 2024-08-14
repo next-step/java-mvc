@@ -27,3 +27,9 @@
 ### HttpServletRequest, HttpServletResponse 외의 파라미터들도 입력 받을 수 있게 하자
 
 [ ] Controller 메서드의 인자 타입에 따라 HttpServletRequest에서 값을 꺼내와 자동으로 형 변환을 한 후 매핑하는 등의 작업을 자동 처리하도록 만들자.
+- [x] ArgumentResolver 인터페이스 및 구현체 개발
+  (HttpServletRequestResolver, HttpServletResponseResolver, PathVariableResolver, RequestParamResolver)
+- [x] MethodArgumentResolvers 클래스 구현
+  (여러 ArgumentResolver를 관리하고 적절한 리졸버 선택)
+- [x] HandlerExecution 클래스 개선
+  (Method 객체를 사용하여 파라미터 정보 처리)
