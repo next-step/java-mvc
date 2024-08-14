@@ -1,6 +1,5 @@
-package com.interface21.webmvc.servlet;
+package com.interface21.webmvc.servlet.mvc;
 
-import com.interface21.webmvc.servlet.mvc.View;
 import com.interface21.webmvc.servlet.mvc.view.JsonView;
 import com.interface21.webmvc.servlet.mvc.view.JspView;
 import org.junit.jupiter.api.DisplayName;
@@ -15,7 +14,7 @@ class ViewResolverTest {
         //given
         String viewName = "index.jsp";
         //when
-        View view = ViewResolver.resolveViewName(viewName);
+        View view = new InternalResourceViewResolver().resolveViewName(viewName);
         //then
         assertThat(view).isInstanceOf(JspView.class);
     }
@@ -24,7 +23,7 @@ class ViewResolverTest {
     @Test
     public void resolveJsonView() {
         //when
-        View view = ViewResolver.resolveJsonView();
+        View view = new JsonView();
         //then
         assertThat(view).isInstanceOf(JsonView.class);
     }
@@ -35,7 +34,7 @@ class ViewResolverTest {
         //given
         String viewName = null;
         //when
-        View view = ViewResolver.resolveViewName(viewName);
+        View view = new InternalResourceViewResolver().resolveViewName(viewName);
         //then
         assertThat(view).isInstanceOf(JspView.class);
     }

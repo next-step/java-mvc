@@ -1,7 +1,8 @@
 package com.interface21.webmvc.servlet;
 
-import com.interface21.webmvc.servlet.view.JsonView;
-import com.interface21.webmvc.servlet.view.JspView;
+import com.interface21.webmvc.servlet.mvc.View;
+import com.interface21.webmvc.servlet.mvc.view.JsonView;
+import com.interface21.webmvc.servlet.mvc.view.JspView;
 
 public class ViewResolver {
     public static View resolveViewName(String viewName) {
