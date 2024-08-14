@@ -1,10 +1,12 @@
 package com.interface21.webmvc.servlet.mvc.tobe;
 
 import com.interface21.web.bind.annotation.PathVariable;
+import com.interface21.webmvc.servlet.mvc.tobe.support.PathPatternUtil;
 import com.interface21.webmvc.servlet.mvc.tobe.support.TypeCheckUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.lang.reflect.Parameter;
+import java.util.stream.IntStream;
 
 public class PathVariableResolver implements ArgumentResolver {
     private final String urlPattern;
@@ -22,18 +24,13 @@ public class PathVariableResolver implements ArgumentResolver {
     public Object resolve(HttpServletRequest request, HttpServletResponse response, Parameter parameter) {
         PathVariable annotation = parameter.getAnnotation(PathVariable.class);
         String variableName = annotation.value().isEmpty() ? parameter.getName() : annotation.value();
-        String value = extractPathVariable(request.getRequestURI(), urlPattern, variableName);
-        return TypeCheckUtil.convertStringToTargetType(value, parameter.getType());
-    }
+        String requestUri = request.getRequestURI();
 
-    private String extractPathVariable(String requestUri, String urlPattern, String variableName) {
-        String[] uriParts = requestUri.split("/");
-        String[] patternParts = urlPattern.split("/");
-        for (int i = 0; i < patternParts.length; i++) {
-            if (patternParts[i].equals("{" + variableName + "}")) {
-                return uriParts[i];
-            }
+        String value = PathPatternUtil.getUriValue(urlPattern, requestUri, variableName);
+        if (value == null) {
+            throw new IllegalArgumentException("Path variable을 찾지 못했습니다. : " + variableName);
         }
-        throw new IllegalArgumentException("Path variable not found: " + variableName);
+
+        return TypeCheckUtil.convertStringToTargetType(value, parameter.getType());
     }
 }

@@ -31,7 +31,7 @@ public class MethodArgumentResolvers {
                 ).stream()
                 .filter(resolver -> resolver.supportsParameter(parameter))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("지원하는 resolver가 없습니다. : " + parameter.getName()));
+                .orElseThrow(() -> new IllegalArgumentException("지원하는 resolver가 없습니다 : " + parameter.getName()));
     }
 
     public Object[] resolveArguments(HttpServletRequest request, HttpServletResponse response,Parameter parameter) {
