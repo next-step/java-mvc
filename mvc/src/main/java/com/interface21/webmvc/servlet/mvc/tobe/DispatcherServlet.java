@@ -22,6 +22,11 @@ public class DispatcherServlet extends HttpServlet {
                 .handlerAdapterRegistry();
     }
 
+    public DispatcherServlet(final MvcConfig mvcConfig) {
+        handlerMappingRegistry = mvcConfig.handlerMappingRegistry();
+        handlerAdapterRegistry = mvcConfig.handlerAdapterRegistry();
+    }
+
     @Override
     public void init() {
         handlerMappingRegistry.initialize();

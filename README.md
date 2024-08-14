@@ -56,3 +56,10 @@
     - [X] app 모듈에 있는 모든 컨트롤러를 어노테이션 기반 MVC로 변경
     - [X] asis 패키지에 있는 레거시 코드를 삭제해도 서비스가 정상 동작하도록 리팩터링
     - [X] DispatcherServlet도 app 패키지가 아닌 mvc 패키지로 이동
+
+## Mission 4
+
+- [X] Controller 메서드 인자 매핑
+    - [X] HttpServletRequest에서 값을 꺼내와 자동으로 형 변환을 한 후 매핑하는 등의 작업을 자동 처리
+        - [X] HttpServletRequest를 사용하지 않고도 매핑할 수 있도록 리팩터링
+    - [X] PathVariable 구현을 위해 URL 매칭과 값 추출
