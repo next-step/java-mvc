@@ -80,10 +80,12 @@ public class AnnotationHandlerMapping implements HandlerMapping {
 
   private void createHandlerExecutions(String fullUrl, RequestMethod[] requestMethods,
       Object controllerInstance, Method method) {
+    RequestMapping requestMapping = method.getDeclaredAnnotation(RequestMapping.class);
+
     Arrays.stream(requestMethods)
         .forEach(requestMethod -> {
           HandlerKey key = new HandlerKey(fullUrl, requestMethod);
-          HandlerExecution execution = new HandlerExecution(controllerInstance, method);
+          HandlerExecution execution = new HandlerExecution(controllerInstance, method,requestMapping.value());
           handlerExecutionsMap.put(key, execution);
         });
   }
