@@ -34,9 +34,9 @@ public class MethodArgumentResolvers {
                 .orElseThrow(() -> new IllegalArgumentException("지원하는 resolver가 없습니다. : " + parameter.getName()));
     }
 
-    public Object[] resolveArguments(HttpServletRequest request, HttpServletResponse response) {
+    public Object[] resolveArguments(HttpServletRequest request, HttpServletResponse response,Parameter parameter) {
         return resolvers.stream()
-                .map(resolver -> resolver.resolve(request, response))
+                .map(resolver -> resolver.resolve(request, response, parameter))
                 .toArray();
     }
 }

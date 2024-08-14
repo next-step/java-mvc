@@ -4,18 +4,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.lang.reflect.Parameter;
 
-public class HttpServletRequestResolver implements ArgumentResolver{
-
-    public HttpServletRequestResolver() {
-    }
-
+public class HttpServletRequestResolver implements ArgumentResolver {
     @Override
     public boolean supportsParameter(Parameter parameter) {
-        return false;
+        return parameter.getType() == HttpServletRequest.class;
     }
 
     @Override
-    public Object resolve(HttpServletRequest request, HttpServletResponse response) {
-        return null;
+    public Object resolve(HttpServletRequest request, HttpServletResponse response, Parameter parameter) {
+        return request;
     }
 }
