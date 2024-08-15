@@ -1,7 +1,6 @@
 package com.interface21.webmvc.servlet.mvc.tobe.parameter;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -12,7 +11,6 @@ import java.lang.reflect.Parameter;
 import java.util.Arrays;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import samples.TestController;
 import samples.TestUserController;
 
 class PathVariableParameterResolverTest {

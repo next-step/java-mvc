@@ -39,7 +39,7 @@ class ObjectParameterResolverTest {
     }
 
     @Test
-    @DisplayName("Object Type을  지원하는지 확인한다.")
+    @DisplayName("Object Type 인수를 가진 요청에 대해 request를 반환합니다.")
     void returnObjectParameterParsed() {
         final var request = mock(HttpServletRequest.class);
         final var response = mock(HttpServletResponse.class);

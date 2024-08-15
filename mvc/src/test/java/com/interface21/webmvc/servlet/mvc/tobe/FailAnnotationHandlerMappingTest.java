@@ -4,6 +4,7 @@ package com.interface21.webmvc.servlet.mvc.tobe;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.interface21.webmvc.servlet.mvc.tobe.exception.ControllerInitializationException;
+import com.interface21.webmvc.servlet.mvc.tobe.parameter.config.ResolverRegistryConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +14,7 @@ public class FailAnnotationHandlerMappingTest {
     @DisplayName("Controller가 생성자가 Private이면, Mapping Initialization가 실패합니다.")
     void get() {
 
-        assertThatThrownBy(() -> new AnnotationHandlerMapping("noconstructor").initialize())
+        assertThatThrownBy(() -> new AnnotationHandlerMapping(ResolverRegistryConfig.getResolverRegistry(),"noconstructor").initialize())
             .isInstanceOf(ControllerInitializationException.class);
     }
 }
