@@ -17,8 +17,7 @@ public class TypeArgumentResolver implements ParameterResolver {
     public Object parseValue(Parameter parameter, HttpServletRequest request,
         HttpServletResponse response) {
 
-        String paramName = request.getParameter(parameter.getName());
-        Object fieldValue = request.getParameter(paramName);
+        Object fieldValue = request.getParameter(parameter.getName());
 
         return TypeMapper.parse(parameter.getType(), fieldValue);
     }
