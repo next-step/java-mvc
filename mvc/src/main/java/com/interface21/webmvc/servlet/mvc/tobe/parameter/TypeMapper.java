@@ -1,5 +1,6 @@
 package com.interface21.webmvc.servlet.mvc.tobe.parameter;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
@@ -26,7 +27,8 @@ public final class TypeMapper {
     }
 
     public static void createTypeToParser() {
-        typeToParser.put(long.class, Boolean::parseBoolean);
+        typeToParser = new HashMap<>();
+        typeToParser.put(long.class, Long::parseLong);
         typeToParser.put(Long.class, Long::parseLong);
         typeToParser.put(String.class, s -> s);
         typeToParser.put(boolean.class, Boolean::parseBoolean);
