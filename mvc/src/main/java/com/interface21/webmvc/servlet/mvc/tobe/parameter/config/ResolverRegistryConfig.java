@@ -5,22 +5,19 @@ import com.interface21.webmvc.servlet.mvc.tobe.parameter.HttpServletResponseReso
 import com.interface21.webmvc.servlet.mvc.tobe.parameter.MethodArgumentResolverRegistry;
 import com.interface21.webmvc.servlet.mvc.tobe.parameter.ObjectParameterResolver;
 import com.interface21.webmvc.servlet.mvc.tobe.parameter.ParameterResolver;
-import com.interface21.webmvc.servlet.mvc.tobe.parameter.PathVariableParameterResolver;
 import com.interface21.webmvc.servlet.mvc.tobe.parameter.ResolverRegistry;
 import com.interface21.webmvc.servlet.mvc.tobe.parameter.TypeArgumentResolver;
 import java.util.List;
-import javax.naming.spi.Resolver;
 
 @Configuration
 public final class ResolverRegistryConfig {
 
+    public static ResolverRegistry REGISTRY;
     private static List<ParameterResolver> RESOLVERS;
     private static ParameterResolver DEFAULT;
 
-    public static ResolverRegistry REGISTRY;
-
-    public static ResolverRegistry getResolverRegistry(){
-        if (REGISTRY == null){
+    public static ResolverRegistry getResolverRegistry() {
+        if (REGISTRY == null) {
             REGISTRY = new MethodArgumentResolverRegistry(getResolvers(), getDefaultResolver());
         }
         return REGISTRY;
@@ -28,8 +25,9 @@ public final class ResolverRegistryConfig {
 
     public static List<ParameterResolver> getResolvers() {
         if (RESOLVERS == null) {
-            RESOLVERS = List.of(new HttpServletRequestResolver(), new HttpServletResponseResolver(),
-                new PathVariableParameterResolver(), new TypeArgumentResolver());
+
+            RESOLVERS = List.of(new HttpServletRequestResolver()
+                , new HttpServletResponseResolver(), new TypeArgumentResolver());
         }
 
         return RESOLVERS;

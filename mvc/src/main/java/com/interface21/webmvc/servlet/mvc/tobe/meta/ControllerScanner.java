@@ -45,7 +45,7 @@ public class ControllerScanner {
                 Collector.of(
                     HashMap::new,  //supplier
                     (acc, method) -> createHandlerKeys(controllerUri, method)  // accumulator
-                        .forEach(key -> acc.put(key, new HandlerExecution(instance, method, resolverRegistry))),
+                        .forEach(key -> acc.put(key, new HandlerExecution(instance, method, resolverRegistry.addResolver(controllerUri)))),
                     (acc1, acc2) -> { // combiner
                         acc1.putAll(acc2);
                         return acc1;
