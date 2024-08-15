@@ -7,6 +7,8 @@ import com.interface21.webmvc.servlet.mvc.tobe.parameter.ObjectParameterResolver
 import com.interface21.webmvc.servlet.mvc.tobe.parameter.ParameterResolver;
 import com.interface21.webmvc.servlet.mvc.tobe.parameter.ResolverRegistry;
 import com.interface21.webmvc.servlet.mvc.tobe.parameter.TypeArgumentResolver;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -26,8 +28,8 @@ public final class ResolverRegistryConfig {
     public static List<ParameterResolver> getResolvers() {
         if (RESOLVERS == null) {
 
-            RESOLVERS = List.of(new HttpServletRequestResolver()
-                , new HttpServletResponseResolver(), new TypeArgumentResolver());
+            RESOLVERS = new ArrayList<>(Arrays.asList(new HttpServletRequestResolver()
+                , new HttpServletResponseResolver(), new TypeArgumentResolver()));
         }
 
         return RESOLVERS;

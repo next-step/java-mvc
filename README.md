@@ -68,10 +68,10 @@
 
 ## 4단계 요구사항
 
-[] 학습 테스트를 
-[] Controller 메서드의 인자 타입에 따라 자동 으로 형변환 후 맵핑
+[x] 학습 테스트를 
+[x] Controller 메서드의 인자 타입에 따라 자동 으로 형변환 후 맵핑
     - [x] compilerArgs 옵션을 생성해서 메서드 파라미터를 가져올 수 있게 적용합니다.
-    - [] HandlerMethodArgumentResolver에 기능 추가를 합니다.
+    - [x] HandlerMethodArgumentResolver에 기능 추가를 합니다.
         - Resolvers들을 Registry 형태로 생성합니다.
             - primitive type에 대한 지원을 추가합니다.
             - 객체 타입에 대한 지원을 추가합니다.

@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.lang.reflect.Parameter;
 import java.util.List;
 
-public class MethodArgumentResolverRegistry implements ResolverRegistry {
+public final class MethodArgumentResolverRegistry implements ResolverRegistry {
 
     private final List<ParameterResolver> parameterResolvers;
     private final ParameterResolver defaultParameterResolver;
