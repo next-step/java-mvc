@@ -29,8 +29,8 @@ public class HandlerExecution {
 
     public ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response)
         throws Exception {
-
-        return (ModelAndView) method.invoke(handler, request, response);
+        Object[] args = resolveArguments(request, response);
+        return (ModelAndView) method.invoke(handler, args);
     }
 
     private Object[] resolveArguments(HttpServletRequest request, HttpServletResponse response) {
@@ -44,7 +44,7 @@ public class HandlerExecution {
     private void initializeArgs(HttpServletRequest request, HttpServletResponse response) {
         Object[] objects = Arrays.stream(method.getParameters())
             .map(parameter -> registry.resolve(parameter, request, response))
-                .toArray();
+            .toArray();
         args.put(method, objects);
     }
 }
