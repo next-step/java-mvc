@@ -8,12 +8,18 @@ public class TypeArgumentResolver implements ParameterResolver {
 
     @Override
     public boolean support(Parameter parameter) {
-        return false;
+        return TypeMapper
+            .getParser(parameter.getType())
+            .isPresent();
     }
 
     @Override
     public Object parseValue(Parameter parameter, HttpServletRequest request,
         HttpServletResponse response) {
-        return null;
+
+        String paramName = request.getParameter(parameter.getName());
+        Object fieldValue = request.getParameter(paramName);
+
+        return TypeMapper.parse(parameter.getType(), fieldValue);
     }
 }

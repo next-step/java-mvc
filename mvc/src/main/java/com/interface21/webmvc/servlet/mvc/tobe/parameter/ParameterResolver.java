@@ -8,5 +8,5 @@ public interface ParameterResolver {
 
     boolean support(Parameter parameter);
 
-    Object parseValue(HttpServletRequest request, HttpServletResponse response);
+    Object parseValue(Parameter parameter, HttpServletRequest request, HttpServletResponse response);
 }
