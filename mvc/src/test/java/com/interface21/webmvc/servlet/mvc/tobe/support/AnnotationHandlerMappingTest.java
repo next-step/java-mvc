@@ -67,8 +67,8 @@ class AnnotationHandlerMappingTest {
         when(request.getRequestURI()).thenReturn("/notexistingPath");
         when(request.getMethod()).thenReturn("POST");
 
-        assertThat(handlerMapping.getHandler(request))
-            .isEqualTo(null);
+        assertThatThrownBy(() -> handlerMapping.getHandler(request))
+            .isInstanceOf(NotFoundException.class);
     }
 
 

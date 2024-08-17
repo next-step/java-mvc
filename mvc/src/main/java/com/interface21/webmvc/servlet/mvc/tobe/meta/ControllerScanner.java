@@ -5,6 +5,7 @@ import com.interface21.web.bind.annotation.RequestMapping;
 import com.interface21.webmvc.servlet.mvc.tobe.HandlerExecution;
 import com.interface21.webmvc.servlet.mvc.tobe.HandlerKey;
 import com.interface21.webmvc.servlet.mvc.tobe.exception.ControllerInitializationException;
+import com.interface21.webmvc.servlet.mvc.tobe.exception.NotFoundException;
 import com.interface21.webmvc.servlet.mvc.tobe.parameter.ResolverRegistry;
 import com.interface21.webmvc.servlet.mvc.tobe.support.ReflectionUtils;
 import java.lang.reflect.InvocationTargetException;
@@ -100,7 +101,7 @@ public class ControllerScanner {
                     .filter(key -> key.matches(handlerKey))
                     .findFirst()
                 .map(key -> handlerExecutions.get(key))
-                .orElse(null);
+                .orElseThrow(() -> new NotFoundException("지원하지 않는 url 과 method 입니다."));
 
     }
 }
