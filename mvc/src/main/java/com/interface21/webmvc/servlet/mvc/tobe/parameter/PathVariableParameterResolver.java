@@ -5,14 +5,16 @@ import com.interface21.webmvc.servlet.mvc.tobe.support.PathPatternUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.lang.reflect.Parameter;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 public class PathVariableParameterResolver implements ParameterResolver {
 
-    private final String url;
+    private final List<String> urls;
 
     public PathVariableParameterResolver(String pathVariableUrls) {
-        url = pathVariableUrls;
+        this.urls = Arrays.asList(pathVariableUrls);
     }
 
     @Override
@@ -24,15 +26,20 @@ public class PathVariableParameterResolver implements ParameterResolver {
     public Object parseValue(Parameter parameter, HttpServletRequest request,
         HttpServletResponse response) {
         String variableName = parameter.getAnnotation(PathVariable.class)
+            .value().isEmpty() ? parameter.getName() : parameter.getAnnotation(PathVariable.class)
             .value();
 
-        if(variableName.isEmpty()){
-            variableName = parameter.getName();
-        }
-
         String requestUri = request.getRequestURI();
-        String variableValues = PathPatternUtil.getUriValue(url, requestUri, variableName);
+
+        String variableValues = urls.stream()
+            .map(url -> PathPatternUtil.getUriValue(url, requestUri, variableName))
+            .findFirst()
+            .orElseThrow(() -> new IllegalStateException("지원하지 않는 pathVarialbe입니다."));
 
         return TypeMapper.parse(parameter.getType(), variableValues);
+    }
+
+    public void addPathVariableParamater(String url) {
+        urls.add(url);
     }
 }

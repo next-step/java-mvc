@@ -29,7 +29,13 @@ public final class MethodArgumentResolverRegistry implements ResolverRegistry {
 
     @Override
     public ResolverRegistry addResolver(String url) {
-        parameterResolvers.add(new PathVariableParameterResolver(url));
+        parameterResolvers.stream()
+            .filter(resolver -> resolver.getClass() == PathVariableParameterResolver.class)
+            .forEach(
+                resolver -> ((PathVariableParameterResolver) resolver)
+                    .addPathVariableParamater(url)
+            );
+
         return this;
     }
 }
