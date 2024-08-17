@@ -11,6 +11,7 @@ import java.rmi.registry.Registry;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -19,7 +20,7 @@ public class HandlerExecution {
     private final Object handler;
     private final Method method;
     private final ResolverRegistry registry;
-    private Map<Method, Object[]> args = new HashMap<>();
+    private Object[] resolvedParamters;
 
     public HandlerExecution(Object handler, Method method, ResolverRegistry registry) {
         this.handler = handler;
@@ -34,17 +35,18 @@ public class HandlerExecution {
     }
 
     private Object[] resolveArguments(HttpServletRequest request, HttpServletResponse response) {
-        if (args.isEmpty()) {
-            initializeArgs(request, response);
+        if (Objects.nonNull(resolvedParamters)) {
+            return resolvedParamters;
         }
 
-        return args.get(method);
+        return initializeArgs(request, response);
     }
 
-    private void initializeArgs(HttpServletRequest request, HttpServletResponse response) {
+    private Object[] initializeArgs(HttpServletRequest request, HttpServletResponse response) {
         Object[] objects = Arrays.stream(method.getParameters())
             .map(parameter -> registry.resolve(parameter, request, response))
             .toArray();
-        args.put(method, objects);
+        resolvedParamters = objects;
+        return objects;
     }
 }
