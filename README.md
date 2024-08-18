@@ -44,9 +44,8 @@
 ### [STEP4] 4단계 - Controller 메서드 인자 매핑
 #### TODO
 - [ ] method의 parameter types를 통해 parsing할 수 있는 parameter parser
-  - [ ] request param parser
-  - [ ] path variable parser
-  - [ ] HttpSerlvetRequest parser
-  - [ ] HttpSerlvetResponse parser
-- [ ] handlerexecution에서 invoke 시점에 parser로 parsing
+  - [ ] query param parser -> 메소드 파라미터의 type, name 보고 request.getParameter 에서 추출
+  - [ ] path variable parser -> @PathVariable이 있을경우 메소드 파라미터의 type, name 보고 /{}/{} path에 특정한 양식 ({})으로 추출 
+  - [ ] parameter typed parser -> 특정 타입을 deserialization. request.getParameter에서 추출
+- [ ] handlerExecution에서 invoke 시점에 parser로 parsing
 - [ ] testusercontroller로 확인
