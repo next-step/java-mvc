@@ -7,6 +7,7 @@ import com.interface21.webmvc.servlet.mvc.tobe.AnnotationHandlerMapping;
 import com.interface21.webmvc.servlet.mvc.tobe.HandlerAdapter;
 import com.interface21.webmvc.servlet.mvc.tobe.MappingRegistry;
 import com.interface21.webmvc.servlet.mvc.tobe.exception.NotFoundException;
+import com.interface21.webmvc.servlet.mvc.tobe.parameter.config.ResolverRegistryConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,7 +32,8 @@ public class DispatcherServlet extends HttpServlet {
     @Override
     public void init() {
         this.mappingRegistry = new HandlerMappingRegistry(
-            List.of(new AnnotationHandlerMapping(basePackages)));
+            List.of(new AnnotationHandlerMapping(ResolverRegistryConfig.getResolverRegistry(),
+                basePackages)));
         this.adapterRegistry = new HandlerAdapterRegistry(
             List.of(new AnnotationHandlerAdapter()));
 

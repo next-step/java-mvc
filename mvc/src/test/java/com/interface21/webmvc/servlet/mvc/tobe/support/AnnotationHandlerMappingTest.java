@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import com.interface21.webmvc.servlet.mvc.tobe.AnnotationHandlerMapping;
 import com.interface21.webmvc.servlet.mvc.tobe.HandlerExecution;
 import com.interface21.webmvc.servlet.mvc.tobe.exception.NotFoundException;
+import com.interface21.webmvc.servlet.mvc.tobe.parameter.config.ResolverRegistryConfig;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +22,7 @@ class AnnotationHandlerMappingTest {
 
     @BeforeEach
     void setUp() {
-        handlerMapping = new AnnotationHandlerMapping("samples");
+        handlerMapping = new AnnotationHandlerMapping(ResolverRegistryConfig.getResolverRegistry(),"samples");
         handlerMapping.initialize();
     }
 
@@ -66,8 +67,8 @@ class AnnotationHandlerMappingTest {
         when(request.getRequestURI()).thenReturn("/notexistingPath");
         when(request.getMethod()).thenReturn("POST");
 
-        assertThat(handlerMapping.getHandler(request))
-            .isEqualTo(null);
+        assertThatThrownBy(() -> handlerMapping.getHandler(request))
+            .isInstanceOf(NotFoundException.class);
     }
 
 
@@ -77,7 +78,7 @@ class AnnotationHandlerMappingTest {
     void SuppportAllMethodsGivenNoRequestMethod(String method) throws Exception {
 
         AnnotationHandlerMapping handlerMappingNoMethod = new AnnotationHandlerMapping(
-            "samples.badmethod");
+            ResolverRegistryConfig.getResolverRegistry(),"samples.badmethod");
         handlerMappingNoMethod.initialize();
 
         final var request = mock(HttpServletRequest.class);

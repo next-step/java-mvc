@@ -65,3 +65,22 @@
     - [x] /api/user 컨트롤러를 추가하고 정상 동작 테스트한다.
     - [x] model 데이터 값에 다른 반환형태를 달리한다.
     - [x] ContentType은 Application_JSON_UTF8_VALUE 로 변경한다.
+
+## 4단계 요구사항
+
+[x] 학습 테스트를 
+[x] Controller 메서드의 인자 타입에 따라 자동 으로 형변환 후 맵핑
+    - [x] compilerArgs 옵션을 생성해서 메서드 파라미터를 가져올 수 있게 적용합니다.
+    - [x] HandlerMethodArgumentResolver에 기능 추가를 합니다.
+        - Resolvers들을 Registry 형태로 생성합니다.
+            - primitive type에 대한 지원을 추가합니다.
+            - 객체 타입에 대한 지원을 추가합니다.
+            - 기본적인 Wrapper class에 대한 지원을 추가합니다.
+            - HttpServletRequest와 HttpServletResponse를 지원한다.
+    - [x] PathPatternParser를 이용해서 PathVariable 구현을 위한 기능을 추가합니다.
+        - 기능
+            - URL 매칭과 경로에서 변수를 추출한다.
+        - 조건
+            - "/users/{id}"
+            - "/users/{id}/otherResource/{resourceId}" 와 같은 포맷을 지원한다.
+    - [x] Resolver를 MethodMapping 할때, 알맞은 args를 넘겨주도록 사용합니다.
