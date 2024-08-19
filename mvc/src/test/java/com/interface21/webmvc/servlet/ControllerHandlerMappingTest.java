@@ -1,5 +1,6 @@
 package com.interface21.webmvc.servlet;
 
+import com.interface21.web.parameter.ParameterParsers;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,10 +14,11 @@ class ControllerHandlerMappingTest {
 
     private ControllerHandlerMapping handlerMapping;
     private HttpRequestHandlers handlers = new HttpRequestHandlers();
+    private ParameterParsers parsers = new ParameterParsers();
 
     @BeforeEach
     void setUp() {
-        handlerMapping = new ControllerHandlerMapping("samples");
+        handlerMapping = new ControllerHandlerMapping(parsers, "samples");
         handlerMapping.initialize(handlers);
     }
 
