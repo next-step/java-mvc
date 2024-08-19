@@ -45,7 +45,7 @@
 #### TODO
 - [ ] method의 parameter types를 통해 parsing할 수 있는 parameter parser
   - [X] query param parser -> 메소드 파라미터의 type, name 보고 request.getParameter 에서 추출
-  - [ ] path variable parser -> @PathVariable이 있을경우 메소드 파라미터의 type, name 보고 /{}/{} path에 특정한 양식 ({})으로 추출 
+  - [X] path variable parser -> @PathVariable이 있을경우 메소드 파라미터의 type, name 보고 /{}/{} path에 특정한 양식 ({})으로 추출 
   - [ ] parameter typed parser -> 특정 타입을 deserialization. request.getParameter에서 추출
 - [ ] handlerExecution에서 invoke 시점에 parser로 parsing
 - [ ] testusercontroller로 확인
