@@ -1,6 +1,7 @@
 package com.interface21.webmvc.servlet;
 
 import com.interface21.web.bind.annotation.RequestMethod;
+import com.interface21.web.support.PathPatternUtil;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.Objects;
@@ -16,7 +17,7 @@ public class HandlerKey {
     }
 
     public boolean matchUrl(final HttpServletRequest request) {
-        return request.getRequestURI().equals(url);
+        return request.getRequestURI().equals(url) || PathPatternUtil.isUrlMatch(url, request.getRequestURI());
     }
 
     public boolean matchMethod(final HttpServletRequest request) {
