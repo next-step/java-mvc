@@ -2,15 +2,18 @@ package com.interface21.webmvc.servlet;
 
 import com.interface21.context.stereotype.ControllerAdvice;
 import com.interface21.web.bind.annotation.ExceptionHandler;
+import com.interface21.web.parameter.ParameterParsers;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
 public class ControllerAdviceHandlerMapping implements HandlerMapping<ExceptionHandlers> {
 
+    private final ParameterParsers parsers;
     private final Object[] basePackage;
 
-    public ControllerAdviceHandlerMapping(final Object... basePackage) {
+    public ControllerAdviceHandlerMapping(ParameterParsers parsers, final Object... basePackage) {
+        this.parsers = parsers;
         this.basePackage = basePackage;
     }
 
@@ -28,7 +31,7 @@ public class ControllerAdviceHandlerMapping implements HandlerMapping<ExceptionH
             return;
         }
         for (Class<? extends Throwable> exceptionClass : handler.value()) {
-            var execution = new HandlerExecution(controllerInstance, method);
+            var execution = new HandlerExecution(controllerInstance, method, parsers);
             handlers.add(exceptionClass, execution);
         }
     }

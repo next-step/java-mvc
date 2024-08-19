@@ -10,6 +10,11 @@ import jakarta.servlet.http.HttpServletResponse;
 @ControllerAdvice
 public class DefaultExceptionHandlers {
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public void handle(IllegalArgumentException ex, HttpServletRequest request, HttpServletResponse response) {
+        response.setStatus(400);
+    }
+
     @ExceptionHandler(NoHandlerFoundException.class)
     public void handle(NoHandlerFoundException ex, HttpServletRequest request, HttpServletResponse response) {
         response.setStatus(404);

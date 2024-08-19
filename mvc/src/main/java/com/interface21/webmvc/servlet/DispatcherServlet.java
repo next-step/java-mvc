@@ -1,5 +1,8 @@
 package com.interface21.webmvc.servlet;
 
+import com.interface21.web.parameter.ParameterParsers;
+import com.interface21.web.parameter.PathVariableParser;
+import com.interface21.web.parameter.QueryParamParser;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,8 +21,9 @@ public class DispatcherServlet extends HttpServlet {
     private final HandlerAdapterRegistry handlerAdapters = new HandlerAdapterRegistry();
 
     public DispatcherServlet() {
-        requestHandlers.addHandlerMapping(new ControllerHandlerMapping(BASE_PACKAGE));
-        exceptionHandlers.addHandlerMapping(new ControllerAdviceHandlerMapping(BASE_PACKAGE));
+        var parameterParsers = new ParameterParsers(new PathVariableParser(), new QueryParamParser());
+        requestHandlers.addHandlerMapping(new ControllerHandlerMapping(parameterParsers, BASE_PACKAGE));
+        exceptionHandlers.addHandlerMapping(new ControllerAdviceHandlerMapping(parameterParsers, BASE_PACKAGE));
         handlerAdapters.addAdapter(new RequestHandlerAdapter());
     }
 

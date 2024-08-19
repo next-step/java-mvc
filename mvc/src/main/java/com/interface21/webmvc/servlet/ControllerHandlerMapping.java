@@ -3,15 +3,18 @@ package com.interface21.webmvc.servlet;
 import com.interface21.context.stereotype.Controller;
 import com.interface21.web.bind.annotation.RequestMapping;
 import com.interface21.web.bind.annotation.RequestMethod;
+import com.interface21.web.parameter.ParameterParsers;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
 public class ControllerHandlerMapping implements HandlerMapping<HttpRequestHandlers> {
 
+    private final ParameterParsers parsers;
     private final Object[] basePackage;
 
-    public ControllerHandlerMapping(final Object... basePackage) {
+    public ControllerHandlerMapping(final ParameterParsers parsers, final Object... basePackage) {
+        this.parsers = parsers;
         this.basePackage = basePackage;
     }
 
@@ -29,7 +32,7 @@ public class ControllerHandlerMapping implements HandlerMapping<HttpRequestHandl
         }
         for (RequestMethod requestMethod : handler.method()) {
             var key = new HandlerKey(handler.value(), requestMethod);
-            var execution = new HandlerExecution(controllerInstance, method);
+            var execution = new HandlerExecution(controllerInstance, method, parsers);
             handlers.add(key, execution);
         }
     }

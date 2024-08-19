@@ -1,4 +1,4 @@
-package com.interface21.webmvc.servlet.mvc.tobe.support;
+package com.interface21.web.support;
 
 import org.junit.jupiter.api.Test;
 
