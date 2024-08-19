@@ -45,8 +45,8 @@ class PathVariableParserTest {
 
         var parameter1 = method.getParameters()[0];
         var parameter2 = method.getParameters()[1];
-        assertThat(parser.parse(method, parameter1, request)).isEqualTo("1");
-        assertThat(parser.parse(method, parameter2, request)).isEqualTo("2");
+        assertThat(parser.parse(method, parameter1, request)).isEqualTo(1L);
+        assertThat(parser.parse(method, parameter2, request)).isEqualTo(2);
     }
 }
 

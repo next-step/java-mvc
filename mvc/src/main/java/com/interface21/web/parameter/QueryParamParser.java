@@ -12,6 +12,9 @@ public class QueryParamParser implements ParameterParser {
     @Override
     public Object parse(Method method, Parameter parameter, HttpServletRequest request) {
         var param = request.getParameter(parameter.getName());
+        if (param == null) {
+            return null;
+        }
         return TypedParsers.parse(parameter.getType(), param);
     }
 
