@@ -15,18 +15,18 @@ public class MethodArgumentResolvers {
         this.resolvers = resolvers;
     }
 
-    public static MethodArgumentResolvers create(String urlPattern, Method method) {
+    public static MethodArgumentResolvers create(Method method) {
         List<ArgumentResolver> resolvers = Arrays.stream(method.getParameters())
-                .map(param -> chooseResolverForParameter(urlPattern, param))
+                .map(param -> chooseResolverForParameter(param, method))
                 .toList();
         return new MethodArgumentResolvers(resolvers);
     }
 
-    private static ArgumentResolver chooseResolverForParameter(String urlPattern, Parameter parameter) {
+    private static ArgumentResolver chooseResolverForParameter(Parameter parameter, Method method) {
         return List.of(
                         new HttpServletRequestResolver(),
                         new HttpServletResponseResolver(),
-                        new PathVariableResolver(urlPattern),
+                        new PathVariableResolver(),
                         new RequestParamResolver()
                 ).stream()
                 .filter(resolver -> resolver.supportsParameter(parameter))
@@ -34,9 +34,9 @@ public class MethodArgumentResolvers {
                 .orElseThrow(() -> new IllegalArgumentException("지원하는 resolver가 없습니다 : " + parameter.getName()));
     }
 
-    public Object[] resolveArguments(HttpServletRequest request, HttpServletResponse response,Parameter parameter) {
+    public Object[] resolveArguments(HttpServletRequest request, HttpServletResponse response,Parameter parameter,Method method) {
         return resolvers.stream()
-                .map(resolver -> resolver.resolve(request, response, parameter))
+                .map(resolver -> resolver.resolve(request, response, parameter, method))
                 .toArray();
     }
 }

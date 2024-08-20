@@ -4,6 +4,7 @@ import com.interface21.web.bind.annotation.RequestParam;
 import com.interface21.webmvc.servlet.mvc.tobe.support.TypeCheckUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 
 public class RequestParamResolver implements ArgumentResolver {
@@ -13,7 +14,7 @@ public class RequestParamResolver implements ArgumentResolver {
     }
 
     @Override
-    public Object resolve(HttpServletRequest request, HttpServletResponse response, Parameter parameter) {
+    public Object resolve(HttpServletRequest request, HttpServletResponse response, Parameter parameter, Method method) {
         RequestParam annotation = parameter.getAnnotation(RequestParam.class);
         String paramName = determineParamName(parameter, annotation);
         String paramValue = extractParamValue(request, paramName);

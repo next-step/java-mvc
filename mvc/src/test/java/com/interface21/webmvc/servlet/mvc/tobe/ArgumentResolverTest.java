@@ -2,6 +2,7 @@ package com.interface21.webmvc.servlet.mvc.tobe;
 
 import com.interface21.web.bind.annotation.PathVariable;
 import com.interface21.web.bind.annotation.RequestParam;
+import java.lang.reflect.Method;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -25,7 +26,7 @@ class ArgumentResolverTest {
 
     // When
     boolean supports = resolver.supportsParameter(parameter);
-    Object resolved = resolver.resolve(request, response, parameter);
+    Object resolved = resolver.resolve(request, response, parameter,null);
 
     // Then
     assertTrue(supports);
@@ -42,7 +43,7 @@ class ArgumentResolverTest {
 
     // When
     boolean supports = resolver.supportsParameter(parameter);
-    Object resolved = resolver.resolve(request, response, parameter);
+    Object resolved = resolver.resolve(request, response, parameter, null);
 
     // Then
     assertTrue(supports);
@@ -52,7 +53,7 @@ class ArgumentResolverTest {
   @Test
   void PathVariable어노테이션이_있으면_URL에서_값을_추출한다() throws NoSuchMethodException {
     // Given
-    PathVariableResolver resolver = new PathVariableResolver("/users/{id}");
+    PathVariableResolver resolver = new PathVariableResolver();
     MockHttpServletRequest request = new MockHttpServletRequest();
     MockHttpServletResponse response = new MockHttpServletResponse();
     Parameter parameter = getParameterByName("id");
@@ -60,7 +61,7 @@ class ArgumentResolverTest {
 
     // When
     boolean supports = resolver.supportsParameter(parameter);
-    Object resolved = resolver.resolve(request, response, parameter);
+    Object resolved = resolver.resolve(request, response, parameter, null);
 
     // Then
     assertTrue(supports);
@@ -78,7 +79,7 @@ class ArgumentResolverTest {
 
     // When
     boolean supports = resolver.supportsParameter(parameter);
-    Object resolved = resolver.resolve(request, response, parameter);
+    Object resolved = resolver.resolve(request, response, parameter, null);
 
     // Then
     assertTrue(supports);
@@ -95,7 +96,7 @@ class ArgumentResolverTest {
 
     // When & Then
     assertTrue(resolver.supportsParameter(parameter));
-    assertThrows(IllegalArgumentException.class, () -> resolver.resolve(request, response, parameter));
+    assertThrows(IllegalArgumentException.class, () -> resolver.resolve(request, response, parameter, null));
   }
 
   private Parameter getParameterByName(String name) throws NoSuchMethodException {

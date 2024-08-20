@@ -12,10 +12,10 @@ public class HandlerExecution {
     private final Method method;
     private final MethodArgumentResolvers argumentResolvers;
 
-    public HandlerExecution(Object handler, Method method, String urlPattern) {
+    public HandlerExecution(Object handler, Method method) {
         this.handler = handler;
         this.method = method;
-        this.argumentResolvers = MethodArgumentResolvers.create(urlPattern, method);
+        this.argumentResolvers = MethodArgumentResolvers.create(method);
     }
 
     public ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response) throws Exception {
@@ -25,7 +25,7 @@ public class HandlerExecution {
 
     private Object[] resolveArguments(HttpServletRequest request, HttpServletResponse response) {
         return Arrays.stream(method.getParameters())
-            .map(param -> argumentResolvers.resolveArguments(request, response, param))
+            .map(param -> argumentResolvers.resolveArguments(request, response, param,method))
             .toArray();
     }
 }
