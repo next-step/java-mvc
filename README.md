@@ -22,37 +22,14 @@
 
 
 
-## 🚀 3단계 - JSON View 구현하기
+## 🚀 4단계 - Controller 메서드 인자 매핑
 
-### JsonView 클래스를 구현한다.
+### HttpServletRequest, HttpServletResponse 외의 파라미터들도 입력 받을 수 있게 하자
 
-- [x] HTML 이외에 JSON으로 응답할 수 있도록 JsonView 클래스를 구현
-    - [x] JSON으로 응답할 때 ContentType은 MediaType.APPLICATION_JSON_UTF8_VALUE으로 반환
-    - [x] model에 데이터가 1개면 값을 그대로 반환하고 2개 이상이면 Map 형태 그대로 JSON으로 변환해서 반환
-    - [x] 아래 코드를 추가하여 정상 동작하는지 확인한다.  
-
-```java
-@Controller
-public class UserController {
-
-  private static final Logger log = LoggerFactory.getLogger(UserController.class);
-
-  @RequestMapping(value = "/api/user", method = RequestMethod.GET)
-  public ModelAndView show(HttpServletRequest request, HttpServletResponse response) {
-    final String account = request.getParameter("account");
-    log.debug("user id : {}", account);
-
-    final ModelAndView modelAndView = new ModelAndView(new JsonView());
-    final User user = InMemoryUserRepository.findByAccount(account)
-        .orElseThrow();
-
-    modelAndView.addObject("user", user);
-    return modelAndView;
-  }
-}
-```  
-
-### Legacy MVC 제거하기
-- [x] app 모듈에 있는 모든 컨트롤러를 어노테이션 기반 MVC로 변경한다.
-- [x] asis 패키지에 있는 레거시 코드를 삭제해도 서비스가 정상 동작하도록 리팩터링
-- [x] DispatcherServlet도 app 패키지가 아닌 mvc 패키지로 옮겨보자.
+[ ] Controller 메서드의 인자 타입에 따라 HttpServletRequest에서 값을 꺼내와 자동으로 형 변환을 한 후 매핑하는 등의 작업을 자동 처리하도록 만들자.
+- [x] ArgumentResolver 인터페이스 및 구현체 개발
+  (HttpServletRequestResolver, HttpServletResponseResolver, PathVariableResolver, RequestParamResolver)
+- [x] MethodArgumentResolvers 클래스 구현
+  (여러 ArgumentResolver를 관리하고 적절한 리졸버 선택)
+- [x] HandlerExecution 클래스 개선
+  (Method 객체를 사용하여 파라미터 정보 처리)

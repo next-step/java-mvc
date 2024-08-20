@@ -33,6 +33,10 @@ dependencies {
     testImplementation 'org.springframework:spring-web:6.1.10'
 }
 
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs << '-parameters'
+}
+
 test {
     useJUnitPlatform()
 }
