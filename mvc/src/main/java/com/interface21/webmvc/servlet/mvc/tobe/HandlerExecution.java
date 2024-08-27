@@ -23,7 +23,7 @@ public class HandlerExecution {
 
     public ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response) throws Exception {
         if (isParameterMappingMethod()) {
-            return (ModelAndView) method.invoke(object, convertToMethodArg(method.getParameters(), request.getParameterMap()));
+            return (ModelAndView) method.invoke(object, convertToMethodArg(method, request.getRequestURI(), request.getParameterMap()));
         }
         return (ModelAndView) method.invoke(object, request, response);
     }

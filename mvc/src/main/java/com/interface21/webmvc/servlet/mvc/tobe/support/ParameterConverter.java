@@ -1,20 +1,24 @@
 package com.interface21.webmvc.servlet.mvc.tobe.support;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Parameter;
+import com.interface21.web.bind.annotation.PathVariable;
+import com.interface21.web.bind.annotation.RequestMapping;
+
+import java.lang.reflect.*;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 public class ParameterConverter {
     public static Object[] convertToMethodArg(
-            Parameter[] parameters,
+            Method method,
+            String uri,
             Map<String, String[]> parameterMap
     ) {
-        if (isDtoParam(parameters)) {
-            return convertToDto(parameters, parameterMap);
+        if (isDtoParam(method.getParameters())) {
+            return convertToDto(method.getParameters(), parameterMap);
         }
 
-        return convertToPrimitive(parameters, parameterMap);
+        return convertToPrimitive(method, uri, parameterMap);
     }
 
     private static boolean isDtoParam(Parameter[] parameters) {
@@ -40,26 +44,90 @@ public class ParameterConverter {
         Parameter parameter = parameters[0];
         Class<?> clazz = parameter.getType();
         Object[] args = new Object[1];
-        Object[] convertedField = new Object[clazz.getFields().length];
-        for (int i = 0; i < clazz.getFields().length; i++) {
-            Field field = clazz.getFields()[i];
+        Map<String, Object> convertedFieldByName = new HashMap<>();
+        Map<String, Class<?>> fieldTypeByName = new HashMap<>();
+
+        for (int i = 0; i < clazz.getDeclaredFields().length; i++) {
+            Field field = clazz.getDeclaredFields()[i];
+            convertedFieldByName.put(field.getName(), convertVariable(field.getName(), field.getType(), parameterMap));
+            fieldTypeByName.put(field.getName(), field.getType());
         }
+
+        args[0] = getNewInstance(convertedFieldByName, fieldTypeByName, clazz);
 
         return args;
     }
 
-    private static Object[] convertToPrimitive(Parameter[] parameters, Map<String, String[]> parameterMap) {
+    private static Object getNewInstance(
+            Map<String, Object> convertedFieldByName,
+            Map<String, Class<?>> fieldTypeByName,
+            Class<?> clazz
+    ) {
+        Constructor<?>[] constructors = clazz.getDeclaredConstructors();
+        for (Constructor<?> constructor : constructors) {
+            Parameter[] parameters = constructor.getParameters();
+            boolean isPossibleToGetNewInstance = true;
+            Object[] args = new Object[parameters.length];
+            for (int i = 0; i < parameters.length; i++) {
+                Parameter parameter = parameters[i];
+                if (!convertedFieldByName.containsKey(parameter.getName())) {
+                    isPossibleToGetNewInstance = false;
+                    break;
+                }
+
+                if (!fieldTypeByName.containsKey(parameter.getName())) {
+                    isPossibleToGetNewInstance = false;
+                    break;
+                }
+
+                if (!fieldTypeByName.get(parameter.getName()).equals(parameter.getType())) {
+                    isPossibleToGetNewInstance = false;
+                    break;
+                }
+
+                args[i] = convertedFieldByName.get(parameter.getName());
+            }
+
+            if (isPossibleToGetNewInstance) {
+                try {
+                    return constructor.newInstance(args);
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        throw new RuntimeException("해당하는 생성자가 없습니다");
+    }
+
+    private static Object[] convertToPrimitive(Method method, String uri, Map<String, String[]> parameterMap) {
+        Parameter[] parameters = method.getParameters();
         Object[] args = new Object[parameters.length];
 
         for (int i = 0; i < parameters.length; i++) {
             Parameter parameter = parameters[i];
-            if (parameter.getType().isArray()) {
+            PathVariable pathVariable = parameter.getAnnotation(PathVariable.class);
+            if (pathVariable != null) {
+                args[i] = convertPathVariable(method, uri, parameter);
+            } else if (parameter.getType().isArray()) {
                 args[i] = convertArray(parameter.getName(), parameter.getType().getComponentType(), parameterMap);
             } else {
                 args[i] = convertVariable(parameter.getName(), parameter.getType(), parameterMap);
             }
         }
         return args;
+    }
+
+    private static Object convertPathVariable(Method method, String uri, Parameter parameter) {
+        String uriPattern = method.getAnnotation(RequestMapping.class).value();
+        return convertValue(
+                parameter.getType(),
+                PathPatternUtil.getUriValue(uriPattern, uri, parameter.getName())
+        );
     }
 
     private static Object[] convertArray(
